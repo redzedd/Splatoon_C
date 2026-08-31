@@ -13,12 +13,7 @@
 
 1. ✅ **地基**(2026-08-31 完成):`git init` + `/project-harness-init`(專案 CLAUDE.md、verify skill、測試島、content-lint 規則、冷啟動驗收通過)。
 2. ✅ **角色與相機**(2026-09-01 完成):CharacterMotionSolver/CameraOrbitSolver 純邏輯 + PlayerLocomotion/ThirdPersonCameraRig 膠水 + scripted intent 抽象層(ILocomotionIntentSource)+ LocomotionAutoTest 煙霧測試。驗證:EditMode 20 綠、AutoTest 6/6、假紅驗證過、幀時間與 GC 達標。
-3. **塗地核心**(全案技術風險最高,先打通):
-   - 每個可塗表面掛 `Paintable` 元件,持有一張 ink RenderTexture。
-   - 塗色 = 用 splat 筆刷 shader 在該表面的 UV 空間 blit 一筆(CommandBuffer)。
-   - 表面材質採樣 ink map 混合墨色。
-   - 先用「滑鼠點哪塗哪」的除錯路徑驗證,不等射擊系統。
-   - 約 1–2 個段落。
+3. ✅ **塗地核心**(2026-09-01 完成):PaintableSurface(每表面 ink RT + CommandBuffer.DrawRenderer 世界座標筆刷)+ InkSplat/PaintableSurface 兩個 shader + InkPaintDebugger(按住 Attack 準星連塗,步驟 4 汰換)。驗證:PaintAutoTest 4/4(readback 證實 RT 寫入)、俯視三色探針證實 UV 對位、假紅驗證過、幀時間最大 8.7ms、塗色穩態 GC 中位 0。教訓:UV_STARTS_AT_TOP 翻轉必要;墨色要過 .linear。
 4. **射墨迴路**:拋物線墨彈(物件池)→ 命中 Paintable → 呼叫步驟 3 的塗色 API。按住連射 + 簡單墨水噴濺視覺。約 1 個段落。
 5. **烏賊態 + 計分**:
    - 腳下墨色偵測(CPU 側 splat 紀錄或 readback 快取)→ 自家墨加速、敵墨減速。
