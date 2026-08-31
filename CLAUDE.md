@@ -61,11 +61,15 @@
 - **Logic:** pure C# in `SplatoonC.Core` asmdef (`Assets/Scripts/Core/`) — no MonoBehaviour, engine-independent where possible, covered by EditMode tests.
 - **Glue:** MonoBehaviours in `SplatoonC.Gameplay` asmdef (`Assets/Scripts/Gameplay/`) wire lifecycle/physics/rendering to Core logic.
 
-### Current Systems Map (verified against code 2026-08-31 — refresh via /harness-audit)
+### Current Systems Map (verified against code 2026-09-01 — refresh via /harness-audit)
 
-- **Gameplay systems: NONE built yet.** Fresh URP template + harness only. M1 build order and acceptance criteria live in `PLAN.md` — read it before planning any feature work.
-- **Tests:** test island seeded at `Assets/Scripts/Core/` + `Assets/Tests/EditMode/` (pure logic + NUnit template — copy this pattern for all new pure logic).
-- **Modules/assemblies:** `SplatoonC.Core` (pure), `SplatoonC.Tests.EditMode`, `SplatoonC.EditorTools` (test bridge). Gameplay asmdef created with first MonoBehaviour.
+- **Locomotion (M1 step 2, done):** pure math in `SplatoonC.Core.Locomotion.CharacterMotionSolver` (gravity/jump/coyote/buffer/camera-relative move) + `PlayerLocomotion` glue driving `CharacterController.Move` in `Update()`. Config: `Assets/Data/PlayerLocomotionConfig.asset` (SO).
+- **Camera:** `CameraOrbitSolver` (pure) + `ThirdPersonCameraRig` on Main Camera (`LateUpdate`, SphereCast occlusion, position-only smoothing). Hand-written by decision — do not suggest Cinemachine.
+- **Input:** `PlayerInputRouter` (only class touching Input System) implements `ILocomotionIntentSource`; AutoTests inject scripted intent via `SetOverrideSource` — never synthetic device events (see global skill unity-playmode-testing).
+- **Play-mode smoke tests:** `LocomotionAutoTest.Run()` in play mode → `[AUTOTEST] PASS/FAIL/DONE` console markers. Copy this pattern for future systems.
+- **Scene:** `SampleScene` has Ground (50×50 plane), Obstacles (wall near spawn for occlusion test, far box, low step), Player prefab instance (`Assets/Prefabs/Player.prefab`, layer `Player` slot 8).
+- **Tests:** 20 EditMode tests green (`Assets/Tests/EditMode/`) — pure logic + NUnit template; copy this pattern for all new pure logic.
+- **Modules/assemblies:** `SplatoonC.Core` (pure), `SplatoonC.Gameplay` (MonoBehaviour glue, refs Core + Unity.InputSystem), `SplatoonC.Tests.EditMode`, `SplatoonC.EditorTools` (test bridge).
 - **Known debris:** `Assets/TutorialInfo/`, `Assets/Readme.asset` — Unity template leftovers; ignore, do not build on, do not "clean up" during unrelated work.
 
 ## 5. Performance / Hot Paths

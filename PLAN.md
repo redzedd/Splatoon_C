@@ -11,8 +11,8 @@
 
 ## 步驟
 
-1. **地基**:`git init` + 跑 `/project-harness-init`(專案 CLAUDE.md、verify skill、測試島)。約 1 個工作段落。
-2. **角色與相機**:第三人稱膠囊角色(移動/跳躍,CharacterController)+ 跟隨相機。用現有 InputSystem_Actions。約 1 個段落。
+1. ✅ **地基**(2026-08-31 完成):`git init` + `/project-harness-init`(專案 CLAUDE.md、verify skill、測試島、content-lint 規則、冷啟動驗收通過)。
+2. ✅ **角色與相機**(2026-09-01 完成):CharacterMotionSolver/CameraOrbitSolver 純邏輯 + PlayerLocomotion/ThirdPersonCameraRig 膠水 + scripted intent 抽象層(ILocomotionIntentSource)+ LocomotionAutoTest 煙霧測試。驗證:EditMode 20 綠、AutoTest 6/6、假紅驗證過、幀時間與 GC 達標。
 3. **塗地核心**(全案技術風險最高,先打通):
    - 每個可塗表面掛 `Paintable` 元件,持有一張 ink RenderTexture。
    - 塗色 = 用 splat 筆刷 shader 在該表面的 UV 空間 blit 一筆(CommandBuffer)。
