@@ -34,11 +34,9 @@ namespace SplatoonC.Gameplay.Debugging
                     ground = surface;
                 }
             }
-            var debugTools = GameObject.Find("DebugTools");
-            var painter = debugTools != null ? debugTools.GetComponent<InkPaintDebugger>() : null;
-            if (ground == null || painter == null)
+            if (ground == null)
             {
-                Debug.LogError("[AUTOTEST] FAIL 前置:找不到 Ground 的 PaintableSurface 或 InkPaintDebugger");
+                Debug.LogError("[AUTOTEST] FAIL 前置:找不到 Ground 的 PaintableSurface");
                 Debug.Log("[AUTOTEST] DONE passed=0 failed=1");
                 Destroy(gameObject);
                 yield break;
@@ -66,14 +64,9 @@ namespace SplatoonC.Gameplay.Debugging
             Check("覆蓋不疊加", afterRepeat - afterFirst < (afterFirst - baseline) / 2,
                 $"再塗增量={afterRepeat - afterFirst}");
 
-            // 案 4:真路徑——相機中心射線瞄準塗色(半徑 0.75m 約 185 texels)
-            bool aimHit = painter.PaintAtAim();
-            yield return CountInk(ground);
-            int afterAim = _lastCount;
-            Check("瞄準塗色", aimHit && afterAim - afterRepeat > 80,
-                $"hit={aimHit} delta={afterAim - afterRepeat}");
+            // (真路徑瞄準/射擊驗收在 ShootingAutoTest,走 intent → InkShooter → 墨彈 → 塗色全鏈)
 
-            // 案 5:連續塗色 3 秒(效能哨兵取樣用,不斷言)
+            // 案 4:連續塗色 3 秒(效能哨兵取樣用,不斷言)
             float endTime = Time.time + 3f;
             var interval = new WaitForSeconds(0.05f);
             int strokes = 0;

@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: 8229166869506101721}
   - component: {fileID: 6872619061180101399}
   - component: {fileID: 8544913390146337702}
+  - component: {fileID: 6959154370674104649}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -320,6 +321,7 @@ MonoBehaviour:
   _move: {fileID: -1246895598473198080, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _look: {fileID: 6940538419726410420, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _jump: {fileID: 335763634227698153, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _mouseSensitivity: 0.12
   _gamepadLookSpeed: 220
 --- !u!114 &8544913390146337702
@@ -338,3 +340,24 @@ MonoBehaviour:
   _input: {fileID: 6872619061180101399}
   _visualRoot: {fileID: 4197822349549493834}
   _cameraTransform: {fileID: 0}
+--- !u!114 &6959154370674104649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8997229261282655361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c374f17dceebb48a893c2d75d57b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.InkShooter
+  _config: {fileID: 11400000, guid: 6f12c0e07ee3c9247811d95d679fee92, type: 2}
+  _input: {fileID: 6872619061180101399}
+  _muzzle: {fileID: 5164912641134097753}
+  _projectilePrefab: {fileID: 3764897678730173231, guid: 782fcc661f371f44ab40aa59a302a632, type: 3}
+  _aimMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _aimMaxDistance: 40
+  _poolPrewarm: 32

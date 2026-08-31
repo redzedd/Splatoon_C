@@ -43,6 +43,13 @@ namespace SplatoonC.Gameplay.CameraRig
         private Vector3 _smoothedPivot;
         private Vector3 _pivotVelocity;
 
+        // 直接設定絕對角度(重生、過場、AutoTest 基準歸位用)。
+        public void SetAngles(float yawDeg, float pitchDeg)
+        {
+            _yaw = Mathf.Repeat(yawDeg, 360f);
+            _pitch = Mathf.Clamp(pitchDeg, _minPitch, _maxPitch);
+        }
+
         private void Start()
         {
             if (_lockCursor)

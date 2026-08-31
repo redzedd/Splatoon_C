@@ -1,4 +1,5 @@
 using System.Collections;
+using SplatoonC.Gameplay.CameraRig;
 using SplatoonC.Gameplay.Player;
 using UnityEngine;
 
@@ -8,11 +9,12 @@ namespace SplatoonC.Gameplay.Debugging
     // (Router → Solver → CharacterController → CameraRig),結果以 [AUTOTEST] 標記供 log 掃描。
     public sealed class LocomotionAutoTest : MonoBehaviour
     {
-        private sealed class TestIntentSource : ILocomotionIntentSource
+        private sealed class TestIntentSource : IPlayerIntentSource
         {
             public Vector2 MoveInput { get; set; }
             public Vector2 LookDeltaDeg { get; set; }
             public bool JumpPressedThisFrame { get; set; }
+            public bool AttackHeld { get; set; }
         }
 
         public static void Run()
@@ -45,6 +47,13 @@ namespace SplatoonC.Gameplay.Debugging
 
             var intent = new TestIntentSource();
             router.SetOverrideSource(intent);
+            // 相機角度歸位:遮擋案假設 yaw 從 0 起算;真滑鼠可能在測試前污染角度。
+            var rig = cam.GetComponent<ThirdPersonCameraRig>();
+            if (rig != null)
+            {
+                rig.SetAngles(0f, 10f);
+            }
+            yield return null;
 
             // 案 1:重力著地——靜置 1 秒後 y 收斂於地面附近,不持續下墜
             yield return new WaitForSeconds(1f);

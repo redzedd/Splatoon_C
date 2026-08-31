@@ -24,6 +24,10 @@ description: Splatoon_C 的驗證管道——任何程式碼變更後、宣稱�
 
 ## 3. Play mode 煙霧測試(行為變更後)
 
+0. **視窗焦點鐵律(2026-09-01 實戰)**:編輯器失焦時 player loop 會被節流到凍結(frameCount 停在 1),
+   AutoTest 假死且症狀像測試掛掉;editor update 也會停,所以編輯器側幫浦救不了。
+   進 Play 前先 PowerShell:`(New-Object -ComObject WScript.Shell).AppActivate('Splatoon_C')`。
+   前景期間真滑鼠會污染相機角度——AutoTest 必須用 `rig.SetAngles()` 歸位,不可假設初始 yaw=0。
 1. `Unity_GetConsoleLogs` 先記下基準(或確認 console 乾淨)。
 2. `Unity_ManageEditor` Action=Play → 等 `IsPlaying == true`。
 3. 操作受影響流程。合成輸入的三大陷阱(編輯器失焦即無聲死亡等)見全域 skill `unity-playmode-testing` — 動測試前先讀。
