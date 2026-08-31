@@ -1,0 +1,37 @@
+# Splatoon_C — Milestone 1:塗地技術原型
+
+決策記錄(2026-08-31,與 redze 定案):
+- 範圍:**純塗地原型,無對戰無 AI**。單人沙盒。
+- 連線:不做,架構也不預留 netcode(接受日後重構成本)。
+- 底盤:Unity 6000.4.3f1 + URP 17.4 + Input System 1.19(全部已安裝)。
+
+## 驗收標準(全部達成才算 M1 完成)
+
+進 Play mode 後:能跑、跳、射墨;地面被擊中處**持久染色**;切換烏賊態時在自家墨上移動速度明顯提升且下沉隱身;HUD 顯示即時佔地百分比;連續塗地 60 秒維持 60fps、無每幀 GC 配置。
+
+## 步驟
+
+1. **地基**:`git init` + 跑 `/project-harness-init`(專案 CLAUDE.md、verify skill、測試島)。約 1 個工作段落。
+2. **角色與相機**:第三人稱膠囊角色(移動/跳躍,CharacterController)+ 跟隨相機。用現有 InputSystem_Actions。約 1 個段落。
+3. **塗地核心**(全案技術風險最高,先打通):
+   - 每個可塗表面掛 `Paintable` 元件,持有一張 ink RenderTexture。
+   - 塗色 = 用 splat 筆刷 shader 在該表面的 UV 空間 blit 一筆(CommandBuffer)。
+   - 表面材質採樣 ink map 混合墨色。
+   - 先用「滑鼠點哪塗哪」的除錯路徑驗證,不等射擊系統。
+   - 約 1–2 個段落。
+4. **射墨迴路**:拋物線墨彈(物件池)→ 命中 Paintable → 呼叫步驟 3 的塗色 API。按住連射 + 簡單墨水噴濺視覺。約 1 個段落。
+5. **烏賊態 + 計分**:
+   - 腳下墨色偵測(CPU 側 splat 紀錄或 readback 快取)→ 自家墨加速、敵墨減速。
+   - 佔地率:定期 `AsyncGPUReadback` 縮圖統計像素,**禁止同步 ReadPixels**。HUD 顯示 %。
+   - 約 1–2 個段落。
+
+## 已知技術風險(動工前記住)
+
+- **UV 唯一性**:塗地法要求可塗表面的 UV 不重疊——自建關卡幾何時每面牆/地板用獨立 UV(必要時用 UV2/lightmap UV)。
+- **計分 readback**:同步讀 GPU 會整幀卡死,一律 AsyncGPUReadback + 低解析度縮圖。
+- **物件池**:墨彈與 splat 高頻生成,第一天就上物件池,不走 Instantiate/Destroy。
+- 相機如需 Cinemachine 須先問過才裝包(目前未安裝)。
+
+## M1 之後(暫不細排)
+
+牆面塗色與烏賊爬牆 → 多武器(滾筒/狙擊)→ 對戰規則與 AI(當初被劃出範圍的部分)。

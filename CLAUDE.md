@@ -1,0 +1,92 @@
+# Splatoon_C — Project Instructions
+
+> **Language Rule (HARD REQUIREMENT):** All user-facing output, code comments, doc strings, and log messages MUST be written in **Traditional Chinese (繁體中文)**. This file itself is in English; everything you produce for the user/codebase is in Traditional Chinese.
+
+---
+
+## 0. Product & Audience
+
+- One-line product: Splatoon-like ink-painting prototype — single-player sandbox, **no combat, no netcode** (decided 2026-08-31; see PLAN.md for milestone scope and acceptance criteria).
+- The user is a game developer & engineer; normal engineering vocabulary is fine.
+- Every system stays designer-tunable in the editor: serialized/tunable fields + 繁中 tooltips over hardcoded values; ScriptableObject data assets for tuning; sensible defaults; setup >5 manual steps = smell.
+- Reply shape for features: brief code summary → concrete setup/wiring steps (exact names) → risks.
+
+## 1. Stack Overview
+
+|Item|Value|
+|---|---|
+|Type|game (Unity)|
+|Engine|Unity **6000.4.3f1** (ProjectSettings/ProjectVersion.txt; also confirmed at runtime via MCP 2026-08-31)|
+|Render pipeline|URP 17.4.0 — RP assets: `Assets/Settings/PC_RPAsset.asset` + `Mobile_RPAsset.asset` (template defaults; which quality tier is active: unverified)|
+|Input|Input System 1.19.0 — actions asset `Assets/InputSystem_Actions.inputactions` (template default Player/UI maps; active input handler setting: unverified)|
+|Target platform|PC / Windows (working assumption — final target 尚未決定)|
+|Source root|`Assets/Scripts/` (Core = pure logic, Gameplay = MonoBehaviour glue), tests in `Assets/Tests/`|
+|Build command|none for M1 (editor-driven prototype)|
+|Test command|see `.claude/skills/verify/` (EditMode tests via test bridge)|
+
+## 2. Dependencies (use these — do NOT reinvent)
+
+|Dependency|Where / Version|Role|
+|---|---|---|
+|com.unity.render-pipelines.universal|17.4.0|Rendering. Ink splat injection will use CommandBuffer/Blitter against RenderTextures.|
+|com.unity.inputsystem|1.19.0|All player input. Extend `Assets/InputSystem_Actions.inputactions`; never use legacy `Input.GetKey/GetAxis`.|
+|com.unity.test-framework|1.6.0|EditMode/PlayMode tests.|
+|com.unity.ugui|2.0.0|Available for HUD. UI Toolkit modules also present. **HUD tech choice 尚未決定** — decide (and record here) when building the coverage HUD.|
+|com.unity.visualscripting|1.9.11|**INSTALLED BUT UNUSED — do NOT use.** All logic is C#.|
+|com.unity.multiplayer.center|1.0.1|**UNUSED by decision — no netcode in this project.** Do not add Netcode packages.|
+|com.unity.ai.assistant + ai.inference|2.18.0-pre.2 / 2.6.1|Editor AI infra (MCP RunCommand rides on it). Not a gameplay dependency — never reference from game code.|
+|com.unity.timeline / collab-proxy / visualstudio etc.|manifest.json|Template defaults, unused by gameplay.|
+
+**Not installed — do not suggest or add without asking the user first:** Cinemachine, DOTween, Animancer, ProBuilder, KCC, any Netcode/Multiplayer package. (Global rule: never add packages without asking.)
+
+### Usage Rules
+
+- **Ink painting (the core system):** paint = UV-space splat blit into a per-surface RenderTexture via CommandBuffer. Never CPU `SetPixel/Apply` loops on paint paths.
+- **Coverage scoring:** GPU readback goes through `AsyncGPUReadback` on a downsampled target ONLY. Synchronous `Texture2D.ReadPixels`/`GetPixels` in runtime code is forbidden (content-lint enforced).
+- **Ink projectiles / splat FX:** object-pooled from day one. No `Instantiate`/`Destroy` per shot in steady state.
+- **Paintable surfaces:** UVs must be unique/non-overlapping per surface (use UV2/lightmap UVs if needed). A new paintable mesh with overlapping UVs is a bug.
+- **Input:** add actions to the existing `.inputactions` asset; read via generated wrapper or `InputActionReference` — no string lookups scattered in code.
+
+## 3. Code Style
+
+- C#, 4-space indent, `PascalCase` types/methods, `_camelCase` private fields, `[SerializeField] private` + 繁中 tooltip for designer knobs.
+- Comments in Traditional Chinese, only for non-obvious *why*.
+- `UnityEngine.Object` null checks use `== null`, never `?.`/`??` (global Unity rule).
+
+## 4. Architecture
+
+- **Data/config:** ScriptableObject assets under `Assets/Data/` (e.g. WeaponConfig, InkConfig). Designer-tunable, 繁中 tooltips.
+- **Prefabs:** `Assets/Prefabs/`. **Scenes:** `SampleScene.unity` is THE working scene for all of M1 — do not create new scenes without asking.
+- **Input wiring:** the `.inputactions` asset is registered as Project-wide Actions with `generateWrapperCode: 0` — keep it that way; use `InputActionReference` fields, never `new InputSystem_Actions()` (would duplicate the shared action instances) and never the `PlayerInput` component.
+- **Logic:** pure C# in `SplatoonC.Core` asmdef (`Assets/Scripts/Core/`) — no MonoBehaviour, engine-independent where possible, covered by EditMode tests.
+- **Glue:** MonoBehaviours in `SplatoonC.Gameplay` asmdef (`Assets/Scripts/Gameplay/`) wire lifecycle/physics/rendering to Core logic.
+
+### Current Systems Map (verified against code 2026-08-31 — refresh via /harness-audit)
+
+- **Gameplay systems: NONE built yet.** Fresh URP template + harness only. M1 build order and acceptance criteria live in `PLAN.md` — read it before planning any feature work.
+- **Tests:** test island seeded at `Assets/Scripts/Core/` + `Assets/Tests/EditMode/` (pure logic + NUnit template — copy this pattern for all new pure logic).
+- **Modules/assemblies:** `SplatoonC.Core` (pure), `SplatoonC.Tests.EditMode`, `SplatoonC.EditorTools` (test bridge). Gameplay asmdef created with first MonoBehaviour.
+- **Known debris:** `Assets/TutorialInfo/`, `Assets/Readme.asset` — Unity template leftovers; ignore, do not build on, do not "clean up" during unrelated work.
+
+## 5. Performance / Hot Paths
+
+- Sustained painting must hold 60 fps with **zero per-frame GC allocation** in paint/score/projectile paths (verify via profiler MCP tools before claiming perf work done).
+- Scoring readback: async only, downsampled, at a throttled interval (not every frame).
+
+## 6. Logging & Error Handling
+
+- `Debug.Log` for development, message text in 繁中. No log spam in per-frame paths.
+- No empty catch blocks; never swallow exceptions to make a feature "work".
+
+## 7. Comments & Documentation
+
+- Default to no comments; names explain *what*. Comment only non-obvious *why* (invariants, workarounds, quirks), in Traditional Chinese, one short line.
+
+## 8. Working Protocol for the AI
+
+1. **Plan first (in Traditional Chinese)** — approach, which dependencies apply, which files change. Check PLAN.md for current milestone scope.
+2. **Check §2 triggers** — painting/scoring/input/projectiles have mandated patterns above; never hand-roll a replacement.
+3. **Confirm before large refactors.** Single-file edits and additive features proceed directly.
+4. **Finish the job.** No TODO, no stubs.
+5. **If unsure, say so.** Do not fabricate API signatures — verify against installed source or `unity_reflect`.
+6. **Verify before "done".** Follow `.claude/skills/verify/`: compile check is mandatory after any code change; runtime smoke + log scan after behavior changes; report evidence tiers ([驗證]/[推論]/[假設]); never report completion without evidence. Global: `/harness-audit`, `/unity-frame-spike`.

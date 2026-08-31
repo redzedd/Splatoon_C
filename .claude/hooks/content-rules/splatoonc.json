@@ -1,0 +1,8 @@
+[
+  {
+    "id": "sc-sync-readback",
+    "appliesTo": "^(?!.*/(editor|tests)/).*\\.cs$",
+    "pattern": "\\.ReadPixels\\s*\\(|\\.WaitForCompletion\\s*\\(",
+    "message": "Synchronous GPU readback is forbidden in Splatoon_C runtime code: Texture2D.ReadPixels and AsyncGPUReadbackRequest.WaitForCompletion stall the whole frame. Coverage scoring / ink sampling must use AsyncGPUReadback.Request on a downsampled target and consume the result asynchronously (see CLAUDE.md section 2). Editor-only tooling belongs under an Editor/ folder, which this rule does not cover. If the user explicitly approves a sync readback, add {\"disable\":[\"sc-sync-readback\"]} to this pack."
+  }
+]

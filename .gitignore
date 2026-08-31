@@ -1,0 +1,26 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+MemoryCaptures/
+Recordings/
+
+# IDE
+.vs/
+.idea/
+*.csproj
+*.sln
+*.user
+.vsconfig
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Crash dumps
+sysinfo.txt
+*.stackdump
