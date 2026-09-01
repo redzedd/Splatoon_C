@@ -703,11 +703,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.CameraRig.ThirdPersonCameraRig
   _target: {fileID: 5267258545148411288}
   _input: {fileID: 5267258545148411287}
-  _distance: 5
+  _distance: 6.2
   _minPitch: -30
   _maxPitch: 60
   _followSmoothTime: 0.04
-  _aimHeightOffset: 1.1
+  _aimHeightOffset: 1.25
   _occlusionRadius: 0.25
   _occlusionMask:
     serializedVersion: 2
@@ -1206,6 +1206,7 @@ MonoBehaviour:
   _stepTime: 0.05
   _maxSteps: 40
   _reticleLift: 0.05
+  _followLandingPoint: 0
 --- !u!1 &714606715
 GameObject:
   m_ObjectHideFlags: 0

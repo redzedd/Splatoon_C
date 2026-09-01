@@ -75,17 +75,27 @@ namespace SplatoonC.Gameplay.Debugging
             yield return null;
             yield return null;
 
-            // 案 1:準星預測落點 vs 實跑落點(容忍散布:2.5° 在 10m 約偏 0.44m)
-            Vector3 predicted = reticle.PredictedLanding;
+            // 案 1:準星(固定畫面中心)指向的世界點 vs 彈實跑落點
+            // ——Splatoon 式固定準心的成立條件:彈道夠平直,中心即命中點。
+            var cam = Camera.main;
+            int aimMask = ~(1 << LayerMask.NameToLayer("Player"));
+            Vector3 predicted = Physics.Raycast(
+                new Ray(cam.transform.position, cam.transform.forward),
+                out RaycastHit centerHit, 60f, aimMask, QueryTriggerInteraction.Ignore)
+                ? centerHit.point
+                : cam.transform.position + cam.transform.forward * 20f;
             intent.AttackHeld = true;
             yield return null;
             yield return null;
             intent.AttackHeld = false;
 
-            // 追蹤該發彈直到回收,記下最後位置
+            // 追蹤該發彈:先抓飛行方向(頭幾幀),再追到回收記下落點
             var poolRoot = GameObject.Find("InkProjectilePool");
             Vector3 lastSeen = Vector3.zero;
+            Vector3 firstSeen = Vector3.zero;
+            Vector3 flightDir = Vector3.zero;
             bool sawProjectile = false;
+            bool dirCaptured = false;
             float watchdog = 0f;
             while (watchdog < 3f)
             {
@@ -96,7 +106,16 @@ namespace SplatoonC.Gameplay.Debugging
                     {
                         anyActive = true;
                         lastSeen = c.position;
-                        sawProjectile = true;
+                        if (!sawProjectile)
+                        {
+                            firstSeen = c.position;
+                            sawProjectile = true;
+                        }
+                        else if (!dirCaptured && (c.position - firstSeen).sqrMagnitude > 0.04f)
+                        {
+                            flightDir = (c.position - firstSeen).normalized;
+                            dirCaptured = true;
+                        }
                     }
                 }
                 if (sawProjectile && !anyActive)
@@ -106,17 +125,26 @@ namespace SplatoonC.Gameplay.Debugging
                 watchdog += Time.deltaTime;
                 yield return null;
             }
-            float aimError = Vector3.Distance(
-                new Vector3(predicted.x, 0f, predicted.z), new Vector3(lastSeen.x, 0f, lastSeen.z));
-            Check("準星對齊落點", sawProjectile && aimError < 1.5f,
-                $"預測={predicted:F1} 實落={lastSeen:F1} 誤差={aimError:F2}m");
+
+            // 固定中心準心保證的是「射擊方向」而非落點——拋物線武器的必然:平視時中心射線
+            // 落在 20m 外,而彈只飛 9m(2026-09-02 實測 18.3m 落差)。故驗收比對方向。
+            float aimAngle = dirCaptured ? Vector3.Angle(flightDir, cam.transform.forward) : 999f;
+            float rangeM = Vector3.Distance(
+                new Vector3(player.transform.position.x, 0f, player.transform.position.z),
+                new Vector3(lastSeen.x, 0f, lastSeen.z));
+            Check("準星方向一致", dirCaptured && aimAngle < 12f,
+                $"彈道與準心夾角={aimAngle:F1}°(含散布 2.5°+槍口視差) 射程={rangeM:F1}m 準心指向距離={Vector3.Distance(player.transform.position, predicted):F1}m");
 
             // 案 2:彈道沿途留痕——沿路徑中段取樣 20 點(滴墨是離散點,單點取樣會抽中空隙)
+            // 取樣線起點用槍口而非角色中心:彈從角色右側 0.52m 射出,用角色中心會與真實彈道
+            // 有橫向偏差而低估覆蓋率(2026-09-02:同一條墨帶用兩種起點量到 8/20 vs 14/20)。
+            Vector3 traceStart = visual.Find("Muzzle") != null
+                ? visual.Find("Muzzle").position : player.transform.position;
             int inkedSamples = 0;
             for (int i = 0; i < 20; i++)
             {
                 float t = Mathf.Lerp(0.25f, 0.85f, i / 19f);
-                Vector3 sample = Vector3.Lerp(player.transform.position, lastSeen, t);
+                Vector3 sample = Vector3.Lerp(traceStart, lastSeen, t);
                 if (ground.SampleOwnership(new Vector3(sample.x, 0f, sample.z)) == 1)
                 {
                     inkedSamples++;

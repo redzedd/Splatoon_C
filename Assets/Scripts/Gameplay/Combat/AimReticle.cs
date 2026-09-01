@@ -21,6 +21,9 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("落點上抬(公尺),避免準星被地面吃掉")]
         private float _reticleLift = 0.05f;
 
+        [SerializeField, Tooltip("準星跟隨彈道落點;關閉則固定畫面中心(Splatoon 式,彈道須夠平直)")]
+        private bool _followLandingPoint;
+
         private Camera _camera;
 
         // 最近一次預測的落點(AutoTest 用來與實跑落點比對)
@@ -80,6 +83,13 @@ namespace SplatoonC.Gameplay.Combat
                 landing = point;
             }
             PredictedLanding = landing;
+
+            if (!_followLandingPoint)
+            {
+                // 固定畫面中心(彈道夠平直時中心即準心);PredictedLanding 仍供測試/未來輔助瞄準用
+                _reticle.anchoredPosition = Vector2.zero;
+                return;
+            }
 
             Vector3 screen = _camera.WorldToScreenPoint(landing);
             if (screen.z <= 0f)

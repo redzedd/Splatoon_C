@@ -70,9 +70,11 @@ namespace SplatoonC.Gameplay.Debugging
             float yawDelta = Mathf.DeltaAngle(yawBefore, cam.transform.eulerAngles.y);
             Check("視角轉動", Mathf.Abs(yawDelta - 90f) < 5f, $"yawDelta={yawDelta:F1}(期望 90)");
 
-            // 案 3:無遮擋時相機距離 ≈ 5
+            // 案 3:無遮擋時相機距離。量的是 camera→CameraPivot,而 rig 繞的是「抬高後的取景點」
+            // (_aimHeightOffset 1.25),故此值略大於 rig 的 _distance 6.2。
             float freeDistance = Vector3.Distance(cam.transform.position, pivot.position);
-            Check("相機距離", Mathf.Abs(freeDistance - 5f) < 0.4f, $"dist={freeDistance:F2}(期望 5)");
+            Check("相機距離", freeDistance > 5.8f && freeDistance < 7.2f,
+                $"dist={freeDistance:F2}(rig distance 6.2 + 取景抬高)");
 
             // 案 4:再轉 180 度(共 270),相機落到 +X 側,出生點旁的牆擋在中間,SphereCast 應拉近
             intent.LookDeltaDeg = new Vector2(180f, 0f);
