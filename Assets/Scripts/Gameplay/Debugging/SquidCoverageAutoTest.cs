@@ -109,7 +109,7 @@ namespace SplatoonC.Gameplay.Debugging
             Check("烏賊不可射擊", liveShots == 0 && _lastCount - beforeSquidFire < 30,
                 $"活彈={liveShots} delta={_lastCount - beforeSquidFire}");
 
-            // 鋪一條 -Z 墨帶(直呼 Paint 會同步登記 InkWorld)
+            // 鋪一條 -Z 墨帶(Paint 會同步標記表面自身的歸屬網格)
             for (int i = 0; i <= 14; i++)
             {
                 ground.Paint(new Vector3(0f, 0f, -i), 2f, new Color(1f, 0.5f, 0f, 1f), 0.7f);

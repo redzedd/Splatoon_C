@@ -15,6 +15,9 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("要壓扁的視覺根(Player/Visual)")]
         private Transform _visualRoot;
 
+        [SerializeField, Tooltip("腳下偵測射線圖層(場景接線時排除 Player)")]
+        private LayerMask _groundMask = ~0;
+
         public bool IsSquid { get; private set; }
 
         public float CurrentSpeedMultiplier { get; private set; } = 1f;
@@ -42,8 +45,18 @@ namespace SplatoonC.Gameplay.Player
             }
 
             IsSquid = _input.SquidHeld;
-            OnOwnInk = InkWorld.Instance != null
-                && InkWorld.Instance.SampleOwnership(transform.position) == 1;
+
+            // M2 重構:改問腳下表面自己的歸屬網格(牆面查詢走同一模式)。
+            OnOwnInk = false;
+            if (Physics.Raycast(transform.position + Vector3.up * 0.3f, Vector3.down,
+                    out RaycastHit groundHit, 1.2f, _groundMask, QueryTriggerInteraction.Ignore))
+            {
+                var surface = groundHit.collider.GetComponent<PaintableSurface>();
+                if (surface != null)
+                {
+                    OnOwnInk = surface.SampleOwnership(groundHit.point) == 1;
+                }
+            }
 
             CurrentSpeedMultiplier = IsSquid
                 ? (OnOwnInk ? _config.SquidInkSpeedMultiplier : _config.SquidDrySpeedMultiplier)

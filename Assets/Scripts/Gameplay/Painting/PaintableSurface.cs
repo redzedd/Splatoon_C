@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SplatoonC.Core.Painting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -15,8 +16,11 @@ namespace SplatoonC.Gameplay.Painting
         [SerializeField, Tooltip("墨水圖解析度(每邊像素)")]
         private int _resolution = 512;
 
-        [SerializeField, Tooltip("splat 注入 shader(SplatoonC/InkSplat);留空自動尋找")]
+        [SerializeField, Tooltip("splat 注入 shader(SplatoonC/InkSplat);留空自動尋找。注意:standalone build 需要此欄位建立資產引用,否則 shader 被剔除")]
         private Shader _splatShader;
+
+        [SerializeField, Tooltip("歸屬網格 cell 大小(公尺,世界單位);烏賊腳下/牆面墨查詢的解析度")]
+        private float _ownershipCellSize = 0.25f;
 
         private static readonly int InkMapId = Shader.PropertyToID("_InkMap");
         private static readonly int SplatCenterId = Shader.PropertyToID("_SplatCenter");
@@ -29,6 +33,9 @@ namespace SplatoonC.Gameplay.Painting
         private CommandBuffer _commandBuffer;
         private MaterialPropertyBlock _propertyBlock;
         private bool _initialized;
+        private InkOwnershipGrid _ownershipGrid;
+        private PlanarSurfaceMap _surfaceMap;
+        private float _planarScale = 1f;
 
         public RenderTexture InkMap
         {
@@ -89,6 +96,50 @@ namespace SplatoonC.Gameplay.Painting
             _renderer.GetPropertyBlock(_propertyBlock);
             _propertyBlock.SetTexture(InkMapId, _inkMap);
             _renderer.SetPropertyBlock(_propertyBlock);
+
+            InitializeOwnership();
+        }
+
+        // 每表面局部平面歸屬網格(M2 重構:取代世界水平網格,牆面也適用)。
+        private void InitializeOwnership()
+        {
+            var meshFilter = GetComponent<MeshFilter>();
+            if (meshFilter == null || meshFilter.sharedMesh == null)
+            {
+                Debug.LogError("PaintableSurface:找不到 mesh,墨歸屬查詢停用", this);
+                return;
+            }
+            Bounds bounds = meshFilter.sharedMesh.bounds;
+            _surfaceMap = PlanarSurfaceMap.FromBounds(bounds.min, bounds.size);
+
+            Vector3 lossy = transform.lossyScale;
+            float scaleA;
+            float scaleB;
+            switch (_surfaceMap.NormalAxis)
+            {
+                case 0: scaleA = Mathf.Abs(lossy.z); scaleB = Mathf.Abs(lossy.y); break;
+                case 1: scaleA = Mathf.Abs(lossy.x); scaleB = Mathf.Abs(lossy.z); break;
+                default: scaleA = Mathf.Abs(lossy.x); scaleB = Mathf.Abs(lossy.y); break;
+            }
+            _planarScale = Mathf.Max((scaleA + scaleB) * 0.5f, 0.0001f);
+
+            float localCellSize = _ownershipCellSize / _planarScale;
+            _ownershipGrid = new InkOwnershipGrid(
+                _surfaceMap.PlaneMin.x, _surfaceMap.PlaneMin.y,
+                _surfaceMap.PlaneSize.x, _surfaceMap.PlaneSize.y,
+                localCellSize);
+        }
+
+        // 查詢表面上某世界點的墨歸屬(0=無墨,1=自家)。
+        public byte SampleOwnership(Vector3 worldPosition)
+        {
+            EnsureInitialized();
+            if (_ownershipGrid == null)
+            {
+                return 0;
+            }
+            Vector2 planePoint = _surfaceMap.ToPlane(transform.InverseTransformPoint(worldPosition));
+            return _ownershipGrid.Sample(planePoint.x, planePoint.y);
         }
 
         public void Paint(Vector3 worldPosition, float radius, Color color, float hardness)
@@ -109,10 +160,11 @@ namespace SplatoonC.Gameplay.Painting
             _commandBuffer.DrawRenderer(_renderer, _splatMaterial, 0, 0);
             Graphics.ExecuteCommandBuffer(_commandBuffer);
 
-            // 同步登記到腳下墨網格(M1 水平地面假設;之後牆面塗色要改按表面法線過濾)。
-            if (InkWorld.Instance != null)
+            // 同步標記本表面的局部歸屬網格(牆面也適用;取代 M1 的世界水平網格)。
+            if (_ownershipGrid != null)
             {
-                InkWorld.Instance.RegisterSplat(worldPosition, radius);
+                Vector2 planePoint = _surfaceMap.ToPlane(transform.InverseTransformPoint(worldPosition));
+                _ownershipGrid.MarkCircle(planePoint.x, planePoint.y, radius / _planarScale, 1);
             }
         }
 

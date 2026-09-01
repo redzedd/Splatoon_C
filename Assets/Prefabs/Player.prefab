@@ -378,3 +378,6 @@ MonoBehaviour:
   _config: {fileID: 11400000, guid: d7faf4ba29b157542b74ca5108d67712, type: 2}
   _input: {fileID: 6872619061180101399}
   _visualRoot: {fileID: 4197822349549493834}
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967039

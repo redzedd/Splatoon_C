@@ -44,9 +44,7 @@
 ## 步驟
 
 1. ✅ **Standalone build 管道 + FPS 哨兵**(2026-09-01 完成):ProjectBuilder + M2Setup(batchmode CLI,編輯器關閉時跑)+ AutoPerfRun(`-autotest` 60 秒連射寫 [PERFRUN] 進 Player.log,含 coverage 塗色活性證據)。驗證:batch EditMode 32 綠、build Succeeded、**avgFps=1053 / p95Ms=1.69 PASS——M1 的 60fps 保留項正式收掉**(編輯器內 16ms 全是編輯器成本)。墨彈調參 32/-10 落地。抓到並修復 shipping-blocker:僅靠 Shader.Find 的 InkSplat 被 build 剔除(場景欄位引用修復,鐵律記入 CLAUDE.md §2)。注:play-mode AutoTest 迴歸與新彈道閾值適配待編輯器下次開啟時跑(standalone 全鏈 coverage=4.1% 已覆蓋主要風險)。
-2. **表面歸屬重構**(~1 段落,行為敏感):
-   - `InkOwnershipGrid` 從「世界水平網格」泛化為「per-surface 局部 UV 網格」,`PaintableSurface.Paint` 同步標記自身。
-   - `InkWorld` 查詢改為(surface, worldPos);地面行為不變——先跑 M1 迴歸再動手,改完必須全綠。
+2. ✅ **表面歸屬重構**(2026-09-01 完成):Core 新增 `PlanarSurfaceMap`(bounds 最薄軸當法線,局部 3D→2D,平面 mesh 假設)+ 4 測試;PaintableSurface 自持局部 `InkOwnershipGrid`(Paint 同步標記)+ `SampleOwnership(worldPos)`;SquidController 改「腳下射線→表面查詢」;InkWorld 單例刪除。驗證:重構前四套 AutoTest 全綠建立基線(Paint 3/3、Squid 5/5、Shooting 3/3 新彈道 delta=406、Locomotion 6/6)→ 重構後 EditMode 36 綠 + Paint/Squid 重跑全綠,加速/減速數字與基線一致(10.85/4.20)。
 3. **可塗牆面 + 關卡幾何**(~1 段落):
    - 牆一律用 Quad/自建 mesh(**Cube primitive 六面共用 UV,違反唯一 UV 鐵律,不可直接掛 PaintableSurface**)。
    - 場景加:高牆、矮牆、斜坡、平台(爬牆目標)。

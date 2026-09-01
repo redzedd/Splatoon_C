@@ -240,7 +240,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 237083885}
-  - component: {fileID: 237083884}
   - component: {fileID: 237083883}
   - component: {fileID: 237083886}
   m_Layer: 0
@@ -265,21 +264,6 @@ MonoBehaviour:
   _surface: {fileID: 472858602}
   _interval: 0.5
   _alphaThreshold: 32
---- !u!114 &237083884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237083882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 859b4e9263dbeab4faa69f9bf7d63c48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Painting.InkWorld
-  _worldCenter: {x: 0, y: 0}
-  _worldSize: {x: 50, y: 50}
-  _cellSize: 0.5
 --- !u!4 &237083885
 Transform:
   m_ObjectHideFlags: 0
@@ -727,6 +711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Painting.PaintableSurface
   _resolution: 512
   _splatShader: {fileID: 4800000, guid: 6565dfb3b6ea5424a933791894e34e97, type: 3}
+  _ownershipCellSize: 0.25
 --- !u!1 &562471924
 GameObject:
   m_ObjectHideFlags: 0
