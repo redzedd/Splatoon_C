@@ -30,6 +30,43 @@
 - **物件池**:墨彈與 splat 高頻生成,第一天就上物件池,不走 Instantiate/Destroy。
 - 相機如需 Cinemachine 須先問過才裝包(目前未安裝)。
 
-## M1 之後(暫不細排)
+# Milestone 2:垂直性——牆面塗色 + 烏賊爬牆
 
-牆面塗色與烏賊爬牆 → 多武器(滾筒/狙擊)→ 對戰規則與 AI(當初被劃出範圍的部分)。
+決策記錄(2026-09-01,與 redze 定案):主軸選「垂直性」(牆面塗色+爬牆),對戰 AI 留到 M3;standalone build 管道包進 M2 收掉 M1 的 60fps 保留項。
+
+## M2 驗收標準
+
+1. 一鍵產出 Windows standalone build,並以 `-autotest` 參數自動跑 60 秒連射塗地,FPS 記錄平均 ≥60(收 M1 保留項)。
+2. 牆面持久染色(視覺 + readback 雙層證據)。
+3. 烏賊態貼「自家墨牆」可爬升 ≥3m 登上平台頂;乾牆不可爬;離牆/到頂行為正確。
+4. M1 全部 AutoTest 迴歸綠;塗地/計分/彈道/爬牆路徑每幀 GC 維持 0。
+
+## 步驟
+
+1. **Standalone build 管道 + FPS 哨兵**(~1 段落):
+   - Editor build script(BuildPipeline → `Builds/`,Windows x64,SampleScene)。
+   - 遊戲內 FPS 探針(dev 限定):`-autotest` 命令列參數觸發 scripted intent 60 秒連射,結束把平均/p95 FPS 寫進 player log。
+   - verify skill 增補 build 管道章節。
+2. **表面歸屬重構**(~1 段落,行為敏感):
+   - `InkOwnershipGrid` 從「世界水平網格」泛化為「per-surface 局部 UV 網格」,`PaintableSurface.Paint` 同步標記自身。
+   - `InkWorld` 查詢改為(surface, worldPos);地面行為不變——先跑 M1 迴歸再動手,改完必須全綠。
+3. **可塗牆面 + 關卡幾何**(~1 段落):
+   - 牆一律用 Quad/自建 mesh(**Cube primitive 六面共用 UV,違反唯一 UV 鐵律,不可直接掛 PaintableSurface**)。
+   - 場景加:高牆、矮牆、斜坡、平台(爬牆目標)。
+   - 牆面塗色驗證:側視三色探針(沿用 M1 步驟 3 的 UV 對位手法)。
+4. **烏賊爬牆**(~1–2 段落,M2 技術風險最高):
+   - 偵測:烏賊態 + 貼牆(前方 raycast)+ 牆面該點自家墨 → climb 模式。
+   - Climb 數學進 Core(純邏輯+測試):重力關閉、輸入映射到牆面切面、離牆/到頂條件。
+   - 風險:CharacterController 貼牆滑動不可靠,可能需 climb 期間手動位移;先做 spike 驗證再定案。
+   - AutoTest:塗牆→貼牆爬升位移斷言;乾牆不可爬;到頂落上平台。
+5. **M2 收官驗收**:standalone FPS 達標 + 爬牆全鏈 + 全 AutoTest 迴歸 + 文件/harness 更新(`/harness-audit`)。
+
+## 已知風險與交接注意
+
+- 步驟 2 的重構動到烏賊變速的資料來源——**迴歸測試先行**,SquidCoverageAutoTest 是安全網。
+- 本 session 結束時 unity-mcp 斷線、coplay-mcp 重新接上:下個 session 開工前先確認 verify 管道實際可用的 MCP 工具(verify skill 寫的是 unity-mcp 工具名;coplay-mcp 有對應的 check_compile_errors / execute_script / play_game,必要時先補 verify skill 的工具對照再動工)。
+- M1 遺留調參項:墨彈 22 m/s + 重力 -18 落點僅 ~5.6m(遠短於準星)——步驟 1 的 build 驗證順手調參(提高初速或瞄準補償)。
+
+## M2 之後(暫不細排)
+
+多武器(滾筒/狙擊)→ 對戰規則與 AI Bot(M3 主軸候選)→ 音效/特效打磨。
