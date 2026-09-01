@@ -21,18 +21,19 @@ MonoBehaviour:
   _inkCostPerShot: 0.045
   _straightRange: 10
   _straightGravity: -1.5
-  _dropGravity: -38
+  _dropGravity: -60
+  _dropHorizontalDrag: 7
   _earlyDropChance: 0.18
   _earlyDropRangeMin: 2
   _earlyDropRangeMax: 7.5
-  _muzzleSplashRadius: 0.42
+  _muzzleSplashRadius: 0.59
   _muzzleSplashDistance: 1.3
   _hitMask:
     serializedVersion: 2
     m_Bits: 4294967039
   _inkColor: {r: 1, g: 0.5, b: 0, a: 1}
-  _splatRadius: 0.65
+  _splatRadius: 0.91
   _splatHardness: 0.7
   _splashCount: 2
-  _splashRadius: 0.3
+  _splashRadius: 0.42
   _splashSpread: 0.6

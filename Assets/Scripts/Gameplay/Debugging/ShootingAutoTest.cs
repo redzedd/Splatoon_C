@@ -90,19 +90,51 @@ namespace SplatoonC.Gameplay.Debugging
             }
             Check("彈體回收", stillActive == 0, $"activeInHierarchy={stillActive}");
 
-            // 案 3:面向出生點旁的牆(絕對角度,不受先前狀態影響),命中非可塗表面 → 不塗地
-            rig.SetAngles(90f, 10f);
-            yield return null;
-            yield return null;
+            // 案 3:命中非可塗表面時,地面只該留下槍口噴濺(路徑痕跡機制),不該有主 splat。
+            // 槍口噴濺是刻意功能,故不能用絕對門檻;改用同長度連射的「空地 vs 牆」比值自我校準,
+            // 半徑調參時門檻自動跟著走。
+            var controller = player.GetComponent<CharacterController>();
+            Vector3 spawnPos = player.transform.position;
+            const float burst = 0.6f;
+
+            // 3a 校準:移到未塗過的空地朝 -Z 連射(槍口噴濺 + 主 splat + 噴濺小點)
+            controller.enabled = false;
+            player.transform.position = new Vector3(-16f, 0.1f, 18f);
+            controller.enabled = true;
+            rig.SetAngles(180f, 10f);
+            for (int i = 0; i < 5; i++)
+            {
+                yield return null;
+            }
             yield return CountInk(ground);
-            int beforeWall = _lastCount;
+            int beforeOpen = _lastCount;
             intent.AttackHeld = true;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(burst);
             intent.AttackHeld = false;
             yield return new WaitForSeconds(1.5f);
             yield return CountInk(ground);
-            int afterWall = _lastCount;
-            Check("命中牆不塗地", afterWall - beforeWall < 60, $"delta={afterWall - beforeWall}");
+            int deltaOpen = _lastCount - beforeOpen;
+
+            // 3b:回出生點面向旁邊的牆,同樣長度連射 → 地面只剩槍口噴濺
+            controller.enabled = false;
+            player.transform.position = spawnPos;
+            controller.enabled = true;
+            rig.SetAngles(90f, 10f);
+            for (int i = 0; i < 5; i++)
+            {
+                yield return null;
+            }
+            yield return CountInk(ground);
+            int beforeWall = _lastCount;
+            intent.AttackHeld = true;
+            yield return new WaitForSeconds(burst);
+            intent.AttackHeld = false;
+            yield return new WaitForSeconds(1.5f);
+            yield return CountInk(ground);
+            int deltaWall = _lastCount - beforeWall;
+
+            Check("命中牆不塗地(地面僅槍口噴濺)", deltaOpen > 0 && deltaWall < deltaOpen * 0.5f,
+                $"空地 delta={deltaOpen}、對牆 delta={deltaWall}(期望對牆 < 空地一半)");
 
             // 案 4:連射 3 秒(效能取樣用,不斷言)
             intent.AttackHeld = true;

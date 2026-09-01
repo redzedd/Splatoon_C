@@ -15,7 +15,8 @@ namespace SplatoonC.Gameplay.Combat
         private float _remainingLifetime;
         private bool _released;
         private TrailRenderer _trail;
-        private float _travelledHorizontal;
+        // 沿彈道的總飛行距離(非水平距離):如此仰射時水平射程自然縮短,平射才是最遠的
+        private float _travelledDistance;
         private float _effectiveRange;
 
         private void Awake()
@@ -31,7 +32,7 @@ namespace SplatoonC.Gameplay.Combat
             _pool = pool;
             _remainingLifetime = config.ProjectileLifetime;
             _released = false;
-            _travelledHorizontal = 0f;
+            _travelledDistance = 0f;
             // 少數彈提前墜落:這是地面路徑痕跡的來源之一(另一個是槍口噴濺)
             _effectiveRange = Random.value < config.EarlyDropChance
                 ? Random.Range(config.EarlyDropRangeMin, config.EarlyDropRangeMax)
@@ -53,9 +54,17 @@ namespace SplatoonC.Gameplay.Combat
             float dt = Time.deltaTime;
             Vector3 previous = transform.position;
 
-            // 兩段式:射程內幾乎不掉(維持準心高度),超過射程才急墜
-            bool beyondRange = _travelledHorizontal >= _effectiveRange;
+            // 兩段式:射程內幾乎不掉(維持準心高度),超過射程才急墜。
+            // 以「沿彈道飛行距離」判定 → 仰射把射程花在高度上,水平距離變短(平射最遠)
+            bool beyondRange = _travelledDistance >= _effectiveRange;
             _velocity.y += (beyondRange ? _config.DropGravity : _config.StraightGravity) * dt;
+            if (beyondRange && _config.DropHorizontalDrag > 0f)
+            {
+                // 墜落時煞停水平速度 → 近乎垂直落下,仰射不會因滯空而飛得比平射遠
+                float damp = Mathf.Exp(-_config.DropHorizontalDrag * dt);
+                _velocity.x *= damp;
+                _velocity.z *= damp;
+            }
 
             Vector3 next = previous + _velocity * dt;
             Vector3 delta = next - previous;
@@ -70,7 +79,7 @@ namespace SplatoonC.Gameplay.Combat
             }
 
             transform.position = next;
-            _travelledHorizontal += new Vector2(delta.x, delta.z).magnitude;
+            _travelledDistance += distance;
             _remainingLifetime -= dt;
             if (_remainingLifetime <= 0f)
             {

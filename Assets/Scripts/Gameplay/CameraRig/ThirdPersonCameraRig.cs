@@ -17,8 +17,8 @@ namespace SplatoonC.Gameplay.CameraRig
         [SerializeField, Tooltip("相機距離(公尺)")]
         private float _distance = 5f;
 
-        [SerializeField, Tooltip("俯仰角下限(度,負值 = 仰視)")]
-        private float _minPitch = -30f;
+        [SerializeField, Tooltip("俯仰角下限(度,負值 = 仰視;-80 幾乎可垂直向上瞄)")]
+        private float _minPitch = -80f;
 
         [SerializeField, Tooltip("俯仰角上限(度,正值 = 俯視)")]
         private float _maxPitch = 60f;

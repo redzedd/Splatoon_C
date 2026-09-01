@@ -704,7 +704,7 @@ MonoBehaviour:
   _target: {fileID: 5267258545148411288}
   _input: {fileID: 5267258545148411287}
   _distance: 6.2
-  _minPitch: -15
+  _minPitch: -80
   _maxPitch: 60
   _followSmoothTime: 0.04
   _aimHeightOffset: 1.25

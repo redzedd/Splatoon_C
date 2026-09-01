@@ -87,6 +87,13 @@
    - 連帶修:歸屬網格對小於 cell 的塗色標記圓心格;URP 粒子材質改 Transparent;遮擋測試牆加高至 3.5m(取景抬高後 2m 牆擋不到視線)。
    - 驗證:EditMode 50 綠、AimAutoTest 4/4、Shooting/Locomotion/Squid/Climb 迴歸全綠、遊戲畫面截圖三張。
 
+3.6 ✅ **手感回饋修正第二輪**(2026-09-02,使用者三項):
+   - 視角限制放寬:`ThirdPersonCameraRig._minPitch` -15 → **-80**,可幾乎垂直朝上瞄準(先前為了讓準心落在甜蜜點而收窄俯角,使用者已明確否決該做法)。
+   - **平射最遠、仰射不增加攻擊距離**:射程判定由「水平距離」改為「沿彈道 3D 飛行距離」(仰角把射程花在高度上),並在墜落階段加入水平阻力 `DropHorizontalDrag` 7/s 指數衰減(近乎垂直落下)。兩者缺一不可——只改 3D 距離時 -30° 仍達 24.4m > 平射 15.9m。實測(RangeByPitchProbe,負角=仰視):0°=13.1 / -15°=12.6 / -30°=10.8 / -50°=8.3 / -70°=4.7m,單調遞減。墜落重力同步 -38 → -60。
+   - **墨彈與塗抹範圍 ×1.4**:splatRadius 0.65→0.91、muzzleSplashRadius 0.42→0.59、墨彈 prefab scale 0.22→0.31、拖尾寬 0.17。
+   - 連帶修:ShootingAutoTest 案 3 的絕對門檻(`delta < 60`)因槍口噴濺功能而失效——改成同長度連射「空地 vs 對牆」自我校準比值(實測 1035 vs 155),半徑再調參也不會假紅。
+   - 驗證:EditMode 50 綠、AimPitchProbe 5/5(偏差 0.13~0.29m)、RangeByPitchProbe 單調遞減、Shooting 3/3、Locomotion 6/6、Squid 5/5、截圖確認墨漬放大。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 已知風險

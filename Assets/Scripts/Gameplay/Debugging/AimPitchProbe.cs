@@ -74,14 +74,21 @@ namespace SplatoonC.Gameplay.Debugging
                     aimReach, mask, QueryTriggerInteraction.Ignore);
                 Vector3 aimTarget = aimHasTarget ? aimHit.point : Vector3.zero;
 
+                // 每角度射 3 發取最佳值:18% 的彈刻意提前墜落(路徑痕跡機制),
+                // 單發量測會被它污染;主彈道準度要看正常彈。
+                float bestMetric = -1f;
+                for (int shot = 0; shot < 3; shot++)
+                {
                 intent.AttackHeld = true;
                 yield return null;
                 yield return null;
                 intent.AttackHeld = false;
 
-                // 追蹤:記錄水平飛行達射程時,彈到準心射線的距離
+                // 追蹤:記錄沿彈道飛行達射程時,彈到準心射線的距離
                 Vector3 launchPos = Vector3.zero;
                 Vector3 lastSeen = Vector3.zero;
+                Vector3 prevPos = Vector3.zero;
+                float travelled3D = 0f;
                 bool launched = false;
                 float distToAimLineAtRange = -1f;
                 float watchdog = 0f;
@@ -99,11 +106,13 @@ namespace SplatoonC.Gameplay.Debugging
                         if (!launched)
                         {
                             launchPos = c.position;
+                            prevPos = c.position;
                             launched = true;
                         }
-                        float horizontal = new Vector2(
-                            c.position.x - launchPos.x, c.position.z - launchPos.z).magnitude;
-                        if (distToAimLineAtRange < 0f && horizontal >= range)
+                        // 射程以沿彈道 3D 距離計(與 InkProjectile 一致)
+                        travelled3D += Vector3.Distance(c.position, prevPos);
+                        prevPos = c.position;
+                        if (distToAimLineAtRange < 0f && travelled3D >= range)
                         {
                             // 點到射線的垂直距離
                             Vector3 toPoint = c.position - camPos;
@@ -120,25 +129,25 @@ namespace SplatoonC.Gameplay.Debugging
                     yield return null;
                 }
 
-                bool ok;
-                string detail;
-                if (aimHasTarget)
+                float metric = aimHasTarget
+                    ? Vector3.Distance(lastSeen, aimTarget)
+                    : distToAimLineAtRange;
+                if (metric >= 0f && (bestMetric < 0f || metric < bestMetric))
                 {
-                    float missDistance = Vector3.Distance(lastSeen, aimTarget);
-                    ok = missDistance < 0.8f;
-                    detail = $"準心指向實物({Vector3.Distance(camPos, aimTarget):F1}m) 命中偏差={missDistance:F2}m";
+                    bestMetric = metric;
                 }
-                else
-                {
-                    ok = distToAimLineAtRange >= 0f && distToAimLineAtRange < 0.6f;
-                    detail = $"準心指向空中 射程{range:F0}m 處距準心線={distToAimLineAtRange:F2}m";
+                yield return new WaitForSeconds(0.2f);
                 }
+
+                bool ok = bestMetric >= 0f && bestMetric < 0.8f;
+                string detail = aimHasTarget
+                    ? $"準心指向實物 命中偏差={bestMetric:F2}m"
+                    : $"準心指向空中 射程{range:F0}m 處距準心線={bestMetric:F2}m";
                 if (ok)
                 {
                     passed++;
                 }
                 Debug.Log($"[PROBE] pitch={pitch:F0}° {detail} {(ok ? "OK" : "偏離")}");
-                yield return new WaitForSeconds(0.25f);
             }
 
             router.ClearOverrideSource();

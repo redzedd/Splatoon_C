@@ -66,9 +66,15 @@ namespace SplatoonC.Gameplay.Combat
 
             for (int i = 0; i < _maxSteps; i++)
             {
-                // 與 InkProjectile 相同的兩段式重力(射程內近直線、超程急墜)
-                velocity.y += (travelled >= config.StraightRange
-                    ? config.DropGravity : config.StraightGravity) * _stepTime;
+                // 與 InkProjectile 相同的兩段式模型(射程內近直線、超程急墜 + 水平煞停)
+                bool beyond = travelled >= config.StraightRange;
+                velocity.y += (beyond ? config.DropGravity : config.StraightGravity) * _stepTime;
+                if (beyond && config.DropHorizontalDrag > 0f)
+                {
+                    float damp = Mathf.Exp(-config.DropHorizontalDrag * _stepTime);
+                    velocity.x *= damp;
+                    velocity.z *= damp;
+                }
                 Vector3 next = point + velocity * _stepTime;
                 Vector3 delta = next - point;
                 float distance = delta.magnitude;
@@ -79,7 +85,7 @@ namespace SplatoonC.Gameplay.Combat
                     found = true;
                     break;
                 }
-                travelled += new Vector2(delta.x, delta.z).magnitude;
+                travelled += distance;
                 point = next;
             }
             if (!found)

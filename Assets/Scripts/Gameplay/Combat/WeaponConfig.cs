@@ -39,6 +39,9 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("超過射程後的墜落重力(負值,很大):高速落地")]
         private float _dropGravity = -38f;
 
+        [SerializeField, Tooltip("墜落階段的水平阻力(每秒指數衰減);夠大才會近乎垂直落下,仰射才不會比平射遠")]
+        private float _dropHorizontalDrag = 7f;
+
         [Header("地面痕跡來源")]
         [SerializeField, Range(0f, 1f), Tooltip("提前墜落的彈比例:讓連射在路徑上鋪出零星墨點")]
         private float _earlyDropChance = 0.18f;
@@ -87,6 +90,7 @@ namespace SplatoonC.Gameplay.Combat
         public float StraightRange => _straightRange;
         public float StraightGravity => _straightGravity;
         public float DropGravity => _dropGravity;
+        public float DropHorizontalDrag => _dropHorizontalDrag;
         public float EarlyDropChance => _earlyDropChance;
         public float EarlyDropRangeMin => _earlyDropRangeMin;
         public float EarlyDropRangeMax => _earlyDropRangeMax;
