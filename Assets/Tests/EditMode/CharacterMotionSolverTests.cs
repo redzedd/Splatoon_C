@@ -123,6 +123,76 @@ namespace SplatoonC.Tests
             Assert.IsTrue(step.HasMoveInput);
         }
 
+        private static LocomotionSettings CreateSettingsWithRamp(float accelTime, float decelTime)
+        {
+            return new LocomotionSettings(
+                moveSpeed: 6f,
+                gravity: -25f,
+                jumpHeight: 1.6f,
+                airControl: 0.6f,
+                coyoteTime: 0.12f,
+                jumpBufferTime: 0.10f,
+                turnSpeedDegPerSec: 720f,
+                groundedStickVelocity: -2f,
+                accelTime: accelTime,
+                decelTime: decelTime);
+        }
+
+        [Test]
+        public void 加速曲線_首幀未滿速_零點一五秒後達滿速()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            var first = CharacterMotionSolver.Step(
+                ref state, new Vector2(0f, 1f), 0f, true, false, s, 0f, dt);
+            Assert.Less(first.Displacement.z / dt, 2f, "首幀不得瞬時滿速");
+
+            for (int i = 1; i < 9; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt);
+            }
+            var later = CharacterMotionSolver.Step(
+                ref state, new Vector2(0f, 1f), 0f, true, false, s, 10 * dt, dt);
+            Assert.AreEqual(6f, later.Displacement.z / dt, 0.1f, "0.15 秒後應達滿速");
+        }
+
+        [Test]
+        public void 減速曲線_放開輸入後停下不瞬停()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            for (int i = 0; i < 12; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt);
+            }
+            var coast = CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, true, false, s, 12 * dt, dt);
+            Assert.Greater(coast.Displacement.z / dt, 2f, "放開首幀仍應有慣性");
+
+            for (int i = 13; i < 20; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, Vector2.zero, 0f, true, false, s, i * dt, dt);
+            }
+            var stopped = CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, true, false, s, 20 * dt, dt);
+            Assert.AreEqual(0f, stopped.Displacement.z / dt, 0.05f, "0.13 秒後應完全停下");
+        }
+
+        [Test]
+        public void 曲線時間為零_維持瞬時舊行為()
+        {
+            var s = CreateSettings();
+            var state = MotionState.CreateInitial();
+            var step = CharacterMotionSolver.Step(
+                ref state, new Vector2(0f, 1f), 0f, true, false, s, 0f, 1f / 60f);
+            Assert.AreEqual(6f, step.Displacement.z / (1f / 60f), 1e-3f);
+        }
+
         [Test]
         public void 速度倍率_直接乘在水平位移上()
         {

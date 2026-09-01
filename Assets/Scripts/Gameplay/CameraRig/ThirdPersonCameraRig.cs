@@ -35,6 +35,22 @@ namespace SplatoonC.Gameplay.CameraRig
         [SerializeField, Tooltip("啟動時鎖定滑鼠游標")]
         private bool _lockCursor = true;
 
+        [Header("速度感 FOV")]
+        [SerializeField, Tooltip("基準 FOV(度)")]
+        private float _baseFov = 60f;
+
+        [SerializeField, Tooltip("最大 FOV 增量(度),高速時的衝刺感")]
+        private float _maxFovBoost = 8f;
+
+        [SerializeField, Tooltip("開始增 FOV 的速度門檻(公尺/秒;基準跑速 6)")]
+        private float _fovSpeedThreshold = 7f;
+
+        [SerializeField, Tooltip("滿 FOV 增量的速度(公尺/秒;烏賊墨上衝刺約 10.8)")]
+        private float _fovMaxSpeed = 11f;
+
+        [SerializeField, Tooltip("FOV 過渡速度(每秒)")]
+        private float _fovLerpSpeed = 6f;
+
         private const float OcclusionSkin = 0.1f;
         private const float MinCameraDistance = 0.3f;
 
@@ -42,6 +58,9 @@ namespace SplatoonC.Gameplay.CameraRig
         private float _pitch = 10f;
         private Vector3 _smoothedPivot;
         private Vector3 _pivotVelocity;
+        private Camera _camera;
+        private Vector3 _lastTargetPosition;
+        private bool _hasLastTargetPosition;
 
         // 直接設定絕對角度(重生、過場、AutoTest 基準歸位用)。
         public void SetAngles(float yawDeg, float pitchDeg)
@@ -58,6 +77,7 @@ namespace SplatoonC.Gameplay.CameraRig
                 Cursor.visible = false;
             }
             _yaw = transform.eulerAngles.y;
+            _camera = GetComponent<Camera>();
             if (_target != null)
             {
                 _smoothedPivot = _target.position;
@@ -94,6 +114,31 @@ namespace SplatoonC.Gameplay.CameraRig
             }
 
             transform.SetPositionAndRotation(desired, Quaternion.Euler(_pitch, _yaw, 0f));
+
+            UpdateSpeedFov();
+        }
+
+        // 高速(烏賊墨上衝刺)時微增 FOV,強化速度感。
+        private void UpdateSpeedFov()
+        {
+            if (_camera == null || Time.deltaTime <= 0f)
+            {
+                return;
+            }
+            float speed = 0f;
+            if (_hasLastTargetPosition)
+            {
+                Vector3 delta = _target.position - _lastTargetPosition;
+                delta.y = 0f;
+                speed = delta.magnitude / Time.deltaTime;
+            }
+            _lastTargetPosition = _target.position;
+            _hasLastTargetPosition = true;
+
+            float boost01 = Mathf.InverseLerp(_fovSpeedThreshold, _fovMaxSpeed, speed);
+            float targetFov = _baseFov + _maxFovBoost * boost01;
+            _camera.fieldOfView = Mathf.Lerp(
+                _camera.fieldOfView, targetFov, 1f - Mathf.Exp(-_fovLerpSpeed * Time.deltaTime));
         }
     }
 }

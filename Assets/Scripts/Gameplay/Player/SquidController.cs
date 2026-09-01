@@ -25,6 +25,11 @@ namespace SplatoonC.Gameplay.Player
         // 供測試/HUD 讀:目前腳下是否自家墨。
         public bool OnOwnInk { get; private set; }
 
+        private CharacterController _controller;
+        private float _squashVelocity;
+        private bool _wasGrounded;
+        private float _lastVerticalSpeed;
+
         private void Awake()
         {
             if (_config == null)
@@ -35,6 +40,7 @@ namespace SplatoonC.Gameplay.Player
             {
                 _input = GetComponent<PlayerInputRouter>();
             }
+            _controller = GetComponent<CharacterController>();
         }
 
         private void Update()
@@ -62,11 +68,24 @@ namespace SplatoonC.Gameplay.Player
                 ? (OnOwnInk ? _config.SquidInkSpeedMultiplier : _config.SquidDrySpeedMultiplier)
                 : 1f;
 
+            // 落地擠壓:夠快落地時往壓扁方向踢一下,交給彈簧自然回彈
+            bool grounded = _controller != null && _controller.isGrounded;
+            if (grounded && !_wasGrounded && _lastVerticalSpeed < -_config.LandSquashMinFallSpeed)
+            {
+                _squashVelocity += _config.LandSquashKick;
+            }
+            _wasGrounded = grounded;
+            _lastVerticalSpeed = _controller != null ? _controller.velocity.y : 0f;
+
+            // 彈簧變形:剛性拉向目標、指數阻尼,過衝一次回穩(取代線性 MoveTowards)
             if (_visualRoot != null)
             {
                 float targetY = IsSquid ? _config.SquidVisualScaleY : 1f;
+                float current = _visualRoot.localScale.y;
+                _squashVelocity += (targetY - current) * _config.SquashStiffness * Time.deltaTime;
+                _squashVelocity *= Mathf.Exp(-_config.SquashDamping * Time.deltaTime);
                 Vector3 scale = _visualRoot.localScale;
-                scale.y = Mathf.MoveTowards(scale.y, targetY, _config.SquidSquashSpeed * Time.deltaTime);
+                scale.y = Mathf.Clamp(current + _squashVelocity * Time.deltaTime, 0.15f, 1.35f);
                 _visualRoot.localScale = scale;
             }
         }

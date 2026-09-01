@@ -66,10 +66,11 @@ namespace SplatoonC.Gameplay.Player
 
             float cameraYaw = _cameraTransform != null ? _cameraTransform.eulerAngles.y : 0f;
 
-            // 爬牆:烏賊態 + 前方自家墨牆 → 接管本幀位移(重力歸零)。
+            // 爬牆:烏賊態 + 前方自家墨牆 → 接管本幀位移(重力與水平慣性歸零,離牆不滑步)。
             if (TryClimb(_input.MoveInput, cameraYaw))
             {
                 _state.VerticalVelocity = 0f;
+                _state.HorizontalVelocity = Vector3.zero;
                 return;
             }
 

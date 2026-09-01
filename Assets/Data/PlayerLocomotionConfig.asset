@@ -19,4 +19,19 @@ MonoBehaviour:
   _coyoteTime: 0.12
   _jumpBuffer: 0.1
   _turnSpeed: 720
+  _accelTime: 0.12
+  _decelTime: 0.08
   _groundedStick: -2
+  _squidInkSpeedMultiplier: 1.8
+  _squidDrySpeedMultiplier: 0.7
+  _squidVisualScaleY: 0.3
+  _squashStiffness: 250
+  _squashDamping: 16
+  _landSquashKick: -5
+  _landSquashMinFallSpeed: 6
+  _climbSpeed: 3.5
+  _wallStickSpeed: 1
+  _climbProbeDistance: 0.7
+  _mantleDuration: 0.35
+  _squidInkRefillPerSecond: 0.5
+  _standingRefillPerSecond: 0.05

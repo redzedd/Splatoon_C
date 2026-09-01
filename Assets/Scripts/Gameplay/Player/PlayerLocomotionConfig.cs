@@ -27,6 +27,12 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("轉向角速度(度/秒)")]
         private float _turnSpeed = 720f;
 
+        [SerializeField, Tooltip("加速時間(秒):0→滿速;0 = 瞬時")]
+        private float _accelTime = 0.12f;
+
+        [SerializeField, Tooltip("減速時間(秒):滿速→0;0 = 瞬時")]
+        private float _decelTime = 0.08f;
+
         [SerializeField, Tooltip("著地時的下壓速度(負值),防著地旗標抖動")]
         private float _groundedStick = -2f;
 
@@ -40,8 +46,17 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Range(0.1f, 1f), Tooltip("烏賊態視覺下沉:Visual 的 Y 縮放")]
         private float _squidVisualScaleY = 0.3f;
 
-        [SerializeField, Tooltip("視覺壓扁/回彈速度(每秒縮放變化量)")]
-        private float _squidSquashSpeed = 6f;
+        [SerializeField, Tooltip("變形彈簧剛性(越大變形越快)")]
+        private float _squashStiffness = 250f;
+
+        [SerializeField, Tooltip("變形彈簧阻尼(越小過衝回彈越明顯)")]
+        private float _squashDamping = 16f;
+
+        [SerializeField, Tooltip("落地擠壓踢速(負值 = 往壓扁方向)")]
+        private float _landSquashKick = -5f;
+
+        [SerializeField, Tooltip("觸發落地擠壓的最小下落速度(公尺/秒)")]
+        private float _landSquashMinFallSpeed = 6f;
 
         [Header("爬牆(烏賊態,自家墨牆)")]
         [SerializeField, Tooltip("爬牆速度(公尺/秒)")]
@@ -74,7 +89,10 @@ namespace SplatoonC.Gameplay.Player
         public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
         public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
         public float SquidVisualScaleY => _squidVisualScaleY;
-        public float SquidSquashSpeed => _squidSquashSpeed;
+        public float SquashStiffness => _squashStiffness;
+        public float SquashDamping => _squashDamping;
+        public float LandSquashKick => _landSquashKick;
+        public float LandSquashMinFallSpeed => _landSquashMinFallSpeed;
 
         public float TurnSpeedDegPerSec => _turnSpeed;
 
@@ -88,7 +106,9 @@ namespace SplatoonC.Gameplay.Player
                 _coyoteTime,
                 _jumpBuffer,
                 _turnSpeed,
-                _groundedStick);
+                _groundedStick,
+                _accelTime,
+                _decelTime);
         }
     }
 }

@@ -11,6 +11,9 @@ namespace SplatoonC.Core.Locomotion
         public readonly float JumpBufferTime;
         public readonly float TurnSpeedDegPerSec;
         public readonly float GroundedStickVelocity;
+        // 加減速時間(秒);≤0 視為瞬時(舊行為)
+        public readonly float AccelTime;
+        public readonly float DecelTime;
 
         public LocomotionSettings(
             float moveSpeed,
@@ -20,7 +23,9 @@ namespace SplatoonC.Core.Locomotion
             float coyoteTime,
             float jumpBufferTime,
             float turnSpeedDegPerSec,
-            float groundedStickVelocity)
+            float groundedStickVelocity,
+            float accelTime = 0f,
+            float decelTime = 0f)
         {
             MoveSpeed = moveSpeed;
             Gravity = gravity;
@@ -30,6 +35,8 @@ namespace SplatoonC.Core.Locomotion
             JumpBufferTime = jumpBufferTime;
             TurnSpeedDegPerSec = turnSpeedDegPerSec;
             GroundedStickVelocity = groundedStickVelocity;
+            AccelTime = accelTime;
+            DecelTime = decelTime;
         }
     }
 }
