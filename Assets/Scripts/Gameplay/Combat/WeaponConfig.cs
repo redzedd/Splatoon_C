@@ -43,24 +43,24 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("墜落階段的水平阻力(每秒指數衰減);夠大才會近乎垂直落下,仰射才不會比平射遠")]
         private float _dropHorizontalDrag = 7f;
 
-        [Header("地面痕跡來源:沿路滴墨")]
-        [SerializeField, Range(0f, 1f), Tooltip("每發墨彈「會滴墨」的機率;0.25 = 約每 4 發滴一次")]
-        private float _dripChancePerShot = 0.25f;
+        [Header("地面痕跡來源:沿路滴墨(確定性,不是機率)")]
+        [SerializeField, Tooltip("每發固定滴幾滴;所需滴數 ≥ 射程 ÷ (射速 × 目標成路秒數 × 滴墨直徑)")]
+        private int _dripsPerShot = 2;
 
-        [SerializeField, Tooltip("滴墨時的墨滴數下限")]
-        private int _dripCountMin = 1;
-
-        [SerializeField, Tooltip("滴墨時的墨滴數上限")]
-        private int _dripCountMax = 2;
+        [SerializeField, Tooltip("相位循環發數;連續 N 發把滴落點錯開成 N 組,後面的發次填前面的縫")]
+        private int _dripPhaseCycle = 4;
 
         [SerializeField, Tooltip("第一滴最早出現的飛行距離(公尺)")]
         private float _dripStartDistance = 0.8f;
 
-        [SerializeField, Tooltip("滴落點的偏早權重;>1 壓向近端(腳邊也塗得到),1 = 沿彈道均勻")]
-        private float _dripDistanceBias = 2.5f;
+        [SerializeField, Tooltip("滴落窗口 = 直飛射程 × 此倍率;要涵蓋墜落段才鋪得到落點附近")]
+        private float _dripRangeMultiplier = 1.5f;
+
+        [SerializeField, Tooltip("滴落距離的隨機抖動(公尺,±);太大會在路上開洞,上限約等於間距減去滴墨直徑")]
+        private float _dripJitterDistance = 0.25f;
 
         [SerializeField, Tooltip("墨滴落地的塗色半徑(公尺)")]
-        private float _dripRadius = 1.82f;
+        private float _dripRadius = 1.2f;
 
         [SerializeField, Tooltip("墨滴繼承墨彈速度的比例;越小越接近原地垂直落下")]
         private float _dripInheritSpeed = 0.25f;
@@ -77,8 +77,11 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("槍口噴濺半徑(公尺);每次射擊必定在腳前濺一點")]
         private float _muzzleSplashRadius = 1.18f;
 
-        [SerializeField, Tooltip("槍口噴濺落點距離(公尺,沿瞄準水平方向)")]
+        [SerializeField, Tooltip("槍口噴濺落點的最近距離(公尺,沿瞄準水平方向)")]
         private float _muzzleSplashDistance = 1.3f;
+
+        [SerializeField, Tooltip("槍口噴濺落點的最遠距離;逐發在近↔遠之間輪替,否則每發都疊在同一點")]
+        private float _muzzleSplashDistanceFar = 4f;
 
         [SerializeField, Tooltip("墨彈命中偵測圖層(排除 Player)")]
         private LayerMask _hitMask = ~0;
@@ -113,11 +116,11 @@ namespace SplatoonC.Gameplay.Combat
         public float StraightGravity => _straightGravity;
         public float DropGravity => _dropGravity;
         public float DropHorizontalDrag => _dropHorizontalDrag;
-        public float DripChancePerShot => _dripChancePerShot;
-        public int DripCountMin => _dripCountMin;
-        public int DripCountMax => _dripCountMax;
+        public int DripsPerShot => _dripsPerShot;
+        public int DripPhaseCycle => _dripPhaseCycle;
         public float DripStartDistance => _dripStartDistance;
-        public float DripDistanceBias => _dripDistanceBias;
+        public float DripRangeMultiplier => _dripRangeMultiplier;
+        public float DripJitterDistance => _dripJitterDistance;
         public float DripRadius => _dripRadius;
         public float DripInheritSpeed => _dripInheritSpeed;
         public float DripGravity => _dripGravity;
@@ -125,6 +128,7 @@ namespace SplatoonC.Gameplay.Combat
         public float DripLifetime => _dripLifetime;
         public float MuzzleSplashRadius => _muzzleSplashRadius;
         public float MuzzleSplashDistance => _muzzleSplashDistance;
+        public float MuzzleSplashDistanceFar => _muzzleSplashDistanceFar;
         public LayerMask HitMask => _hitMask;
         public Color InkColor => _inkColor;
         public float SplatRadius => _splatRadius;

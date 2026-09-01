@@ -51,6 +51,8 @@ namespace SplatoonC.Gameplay.Combat
         private Transform _dripPoolRoot;
         private SquidController _squidController;
         private PlayerInkTank _inkTank;
+        // 遞增的發射序號:滴墨相位與槍口噴濺距離都靠它逐發輪替
+        private int _shotIndex;
 
         private void Awake()
         {
@@ -222,12 +224,14 @@ namespace SplatoonC.Gameplay.Combat
                     * direction;
             }
             var projectile = _pool.Get();
-            projectile.Launch(origin, direction * _config.MuzzleSpeed, _config, _pool, _dripPool);
-            PaintMuzzleSplash(origin, direction);
+            projectile.Launch(origin, direction * _config.MuzzleSpeed, _config, _pool, _dripPool, _shotIndex);
+            PaintMuzzleSplash(origin, direction, _shotIndex);
+            _shotIndex++;
         }
 
         // 槍口噴濺:每次射擊必定在腳前濺一小片墨——這是地面路徑痕跡的第二個來源。
-        private void PaintMuzzleSplash(Vector3 origin, Vector3 direction)
+        // 落點距離逐發在近↔遠之間輪替,否則每發都疊在同一點,近端只等於一個墨點。
+        private void PaintMuzzleSplash(Vector3 origin, Vector3 direction, int shotIndex)
         {
             if (_config.MuzzleSplashRadius <= 0f)
             {
@@ -238,7 +242,11 @@ namespace SplatoonC.Gameplay.Combat
             {
                 return;
             }
-            Vector3 probe = origin + flat.normalized * _config.MuzzleSplashDistance;
+            int cycle = Mathf.Max(1, _config.DripPhaseCycle);
+            float t = cycle > 1 ? (shotIndex % cycle) / (float)(cycle - 1) : 0f;
+            float distance = Mathf.Lerp(_config.MuzzleSplashDistance,
+                _config.MuzzleSplashDistanceFar, t);
+            Vector3 probe = origin + flat.normalized * distance;
             if (Physics.Raycast(probe + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit,
                     4f, _config.HitMask, QueryTriggerInteraction.Ignore))
             {

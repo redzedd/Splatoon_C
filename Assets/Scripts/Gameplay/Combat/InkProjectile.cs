@@ -33,7 +33,7 @@ namespace SplatoonC.Gameplay.Combat
         }
 
         public void Launch(Vector3 position, Vector3 velocity, WeaponConfig config,
-            IObjectPool<InkProjectile> pool, IObjectPool<InkDrip> dripPool)
+            IObjectPool<InkProjectile> pool, IObjectPool<InkDrip> dripPool, int shotIndex)
         {
             transform.position = position;
             if (velocity.sqrMagnitude > 0.0001f)
@@ -47,7 +47,7 @@ namespace SplatoonC.Gameplay.Combat
             _remainingLifetime = config.ProjectileLifetime;
             _released = false;
             _travelledDistance = 0f;
-            PlanDrips(config);
+            PlanDrips(config, shotIndex);
             // 池化重用鐵律:清掉上一輪殘留拖尾,否則會從回收點畫一條線到槍口
             if (_trail != null)
             {
@@ -55,29 +55,26 @@ namespace SplatoonC.Gameplay.Combat
             }
         }
 
-        private void PlanDrips(WeaponConfig config)
+        private void PlanDrips(WeaponConfig config, int shotIndex)
         {
             _dripIndex = 0;
             _dripCount = 0;
-            if (_dripPool == null || config.DripCountMax <= 0)
+            if (_dripPool == null || config.DripsPerShot <= 0)
             {
                 return;
             }
-            // 不是每發都滴:約每 4 發滴一次(否則連射會糊成一整片)
-            if (Random.value >= config.DripChancePerShot)
-            {
-                return;
-            }
-            int min = Mathf.Max(0, config.DripCountMin);
-            int max = Mathf.Max(min, config.DripCountMax);
-            int count = Random.Range(min, max + 1);
-            for (int i = 0; i < count && i < MaxDrips; i++)
+            int count = Mathf.Min(config.DripsPerShot, MaxDrips);
+            for (int i = 0; i < count; i++)
             {
                 _dripSamples[i] = Random.value;
             }
+            // 逐發相位錯開:第 s 發整組往後推 (s mod K)/K 個間距,後面的發次填前面的縫
+            int cycle = Mathf.Max(1, config.DripPhaseCycle);
+            float phase = (shotIndex % cycle) / (float)cycle;
+            float maxDistance = config.StraightRange * Mathf.Max(1f, config.DripRangeMultiplier);
             _dripCount = DripPlanner.Plan(_dripDistances, count,
-                config.DripStartDistance, config.StraightRange, _dripSamples,
-                config.DripDistanceBias);
+                config.DripStartDistance, maxDistance, phase, _dripSamples,
+                config.DripJitterDistance);
         }
 
         private void Update()

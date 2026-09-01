@@ -58,7 +58,7 @@ namespace SplatoonC.Gameplay.Debugging
                 yield break;
             }
 
-            // 滴墨已改成機率制(約每 4 發滴一次),單發量測沒有統計意義:射 20 發看總量與分佈。
+            // 滴墨是確定性的(每發固定滴數、逐發相位錯開),射 20 發看總量與分佈是否均勻。
             const int shots = 20;
             float range = player.GetComponent<InkShooter>().Config.StraightRange;
             Vector3 muzzle = player.transform.position;
@@ -102,9 +102,11 @@ namespace SplatoonC.Gameplay.Debugging
             }
             float perShot = spawnDistances.Count / (float)shots;
             float median = spawnDistances.Count > 0 ? spawnDistances[spawnDistances.Count / 2] : -1f;
-            // 期望:每發平均 0.2~0.8 滴(3~5 發滴 1~2 滴),且多數落在射程近半(腳邊也塗得到)
-            bool ok = perShot > 0.2f && perShot < 0.8f && nearHalf * 2 >= spawnDistances.Count;
-            Debug.Log($"[PROBE] {shots} 發共滴 {spawnDistances.Count} 滴(每發 {perShot:F2},期望 0.2~0.8)" +
+            // 期望:每發等於設定的滴數(確定性),且近半/遠半大致各半(相位錯開後分佈均勻)
+            float expected = player.GetComponent<InkShooter>().Config.DripsPerShot;
+            bool ok = Mathf.Abs(perShot - expected) < 0.35f && nearHalf > 0
+                && nearHalf < spawnDistances.Count;
+            Debug.Log($"[PROBE] {shots} 發共滴 {spawnDistances.Count} 滴(每發 {perShot:F2},期望 {expected:F0})" +
                 $" 中位距離={median:F1}m 落在近半({range * 0.5f:F1}m 內)={nearHalf}/{spawnDistances.Count}" +
                 $" {(ok ? "OK" : "異常")}");
 

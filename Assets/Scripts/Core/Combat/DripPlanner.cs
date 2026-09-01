@@ -1,14 +1,20 @@
 namespace SplatoonC.Core.Combat
 {
-    // 沿彈道滴墨的排程純邏輯:把 0~1 隨機取樣映射成「沿彈道遞增的滴落距離」。
+    // 沿彈道滴墨的排程純邏輯。
+    //
+    // 為什麼是確定性而非機率:0.5 秒只有 6~7 發,機率制的滴落位置隨機,
+    // 缺口是機率保證會出現的,調高機率只會讓缺口變少而不會消失。
+    // 改成「每發固定滴數、位置由規則決定、逐發相位錯開」,後面的發次自動填前面的縫。
+    //
+    // 位置公式:distance_i = min + ((i + phase) / count) × span
+    // phase ∈ [0,1) 逐發輪替。如此 i 的值域彼此不重疊,最遠一滴也永遠不會超出 max。
     // 遞增是硬需求——墨彈用單一游標依序觸發滴落,亂序會讓後面的滴永遠不觸發。
-    // bias > 1 把取樣壓向近端(玩家腳邊也要塗得到);bias = 1 為均勻分佈。
     public static class DripPlanner
     {
         public static int Plan(float[] distances, int count, float minDistance, float maxDistance,
-            float[] samples, float bias = 1f)
+            float phase, float[] jitterSamples, float jitterDistance)
         {
-            if (distances == null || samples == null || count <= 0)
+            if (distances == null || count <= 0)
             {
                 return 0;
             }
@@ -16,35 +22,51 @@ namespace SplatoonC.Core.Combat
             {
                 count = distances.Length;
             }
-            if (count > samples.Length)
-            {
-                count = samples.Length;
-            }
 
             float span = maxDistance - minDistance;
             if (span < 0f)
             {
                 span = 0f;
             }
-            for (int i = 0; i < count; i++)
+            // 區間倒置時 span 被夾成 0,夾制上限必須用 min+span(而非較小的 max),否則會被拉回 max
+            float end = minDistance + span;
+            if (phase < 0f)
             {
-                float s = samples[i];
-                if (s < 0f)
-                {
-                    s = 0f;
-                }
-                else if (s > 1f)
-                {
-                    s = 1f;
-                }
-                if (bias > 0f && bias != 1f)
-                {
-                    s = (float)System.Math.Pow(s, bias);
-                }
-                distances[i] = minDistance + s * span;
+                phase = 0f;
+            }
+            else if (phase >= 1f)
+            {
+                phase -= (int)phase;
             }
 
-            // 插入排序:n ≤ 3,無配置、比任何通用排序都省。
+            for (int i = 0; i < count; i++)
+            {
+                float d = minDistance + (i + phase) / count * span;
+                if (jitterSamples != null && i < jitterSamples.Length && jitterDistance > 0f)
+                {
+                    float s = jitterSamples[i];
+                    if (s < 0f)
+                    {
+                        s = 0f;
+                    }
+                    else if (s > 1f)
+                    {
+                        s = 1f;
+                    }
+                    d += (s * 2f - 1f) * jitterDistance;
+                }
+                if (d < minDistance)
+                {
+                    d = minDistance;
+                }
+                else if (d > end)
+                {
+                    d = end;
+                }
+                distances[i] = d;
+            }
+
+            // 插入排序:抖動可能讓相鄰兩滴互換,排序保住「游標依序觸發」的不變式。
             for (int i = 1; i < count; i++)
             {
                 float key = distances[i];

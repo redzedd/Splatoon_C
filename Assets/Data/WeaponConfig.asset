@@ -23,18 +23,19 @@ MonoBehaviour:
   _straightGravity: -1.5
   _dropGravity: -60
   _dropHorizontalDrag: 7
-  _dripChancePerShot: 0.25
-  _dripCountMin: 1
-  _dripCountMax: 2
+  _dripsPerShot: 2
+  _dripPhaseCycle: 4
   _dripStartDistance: 0.8
-  _dripDistanceBias: 2.5
-  _dripRadius: 1.82
+  _dripRangeMultiplier: 1.5
+  _dripJitterDistance: 0.25
+  _dripRadius: 1.2
   _dripInheritSpeed: 0.25
   _dripGravity: -25
   _dripSideSpeed: 0.8
   _dripLifetime: 3
   _muzzleSplashRadius: 1.18
   _muzzleSplashDistance: 1.3
+  _muzzleSplashDistanceFar: 4
   _hitMask:
     serializedVersion: 2
     m_Bits: 4294967039
