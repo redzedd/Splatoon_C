@@ -62,6 +62,38 @@
 - 本 session 結束時 unity-mcp 斷線、coplay-mcp 重新接上:下個 session 開工前先確認 verify 管道實際可用的 MCP 工具(verify skill 寫的是 unity-mcp 工具名;coplay-mcp 有對應的 check_compile_errors / execute_script / play_game,必要時先補 verify skill 的工具對照再動工)。
 - M1 遺留調參項:墨彈 22 m/s + 重力 -18 落點僅 ~5.6m(遠短於準星)——步驟 1 的 build 驗證順手調參(提高初速或瞄準補償)。
 
-## M2 之後(暫不細排)
+# Milestone 3:手感與視覺打磨
 
-多武器(滾筒/狙擊)→ 對戰規則與 AI Bot(M3 主軸候選)→ 音效/特效打磨。
+決策記錄(2026-09-02,與 redze 定案):主軸=打磨,重點三塊:射擊與塗地視覺、移動與烏賊手感、墨量系統(ink tank)。音效與氛圍留 M4;對戰 AI 順延。
+
+## M3 驗收標準
+
+1. **墨量迴圈**:連射會耗盡墨並停火;烏賊在自家墨上快速回墨(約 2 秒回滿);HUD 墨量條即時顯示。
+2. **塗地視覺**:墨漬為不規則有機潑濺形狀(非均勻圓,截圖對比);命中有噴濺粒子;墨彈有拖尾;畫面有準星。
+3. **移動手感**:水平移動有加減速曲線(非瞬時速度);烏賊變形有彈性過衝;落地有 squash 回饋;衝刺時相機 FOV 微增。
+4. **紅線維持**:粒子/拖尾全 pooled;standalone `-autotest` FPS 達標、零例外;全 AutoTest 迴歸綠。
+
+## 步驟
+
+1. **墨量系統**(~1 段落,gameplay 骨架先行):
+   - Core `InkTank` 純邏輯(容量、每發消耗、烏賊自家墨回墨速率、人形緩慢回墨、空墨停射)+ 測試。
+   - InkShooter 整合(墨不足不發射);SquidController 提供回墨條件;HUD 墨量條(uGUI Image fill)。
+   - 調參入 WeaponConfig(消耗)與 LocomotionConfig(回墨)。
+   - AutoTest:連射至空→停火;烏賊回墨→恢復;HUD 值變化。
+2. **射擊與塗地視覺**(~1–2 段落):
+   - InkSplat shader 加噪聲邊緣 + 每發隨機旋轉/大小 → 有機潑濺(**UV 翻轉鐵律不可動**;splat 面積變化可能碰既有測試 delta 閾值,紅了調閾值不調功能)。
+   - 命中噴濺粒子(內建 ParticleSystem,burst 型,物件池);墨彈 TrailRenderer 拖尾;準星 HUD;槍口位置修正(從視覺前方射出)。
+3. **移動與烏賊手感**(~1–2 段落,行為敏感):
+   - CharacterMotionSolver 加水平加減速曲線(0→滿速 ~0.15s;**動核心求解器,迴歸前後夾擊**;既有位移閾值驗算可容納)。
+   - 烏賊變形彈性過衝(手寫 spring,不裝 DOTween);自家墨上加深下沉;落地 squash;相機 FOV 隨速度。
+4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
+
+## 已知風險
+
+- 步驟 3 動 CharacterMotionSolver 是全案最敏感處——每次改動先跑 Locomotion/Squid/Climb 三套迴歸。
+- 烏賊半透明需 transparent 材質變體;若 URP 材質切換繁瑣,降級為「加深下沉+縮小」(視覺等效,免改渲染)。
+- 粒子與拖尾是新的每幀渲染成本——收官 standalone FPS 是硬閘門。
+
+## M3 之後(暫不細排)
+
+音效與氛圍(SFX/BGM/墨面光澤)→ 對戰規則與 AI Bot → 多武器。
