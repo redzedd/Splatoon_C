@@ -35,6 +35,7 @@ namespace SplatoonC.Gameplay.Combat
         private ObjectPool<InkProjectile> _pool;
         private Transform _poolRoot;
         private SquidController _squidController;
+        private PlayerInkTank _inkTank;
 
         private void Awake()
         {
@@ -53,6 +54,7 @@ namespace SplatoonC.Gameplay.Combat
             _camera = Camera.main;
             _fireClock = FireClock.CreateReady();
             _squidController = GetComponent<SquidController>();
+            _inkTank = GetComponent<PlayerInkTank>();
 
             _poolRoot = new GameObject("InkProjectilePool").transform;
             _pool = new ObjectPool<InkProjectile>(
@@ -104,6 +106,11 @@ namespace SplatoonC.Gameplay.Combat
 
         private void Fire()
         {
+            // 空墨不發射(整發判定,FireClock 的節奏槽照走 = 乾扣扳機)。
+            if (_inkTank != null && !_inkTank.TryConsume(_config.InkCostPerShot))
+            {
+                return;
+            }
             if (_camera == null)
             {
                 _camera = Camera.main;

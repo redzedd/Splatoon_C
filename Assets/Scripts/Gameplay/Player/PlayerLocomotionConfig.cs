@@ -61,6 +61,16 @@ namespace SplatoonC.Gameplay.Player
         public float ClimbProbeDistance => _climbProbeDistance;
         public float MantleDuration => _mantleDuration;
 
+        [Header("墨量")]
+        [SerializeField, Tooltip("烏賊在自家墨上的回墨速率(每秒,0~1;0.5 = 兩秒回滿)")]
+        private float _squidInkRefillPerSecond = 0.5f;
+
+        [SerializeField, Tooltip("非烏賊回墨時的緩慢回墨速率(每秒,0~1)")]
+        private float _standingRefillPerSecond = 0.05f;
+
+        public float SquidInkRefillPerSecond => _squidInkRefillPerSecond;
+        public float StandingRefillPerSecond => _standingRefillPerSecond;
+
         public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
         public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
         public float SquidVisualScaleY => _squidVisualScaleY;

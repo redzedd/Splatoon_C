@@ -75,11 +75,7 @@
 
 ## 步驟
 
-1. **墨量系統**(~1 段落,gameplay 骨架先行):
-   - Core `InkTank` 純邏輯(容量、每發消耗、烏賊自家墨回墨速率、人形緩慢回墨、空墨停射)+ 測試。
-   - InkShooter 整合(墨不足不發射);SquidController 提供回墨條件;HUD 墨量條(uGUI Image fill)。
-   - 調參入 WeaponConfig(消耗)與 LocomotionConfig(回墨)。
-   - AutoTest:連射至空→停火;烏賊回墨→恢復;HUD 值變化。
+1. ✅ **墨量系統**(2026-09-02 完成):Core `InkTank`(整發消耗+epsilon 容忍浮點累積、速率回墨)+ 5 測試;`PlayerInkTank` 持有(烏賊自家墨 0.5/s 快回、站立 0.05/s 慢回、InfiniteInk 除錯旗標供效能測試);InkShooter 空墨不發射(乾扣扳機);HUD 墨量條(InkBarFill 程式控寬)。驗證:EditMode 46 綠(浮點誤差被測試當場抓到修掉)、InkTankAutoTest 4/4(耗盡 0.036/回墨 1.000/恢復射擊消耗 6 發/HUD 174=174)、Shooting 乾淨 session 迴歸 3/3。教訓:塗色類測試互相污染 -Z 落彈區與墨量,能用墨量/歸屬斷言就不用地面 delta(session 純度規則入 CLAUDE.md)。
 2. **射擊與塗地視覺**(~1–2 段落):
    - InkSplat shader 加噪聲邊緣 + 每發隨機旋轉/大小 → 有機潑濺(**UV 翻轉鐵律不可動**;splat 面積變化可能碰既有測試 delta 閾值,紅了調閾值不調功能)。
    - 命中噴濺粒子(內建 ParticleSystem,burst 型,物件池);墨彈 TrailRenderer 拖尾;準星 HUD;槍口位置修正(從視覺前方射出)。

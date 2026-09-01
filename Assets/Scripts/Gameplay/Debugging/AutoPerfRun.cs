@@ -59,6 +59,12 @@ namespace SplatoonC.Gameplay.Debugging
             }
 
             yield return new WaitForSeconds(_warmup);
+            // 效能取樣要維持全程連射,開無限墨(墨量迴圈另有 InkTankAutoTest 驗)。
+            var tank = player.GetComponent<PlayerInkTank>();
+            if (tank != null)
+            {
+                tank.InfiniteInk = true;
+            }
             router.SetOverrideSource(new SpinFireIntent());
             Debug.Log($"[PERFRUN] 開始:{_duration:F0} 秒連射+旋轉");
 

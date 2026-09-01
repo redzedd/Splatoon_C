@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 8544913390146337702}
   - component: {fileID: 6959154370674104649}
   - component: {fileID: 3144797367385510914}
+  - component: {fileID: 5233738947475570186}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -384,3 +385,17 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967039
+--- !u!114 &5233738947475570186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8997229261282655361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c51407096402a946b92e7c54182c684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Player.PlayerInkTank
+  _config: {fileID: 11400000, guid: d7faf4ba29b157542b74ca5108d67712, type: 2}
+  _infiniteInk: 0

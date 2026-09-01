@@ -26,6 +26,9 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("散布角(度):每發在瞄準方向的隨機錐形內偏移")]
         private float _spreadAngleDeg = 2.5f;
 
+        [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化;0.045 約 22 發射空)")]
+        private float _inkCostPerShot = 0.045f;
+
         [SerializeField, Tooltip("墨彈命中偵測圖層(排除 Player)")]
         private LayerMask _hitMask = ~0;
 
@@ -54,6 +57,7 @@ namespace SplatoonC.Gameplay.Combat
         public float ProjectileGravity => _projectileGravity;
         public float ProjectileLifetime => _projectileLifetime;
         public float SpreadAngleDeg => _spreadAngleDeg;
+        public float InkCostPerShot => _inkCostPerShot;
         public LayerMask HitMask => _hitMask;
         public Color InkColor => _inkColor;
         public float SplatRadius => _splatRadius;
