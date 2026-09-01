@@ -84,8 +84,7 @@ namespace SplatoonC.Gameplay.Debugging
                 out RaycastHit centerHit, 60f, aimMask, QueryTriggerInteraction.Ignore)
                 ? centerHit.point
                 : cam.transform.position + cam.transform.forward * 20f;
-            // 單發射擊並追蹤;18% 的彈會提前墜落(路徑痕跡來源),量主彈道時要抽到正常彈,
-            // 故最多重射 5 次直到取得射程 > 9m 的一發。
+            // 單發射擊並追蹤;散布角讓單發有雜訊,故最多重射 5 次直到取得射程 > 9m 的一發。
             var poolRoot = GameObject.Find("InkProjectilePool");
             Vector3 lastSeen = Vector3.zero;
             Vector3 firstSeen = Vector3.zero;
@@ -169,7 +168,7 @@ namespace SplatoonC.Gameplay.Debugging
             Check("射程內近直線", maxDropInRange < 0.6f,
                 $"8m 內最大下墜={maxDropInRange:F2}m(期望 <0.6,舊單一拋物線約 1.5+)");
 
-            // 案 2:連射鋪路——路徑痕跡由「槍口必噴濺 + 18% 提前墜落彈」累積而成,
+            // 案 2:連射鋪路——路徑痕跡由「槍口必噴濺 + 每發沿路滴下的 1~3 滴墨」累積而成,
             // 單發不會鋪出路徑(使用者觀察到的真實行為),故連射再量。
             // 用俯視角(玩家實際塗地的視角):平視時彈全落在遠端,腳前自然沒有路。
             rig.SetAngles(180f, 22f);
@@ -202,7 +201,7 @@ namespace SplatoonC.Gameplay.Debugging
                 }
             }
             Check("連射鋪路", inkedSamples >= 6,
-                $"槍口→落點取樣 20 點中 {inkedSamples} 點有墨(槍口噴濺+提前落彈累積)");
+                $"槍口→落點取樣 20 點中 {inkedSamples} 點有墨(槍口噴濺+沿路滴墨累積)");
 
             // 案 3:烏賊潛入自家墨 → 視覺完全隱形;起身 → 恢復
             ground.Paint(player.transform.position, 3f, new Color(1f, 0.5f, 0f, 1f), 0.7f);

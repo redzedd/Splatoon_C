@@ -94,6 +94,12 @@
    - 連帶修:ShootingAutoTest 案 3 的絕對門檻(`delta < 60`)因槍口噴濺功能而失效——改成同長度連射「空地 vs 對牆」自我校準比值(實測 1035 vs 155),半徑再調參也不會假紅。
    - 驗證:EditMode 50 綠、AimPitchProbe 5/5(偏差 0.13~0.29m)、RangeByPitchProbe 單調遞減、Shooting 3/3、Locomotion 6/6、Squid 5/5、截圖確認墨漬放大。
 
+3.7 ✅ **手感回饋修正第三輪**(2026-09-02,使用者兩項):
+   - **射速 ×2、墨彈與塗墨 ×2、初速 ×1.5**:fireInterval 0.125→0.0625(16 發/秒)、muzzleSpeed 26→39、splatRadius 0.91→1.82、splashRadius 0.42→0.84、muzzleSplashRadius 0.59→1.18、墨彈 prefab scale 0.31→0.62、拖尾寬 0.34。
+   - **地面痕跡機制改寫成「沿路滴墨」**(使用者更正:不是提前落下的子彈,而是子彈沿路滴 1~3 滴):新增 Core `DripPlanner`(0~1 取樣 → 沿彈道遞增的滴落距離,遞增是硬需求:墨彈用單一游標依序觸發)+ 6 測試;新增池化 `InkDrip`(自有重力、無傷害、落地塗小 splat)與 `InkDrip.prefab`;`EarlyDropChance` 機制整組刪除(連同 WeaponConfig 三個欄位)。
+   - 驗證:EditMode 56 綠、DripProbe(單發滴 3 滴,生成點距槍口 4.3/4.8/6.3m)、AimAutoTest 5/5(連射鋪路由 13/20 提升到 18/20)、RangeByPitchProbe 仍單調遞減(14.7/14.3/12.7/9.4/5.1m)、Shooting 3/3、Locomotion 6/6、Climb 3/3、Squid 5/5。
+   - 未動但已知的連帶影響:射速加倍後墨量消耗也加倍(0.045/發 × 16 發/秒 → 滿槽約 22 發 ≈ 1.4 秒),`_inkCostPerShot` 刻意未調,待使用者決定。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 已知風險

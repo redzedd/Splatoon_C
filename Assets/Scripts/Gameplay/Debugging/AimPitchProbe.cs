@@ -74,8 +74,8 @@ namespace SplatoonC.Gameplay.Debugging
                     aimReach, mask, QueryTriggerInteraction.Ignore);
                 Vector3 aimTarget = aimHasTarget ? aimHit.point : Vector3.zero;
 
-                // 每角度射 3 發取最佳值:18% 的彈刻意提前墜落(路徑痕跡機制),
-                // 單發量測會被它污染;主彈道準度要看正常彈。
+                // 每角度射 3 發取最佳值:散布角(2.5°)讓單發量測有雜訊,
+                // 主彈道準度要看最好的那發。
                 float bestMetric = -1f;
                 for (int shot = 0; shot < 3; shot++)
                 {

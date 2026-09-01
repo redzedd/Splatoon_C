@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e2eeb923e46d64f9a01122875a5051, type: 3}
   m_Name: WeaponConfig
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponConfig
-  _fireInterval: 0.125
+  _fireInterval: 0.0625
   _maxShotsPerFrame: 4
-  _muzzleSpeed: 26
+  _muzzleSpeed: 39
   _projectileGravity: -11
   _projectileLifetime: 3
   _spreadAngleDeg: 2.5
@@ -23,17 +23,22 @@ MonoBehaviour:
   _straightGravity: -1.5
   _dropGravity: -60
   _dropHorizontalDrag: 7
-  _earlyDropChance: 0.18
-  _earlyDropRangeMin: 2
-  _earlyDropRangeMax: 7.5
-  _muzzleSplashRadius: 0.59
+  _dripCountMin: 1
+  _dripCountMax: 3
+  _dripStartDistance: 1.5
+  _dripRadius: 0.55
+  _dripInheritSpeed: 0.25
+  _dripGravity: -25
+  _dripSideSpeed: 0.8
+  _dripLifetime: 3
+  _muzzleSplashRadius: 1.18
   _muzzleSplashDistance: 1.3
   _hitMask:
     serializedVersion: 2
     m_Bits: 4294967039
   _inkColor: {r: 1, g: 0.5, b: 0, a: 1}
-  _splatRadius: 0.91
+  _splatRadius: 1.82
   _splatHardness: 0.7
   _splashCount: 2
-  _splashRadius: 0.42
+  _splashRadius: 0.84
   _splashSpread: 0.6

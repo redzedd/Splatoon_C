@@ -22,6 +22,9 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("墨彈 prefab(Assets/Prefabs/InkProjectile)")]
         private InkProjectile _projectilePrefab;
 
+        [SerializeField, Tooltip("墨滴 prefab(Assets/Prefabs/InkDrip);沿彈道滴落的小墨點")]
+        private InkDrip _dripPrefab;
+
         [SerializeField, Tooltip("瞄準射線圖層(排除 Player)")]
         private LayerMask _aimMask = ~0;
 
@@ -30,6 +33,9 @@ namespace SplatoonC.Gameplay.Combat
 
         [SerializeField, Tooltip("物件池預熱數量")]
         private int _poolPrewarm = 32;
+
+        [SerializeField, Tooltip("墨滴池預熱數量(每發最多滴 3 滴,需求量是墨彈的數倍)")]
+        private int _dripPoolPrewarm = 96;
 
         [SerializeField, Tooltip("發射點沿瞄準方向前移(公尺);_muzzle 已在槍口時設 0")]
         private float _muzzleForwardOffset;
@@ -40,7 +46,9 @@ namespace SplatoonC.Gameplay.Combat
         private Camera _camera;
         private FireClock _fireClock;
         private ObjectPool<InkProjectile> _pool;
+        private ObjectPool<InkDrip> _dripPool;
         private Transform _poolRoot;
+        private Transform _dripPoolRoot;
         private SquidController _squidController;
         private PlayerInkTank _inkTank;
 
@@ -85,12 +93,43 @@ namespace SplatoonC.Gameplay.Combat
                     _pool.Release(warm[i]);
                 }
             }
+
+            if (_dripPrefab == null)
+            {
+                Debug.LogWarning("InkShooter:缺少墨滴 prefab,沿路滴墨會停用", this);
+            }
+            else
+            {
+                _dripPoolRoot = new GameObject("InkDripPool").transform;
+                _dripPool = new ObjectPool<InkDrip>(
+                    CreateDrip,
+                    d => d.gameObject.SetActive(true),
+                    d => d.gameObject.SetActive(false),
+                    d => Destroy(d.gameObject),
+                    collectionCheck: true,
+                    defaultCapacity: _dripPoolPrewarm);
+
+                var warmDrips = new InkDrip[_dripPoolPrewarm];
+                for (int i = 0; i < _dripPoolPrewarm; i++)
+                {
+                    warmDrips[i] = _dripPool.Get();
+                }
+                for (int i = 0; i < _dripPoolPrewarm; i++)
+                {
+                    _dripPool.Release(warmDrips[i]);
+                }
+            }
         }
 
         private InkProjectile CreateProjectile()
         {
             var projectile = Instantiate(_projectilePrefab, _poolRoot);
             return projectile;
+        }
+
+        private InkDrip CreateDrip()
+        {
+            return Instantiate(_dripPrefab, _dripPoolRoot);
         }
 
         private void Update()
@@ -183,7 +222,7 @@ namespace SplatoonC.Gameplay.Combat
                     * direction;
             }
             var projectile = _pool.Get();
-            projectile.Launch(origin, direction * _config.MuzzleSpeed, _config, _pool);
+            projectile.Launch(origin, direction * _config.MuzzleSpeed, _config, _pool, _dripPool);
             PaintMuzzleSplash(origin, direction);
         }
 

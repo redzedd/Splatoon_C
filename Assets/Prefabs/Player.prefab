@@ -394,11 +394,13 @@ MonoBehaviour:
   _input: {fileID: 6872619061180101399}
   _muzzle: {fileID: 6253005704661832887}
   _projectilePrefab: {fileID: 3764897678730173231, guid: 782fcc661f371f44ab40aa59a302a632, type: 3}
+  _dripPrefab: {fileID: 4249119246433288612, guid: 1b51bc30e1373de4eba5956820ad1987, type: 3}
   _aimMask:
     serializedVersion: 2
     m_Bits: 4294967039
   _aimMaxDistance: 40
   _poolPrewarm: 32
+  _dripPoolPrewarm: 96
   _muzzleForwardOffset: 0
   _muzzleDropOffset: 0
 --- !u!114 &3144797367385510914
