@@ -62,10 +62,13 @@ namespace SplatoonC.Gameplay.Combat
             Vector3 point = origin;
             Vector3 landing = origin + direction * 10f;
             bool found = false;
+            float travelled = 0f;
 
             for (int i = 0; i < _maxSteps; i++)
             {
-                velocity.y += config.ProjectileGravity * _stepTime;
+                // 與 InkProjectile 相同的兩段式重力(射程內近直線、超程急墜)
+                velocity.y += (travelled >= config.StraightRange
+                    ? config.DropGravity : config.StraightGravity) * _stepTime;
                 Vector3 next = point + velocity * _stepTime;
                 Vector3 delta = next - point;
                 float distance = delta.magnitude;
@@ -76,6 +79,7 @@ namespace SplatoonC.Gameplay.Combat
                     found = true;
                     break;
                 }
+                travelled += new Vector2(delta.x, delta.z).magnitude;
                 point = next;
             }
             if (!found)

@@ -29,15 +29,31 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化;0.045 約 22 發射空)")]
         private float _inkCostPerShot = 0.045f;
 
-        [Header("飛行滴墨(步槍沿途留痕)")]
-        [SerializeField, Tooltip("滴墨間距(公尺):彈每飛這麼遠就往正下方滴一滴;0 = 關閉")]
-        private float _dripSpacing = 1.1f;
+        [Header("兩段式彈道(Splatoon 式:直飛到射程極限後急墜)")]
+        [SerializeField, Tooltip("直飛射程(公尺):在此距離內近乎直線,維持準心高度")]
+        private float _straightRange = 10f;
 
-        [SerializeField, Tooltip("滴墨半徑(公尺),應明顯小於主 splat")]
-        private float _dripRadius = 0.22f;
+        [SerializeField, Tooltip("直飛段重力(負值,很小):只做微微下墜")]
+        private float _straightGravity = -1.5f;
 
-        [SerializeField, Tooltip("滴墨往下探測的最大距離(公尺)")]
-        private float _dripMaxDrop = 8f;
+        [SerializeField, Tooltip("超過射程後的墜落重力(負值,很大):高速落地")]
+        private float _dropGravity = -38f;
+
+        [Header("地面痕跡來源")]
+        [SerializeField, Range(0f, 1f), Tooltip("提前墜落的彈比例:讓連射在路徑上鋪出零星墨點")]
+        private float _earlyDropChance = 0.18f;
+
+        [SerializeField, Tooltip("提前墜落彈的最短射程(公尺)")]
+        private float _earlyDropRangeMin = 2f;
+
+        [SerializeField, Tooltip("提前墜落彈的最長射程(公尺)")]
+        private float _earlyDropRangeMax = 7.5f;
+
+        [SerializeField, Tooltip("槍口噴濺半徑(公尺);每次射擊必定在腳前濺一點")]
+        private float _muzzleSplashRadius = 0.42f;
+
+        [SerializeField, Tooltip("槍口噴濺落點距離(公尺,沿瞄準水平方向)")]
+        private float _muzzleSplashDistance = 1.3f;
 
         [SerializeField, Tooltip("墨彈命中偵測圖層(排除 Player)")]
         private LayerMask _hitMask = ~0;
@@ -68,9 +84,14 @@ namespace SplatoonC.Gameplay.Combat
         public float ProjectileLifetime => _projectileLifetime;
         public float SpreadAngleDeg => _spreadAngleDeg;
         public float InkCostPerShot => _inkCostPerShot;
-        public float DripSpacing => _dripSpacing;
-        public float DripRadius => _dripRadius;
-        public float DripMaxDrop => _dripMaxDrop;
+        public float StraightRange => _straightRange;
+        public float StraightGravity => _straightGravity;
+        public float DropGravity => _dropGravity;
+        public float EarlyDropChance => _earlyDropChance;
+        public float EarlyDropRangeMin => _earlyDropRangeMin;
+        public float EarlyDropRangeMax => _earlyDropRangeMax;
+        public float MuzzleSplashRadius => _muzzleSplashRadius;
+        public float MuzzleSplashDistance => _muzzleSplashDistance;
         public LayerMask HitMask => _hitMask;
         public Color InkColor => _inkColor;
         public float SplatRadius => _splatRadius;

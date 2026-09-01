@@ -4,8 +4,9 @@ using UnityEngine.Pool;
 
 namespace SplatoonC.Gameplay.Combat
 {
-    // 池化墨彈:手動積分拋物線 + 每幀「前一位置→新位置」線段 raycast(高速彈不靠 collider)。
-    // 命中 PaintableSurface 就塗主點 + 噴濺小點;命中非可塗表面直接回收。
+    // 池化墨彈:兩段式彈道(Splatoon 式)——射程內近乎直線維持準心高度,
+    // 到達射程極限後重力驟增高速墜地。部分彈的射程被隨機縮短(提前墜落),
+    // 連射時就在路徑上鋪出零星墨點。每幀「前一位置→新位置」線段 raycast,不靠 collider。
     public sealed class InkProjectile : MonoBehaviour
     {
         private WeaponConfig _config;
@@ -14,7 +15,8 @@ namespace SplatoonC.Gameplay.Combat
         private float _remainingLifetime;
         private bool _released;
         private TrailRenderer _trail;
-        private float _distanceSinceDrip;
+        private float _travelledHorizontal;
+        private float _effectiveRange;
 
         private void Awake()
         {
@@ -29,7 +31,11 @@ namespace SplatoonC.Gameplay.Combat
             _pool = pool;
             _remainingLifetime = config.ProjectileLifetime;
             _released = false;
-            _distanceSinceDrip = 0f;
+            _travelledHorizontal = 0f;
+            // 少數彈提前墜落:這是地面路徑痕跡的來源之一(另一個是槍口噴濺)
+            _effectiveRange = Random.value < config.EarlyDropChance
+                ? Random.Range(config.EarlyDropRangeMin, config.EarlyDropRangeMax)
+                : config.StraightRange;
             // 池化重用鐵律:清掉上一輪殘留拖尾,否則會從回收點畫一條線到槍口
             if (_trail != null)
             {
@@ -46,7 +52,11 @@ namespace SplatoonC.Gameplay.Combat
 
             float dt = Time.deltaTime;
             Vector3 previous = transform.position;
-            _velocity.y += _config.ProjectileGravity * dt;
+
+            // 兩段式:射程內幾乎不掉(維持準心高度),超過射程才急墜
+            bool beyondRange = _travelledHorizontal >= _effectiveRange;
+            _velocity.y += (beyondRange ? _config.DropGravity : _config.StraightGravity) * dt;
+
             Vector3 next = previous + _velocity * dt;
             Vector3 delta = next - previous;
             float distance = delta.magnitude;
@@ -60,7 +70,7 @@ namespace SplatoonC.Gameplay.Combat
             }
 
             transform.position = next;
-            DripAlongPath(distance);
+            _travelledHorizontal += new Vector2(delta.x, delta.z).magnitude;
             _remainingLifetime -= dt;
             if (_remainingLifetime <= 0f)
             {
@@ -68,30 +78,6 @@ namespace SplatoonC.Gameplay.Combat
             }
         }
 
-        // 步槍沿途留痕:每飛一個間距,往正下方滴一滴小墨(Splatoon 的整條彈道都會沾墨)。
-        private void DripAlongPath(float travelled)
-        {
-            if (_config.DripSpacing <= 0f)
-            {
-                return;
-            }
-            _distanceSinceDrip += travelled;
-            if (_distanceSinceDrip < _config.DripSpacing)
-            {
-                return;
-            }
-            _distanceSinceDrip = 0f;
-
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit drop,
-                    _config.DripMaxDrop, _config.HitMask, QueryTriggerInteraction.Ignore))
-            {
-                var surface = drop.collider.GetComponent<PaintableSurface>();
-                if (surface != null)
-                {
-                    surface.Paint(drop.point, _config.DripRadius, _config.InkColor, _config.SplatHardness);
-                }
-            }
-        }
 
         private void OnHit(RaycastHit hit)
         {

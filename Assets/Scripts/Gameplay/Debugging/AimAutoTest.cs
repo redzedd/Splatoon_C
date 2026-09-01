@@ -84,74 +84,110 @@ namespace SplatoonC.Gameplay.Debugging
                 out RaycastHit centerHit, 60f, aimMask, QueryTriggerInteraction.Ignore)
                 ? centerHit.point
                 : cam.transform.position + cam.transform.forward * 20f;
-            intent.AttackHeld = true;
-            yield return null;
-            yield return null;
-            intent.AttackHeld = false;
-
-            // 追蹤該發彈:先抓飛行方向(頭幾幀),再追到回收記下落點
+            // 單發射擊並追蹤;18% 的彈會提前墜落(路徑痕跡來源),量主彈道時要抽到正常彈,
+            // 故最多重射 5 次直到取得射程 > 9m 的一發。
             var poolRoot = GameObject.Find("InkProjectilePool");
             Vector3 lastSeen = Vector3.zero;
             Vector3 firstSeen = Vector3.zero;
             Vector3 flightDir = Vector3.zero;
             bool sawProjectile = false;
             bool dirCaptured = false;
-            float watchdog = 0f;
-            while (watchdog < 3f)
+            float maxDropInRange = 0f;
+            float rangeM = 0f;
+
+            for (int attempt = 0; attempt < 5; attempt++)
             {
-                bool anyActive = false;
-                foreach (Transform c in poolRoot.transform)
+                lastSeen = Vector3.zero;
+                firstSeen = Vector3.zero;
+                sawProjectile = false;
+                dirCaptured = false;
+                maxDropInRange = 0f;
+
+                intent.AttackHeld = true;
+                yield return null;
+                yield return null;
+                intent.AttackHeld = false;
+
+                float watchdog = 0f;
+                while (watchdog < 3f)
                 {
-                    if (c.gameObject.activeInHierarchy)
+                    bool anyActive = false;
+                    foreach (Transform c in poolRoot.transform)
                     {
-                        anyActive = true;
-                        lastSeen = c.position;
-                        if (!sawProjectile)
+                        if (c.gameObject.activeInHierarchy)
                         {
-                            firstSeen = c.position;
-                            sawProjectile = true;
-                        }
-                        else if (!dirCaptured && (c.position - firstSeen).sqrMagnitude > 0.04f)
-                        {
-                            flightDir = (c.position - firstSeen).normalized;
-                            dirCaptured = true;
+                            anyActive = true;
+                            lastSeen = c.position;
+                            if (!sawProjectile)
+                            {
+                                firstSeen = c.position;
+                                sawProjectile = true;
+                            }
+                            else
+                            {
+                                if (!dirCaptured && (c.position - firstSeen).sqrMagnitude > 0.04f)
+                                {
+                                    flightDir = (c.position - firstSeen).normalized;
+                                    dirCaptured = true;
+                                }
+                                float horizontal = new Vector2(
+                                    c.position.x - firstSeen.x, c.position.z - firstSeen.z).magnitude;
+                                if (horizontal < 8f)
+                                {
+                                    maxDropInRange = Mathf.Max(maxDropInRange, firstSeen.y - c.position.y);
+                                }
+                            }
                         }
                     }
+                    if (sawProjectile && !anyActive)
+                    {
+                        break;
+                    }
+                    watchdog += Time.deltaTime;
+                    yield return null;
                 }
-                if (sawProjectile && !anyActive)
+
+                rangeM = Vector3.Distance(
+                    new Vector3(player.transform.position.x, 0f, player.transform.position.z),
+                    new Vector3(lastSeen.x, 0f, lastSeen.z));
+                if (rangeM > 9f)
                 {
                     break;
                 }
-                watchdog += Time.deltaTime;
-                yield return null;
+                yield return new WaitForSeconds(0.2f);
             }
 
             // 固定中心準心保證的是「射擊方向」而非落點——拋物線武器的必然:平視時中心射線
             // 落在 20m 外,而彈只飛 9m(2026-09-02 實測 18.3m 落差)。故驗收比對方向。
             float aimAngle = dirCaptured ? Vector3.Angle(flightDir, cam.transform.forward) : 999f;
-            float rangeM = Vector3.Distance(
-                new Vector3(player.transform.position.x, 0f, player.transform.position.z),
-                new Vector3(lastSeen.x, 0f, lastSeen.z));
             Check("準星方向一致", dirCaptured && aimAngle < 12f,
                 $"彈道與準心夾角={aimAngle:F1}°(含散布 2.5°+槍口視差) 射程={rangeM:F1}m 準心指向距離={Vector3.Distance(player.transform.position, predicted):F1}m");
 
-            // 案 2:彈道沿途留痕——沿路徑中段取樣 20 點(滴墨是離散點,單點取樣會抽中空隙)
-            // 取樣線起點用槍口而非角色中心:彈從角色右側 0.52m 射出,用角色中心會與真實彈道
-            // 有橫向偏差而低估覆蓋率(2026-09-02:同一條墨帶用兩種起點量到 8/20 vs 14/20)。
+            // 兩段式彈道:射程內幾乎不掉高度(維持準心高度),超程才急墜
+            Check("射程內近直線", maxDropInRange < 0.6f,
+                $"8m 內最大下墜={maxDropInRange:F2}m(期望 <0.6,舊單一拋物線約 1.5+)");
+
+            // 案 2:連射鋪路——路徑痕跡由「槍口必噴濺 + 18% 提前墜落彈」累積而成,
+            // 單發不會鋪出路徑(那是使用者觀察到的真實行為),故連射 1.5 秒再量。
+            intent.AttackHeld = true;
+            yield return new WaitForSeconds(1.5f);
+            intent.AttackHeld = false;
+            yield return new WaitForSeconds(1f);
+
             Vector3 traceStart = visual.Find("Muzzle") != null
                 ? visual.Find("Muzzle").position : player.transform.position;
             int inkedSamples = 0;
             for (int i = 0; i < 20; i++)
             {
-                float t = Mathf.Lerp(0.25f, 0.85f, i / 19f);
+                float t = Mathf.Lerp(0.08f, 0.85f, i / 19f);
                 Vector3 sample = Vector3.Lerp(traceStart, lastSeen, t);
                 if (ground.SampleOwnership(new Vector3(sample.x, 0f, sample.z)) == 1)
                 {
                     inkedSamples++;
                 }
             }
-            Check("沿途滴墨", inkedSamples >= 12,
-                $"路徑取樣 20 點中 {inkedSamples} 點有墨(期望 ≥12,連續痕跡)");
+            Check("連射鋪路", inkedSamples >= 6,
+                $"槍口→落點取樣 20 點中 {inkedSamples} 點有墨(槍口噴濺+提前落彈累積)");
 
             // 案 3:烏賊潛入自家墨 → 視覺完全隱形;起身 → 恢復
             ground.Paint(player.transform.position, 3f, new Color(1f, 0.5f, 0f, 1f), 0.7f);

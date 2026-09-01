@@ -1,4 +1,5 @@
 using SplatoonC.Core.Combat;
+using SplatoonC.Gameplay.Painting;
 using SplatoonC.Gameplay.Player;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -162,6 +163,32 @@ namespace SplatoonC.Gameplay.Combat
             }
             var projectile = _pool.Get();
             projectile.Launch(origin, direction * _config.MuzzleSpeed, _config, _pool);
+            PaintMuzzleSplash(origin, direction);
+        }
+
+        // 槍口噴濺:每次射擊必定在腳前濺一小片墨——這是地面路徑痕跡的第二個來源。
+        private void PaintMuzzleSplash(Vector3 origin, Vector3 direction)
+        {
+            if (_config.MuzzleSplashRadius <= 0f)
+            {
+                return;
+            }
+            Vector3 flat = new Vector3(direction.x, 0f, direction.z);
+            if (flat.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
+            Vector3 probe = origin + flat.normalized * _config.MuzzleSplashDistance;
+            if (Physics.Raycast(probe + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit,
+                    4f, _config.HitMask, QueryTriggerInteraction.Ignore))
+            {
+                var surface = hit.collider.GetComponent<PaintableSurface>();
+                if (surface != null)
+                {
+                    surface.Paint(hit.point, _config.MuzzleSplashRadius,
+                        _config.InkColor, _config.SplatHardness);
+                }
+            }
         }
     }
 }
