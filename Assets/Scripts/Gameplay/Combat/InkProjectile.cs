@@ -13,6 +13,12 @@ namespace SplatoonC.Gameplay.Combat
         private Vector3 _velocity;
         private float _remainingLifetime;
         private bool _released;
+        private TrailRenderer _trail;
+
+        private void Awake()
+        {
+            _trail = GetComponent<TrailRenderer>();
+        }
 
         public void Launch(Vector3 position, Vector3 velocity, WeaponConfig config, IObjectPool<InkProjectile> pool)
         {
@@ -22,6 +28,11 @@ namespace SplatoonC.Gameplay.Combat
             _pool = pool;
             _remainingLifetime = config.ProjectileLifetime;
             _released = false;
+            // 池化重用鐵律:清掉上一輪殘留拖尾,否則會從回收點畫一條線到槍口
+            if (_trail != null)
+            {
+                _trail.Clear();
+            }
         }
 
         private void Update()
@@ -56,6 +67,10 @@ namespace SplatoonC.Gameplay.Combat
 
         private void OnHit(RaycastHit hit)
         {
+            if (InkSplashFxPool.Instance != null)
+            {
+                InkSplashFxPool.Instance.Spawn(hit.point, hit.normal);
+            }
             var surface = hit.collider.GetComponent<PaintableSurface>();
             if (surface != null)
             {

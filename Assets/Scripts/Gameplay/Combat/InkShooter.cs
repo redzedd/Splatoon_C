@@ -30,6 +30,12 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("物件池預熱數量")]
         private int _poolPrewarm = 32;
 
+        [SerializeField, Tooltip("發射點沿瞄準方向前移(公尺),讓彈從身前射出")]
+        private float _muzzleForwardOffset = 0.4f;
+
+        [SerializeField, Tooltip("發射點下移(公尺),從頭頂壓到胸口高度")]
+        private float _muzzleDropOffset = 0.3f;
+
         private Camera _camera;
         private FireClock _fireClock;
         private ObjectPool<InkProjectile> _pool;
@@ -131,8 +137,9 @@ namespace SplatoonC.Gameplay.Combat
                 target = aimRay.GetPoint(_aimMaxDistance);
             }
 
-            Vector3 origin = _muzzle.position;
+            Vector3 origin = _muzzle.position - Vector3.up * _muzzleDropOffset;
             Vector3 direction = (target - origin).normalized;
+            origin += direction * _muzzleForwardOffset;
             if (_config.SpreadAngleDeg > 0f)
             {
                 Vector2 offset = Random.insideUnitCircle * _config.SpreadAngleDeg;

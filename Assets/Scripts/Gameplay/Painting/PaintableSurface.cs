@@ -22,10 +22,14 @@ namespace SplatoonC.Gameplay.Painting
         [SerializeField, Tooltip("歸屬網格 cell 大小(公尺,世界單位);烏賊腳下/牆面墨查詢的解析度")]
         private float _ownershipCellSize = 0.25f;
 
+        [SerializeField, Range(0f, 0.6f), Tooltip("墨漬邊緣噪聲振幅(0 = 正圓;只影響視覺,不影響歸屬網格)")]
+        private float _splatNoiseAmplitude = 0.3f;
+
         private static readonly int InkMapId = Shader.PropertyToID("_InkMap");
         private static readonly int SplatCenterId = Shader.PropertyToID("_SplatCenter");
         private static readonly int SplatColorId = Shader.PropertyToID("_SplatColor");
         private static readonly int SplatHardnessId = Shader.PropertyToID("_SplatHardness");
+        private static readonly int SplatNoiseId = Shader.PropertyToID("_SplatNoise");
 
         private Renderer _renderer;
         private RenderTexture _inkMap;
@@ -157,6 +161,13 @@ namespace SplatoonC.Gameplay.Painting
             // Linear 色彩空間:檢視器挑的 sRGB 色先轉 linear,否則墨色顯示偏亮(橘變黃)。
             _commandBuffer.SetGlobalColor(SplatColorId, color.linear);
             _commandBuffer.SetGlobalFloat(SplatHardnessId, hardness);
+            // 每發隨機波瓣:頻率取整數(shader 的 ±π 接縫要求),相位全隨機。
+            // 低頻大瓣(2~4)+中頻小瓣(5~8):高頻會變齒輪感(2026-09-02 截圖迭代)。
+            _commandBuffer.SetGlobalVector(SplatNoiseId, new Vector4(
+                _splatNoiseAmplitude,
+                Mathf.Round(Random.Range(2f, 5f)),
+                Mathf.Round(Random.Range(5f, 9f)),
+                Random.Range(0f, Mathf.PI * 2f)));
             _commandBuffer.DrawRenderer(_renderer, _splatMaterial, 0, 0);
             Graphics.ExecuteCommandBuffer(_commandBuffer);
 
