@@ -40,6 +40,7 @@ namespace SplatoonC.Gameplay.Player
         public bool OnOwnInk { get; private set; }
 
         private CharacterController _controller;
+        private PlayerLocomotion _locomotion;
         private float _squashVelocity;
         private bool _wasGrounded;
         private float _lastVerticalSpeed;
@@ -50,6 +51,7 @@ namespace SplatoonC.Gameplay.Player
         private DiveTransition _dive;
         private bool _submergeTarget;
         private Vector3 _visualBaseLocalPosition;
+        private Vector3 _diveWorldDirection = Vector3.down;
 
         private void Awake()
         {
@@ -62,6 +64,7 @@ namespace SplatoonC.Gameplay.Player
                 _input = GetComponent<PlayerInputRouter>();
             }
             _controller = GetComponent<CharacterController>();
+            _locomotion = GetComponent<PlayerLocomotion>();
             if (_visualRoot != null)
             {
                 _visualRenderers = _visualRoot.GetComponentsInChildren<Renderer>(true);
@@ -73,7 +76,16 @@ namespace SplatoonC.Gameplay.Player
         // 潛入自家墨 = 完全隱形,但進出都要走過場(不是瞬間開關 Renderer);入墨、出墨與游動時濺出水花。
         private void UpdateSubmergedVisual()
         {
-            bool wantsSubmerge = _hideWhenSubmerged && IsSquid && OnOwnInk;
+            // 爬牆時腳下沒有墨(OnOwnInk 是向下射線),要改看牆面,否則整個人露在牆外
+            bool insideWall = _locomotion != null && _locomotion.IsInsideInkedWall;
+            bool wantsSubmerge = _hideWhenSubmerged && IsSquid && (OnOwnInk || insideWall);
+
+            // 沉入方向只在「下沉中」更新:翻越離牆的瞬間爬牆狀態就沒了,
+            // 若跟著切回向下,角色會變成從地底冒出來而不是從牆裡鑽出來。
+            if (wantsSubmerge)
+            {
+                _diveWorldDirection = insideWall ? -_locomotion.ClimbWallNormal : Vector3.down;
+            }
             if (wantsSubmerge != _submergeTarget)
             {
                 _submergeTarget = wantsSubmerge;
@@ -176,12 +188,14 @@ namespace SplatoonC.Gameplay.Player
             }
         }
 
-        // 鑽進/鑽出的位移:往下沉進墨面(地面會擋住),同時橫向收縮做出被吸進去的感覺。
+        // 鑽進/鑽出的位移:沉進墨面(不透明表面會擋住),同時橫向收縮做出被吸進去的感覺。
         // 疊在彈簧壓扁之後套用,兩者不互相覆蓋(彈簧只動 y 縮放,這裡動位置與 x/z 縮放)。
         private void ApplyDiveVisual()
         {
             float eased = DiveTransition.Ease(_dive.Progress);
-            _visualRoot.localPosition = _visualBaseLocalPosition - Vector3.up * (_config.DiveDepth * eased);
+            // 平地往下沉、爬牆往牆裡沉;方向在 UpdateSubmergedVisual 決定並鎖住
+            Vector3 localDir = transform.InverseTransformDirection(_diveWorldDirection);
+            _visualRoot.localPosition = _visualBaseLocalPosition + localDir * (_config.DiveDepth * eased);
 
             float shrink = 1f - _config.DiveHorizontalShrink * eased;
             Vector3 scale = _visualRoot.localScale;

@@ -38,6 +38,11 @@ namespace SplatoonC.Gameplay.Player
 
         public bool IsClimbing => _climbPhase != ClimbPhase.None;
 
+        // 只有「貼在自家墨牆上爬」才算泡在墨裡;翻越階段是躍出牆面,該現形。
+        public bool IsInsideInkedWall => _climbPhase == ClimbPhase.Climbing;
+
+        public Vector3 ClimbWallNormal => _climbWallNormal;
+
         private void Awake()
         {
             _controller = GetComponent<CharacterController>();

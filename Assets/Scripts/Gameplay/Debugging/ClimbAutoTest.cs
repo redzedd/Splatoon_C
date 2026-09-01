@@ -87,6 +87,26 @@ namespace SplatoonC.Gameplay.Debugging
             float climbY = player.transform.position.y;
             Check("墨牆爬升", climbY > 0.8f, $"y={climbY:F2}(爬牆速度 3.5)");
 
+            // 案 2.5:爬牆中泡在墨牆裡 → 完全隱形,且視覺往牆內沉(不是往下沉)
+            //(OnOwnInk 是向下射線,爬牆時腳下沒墨,所以必須靠牆面狀態才不會整個人露在牆外)
+            var squid = player.GetComponent<SquidController>();
+            var visual = player.transform.Find("Visual");
+            var climbRenderers = visual.GetComponentsInChildren<Renderer>(true);
+            int visibleOnWall = 0;
+            foreach (var r in climbRenderers)
+            {
+                if (r.enabled)
+                {
+                    visibleOnWall++;
+                }
+            }
+            // 牆面法線是 -X,往牆裡沉 = 世界 +X;Player 未旋轉故局部 x 應為正
+            float intoWallOffset = visual.localPosition.x;
+            Check("爬牆時隱形且沉入牆內",
+                visibleOnWall == 0 && squid.IsSubmerged && intoWallOffset > 0.5f,
+                $"可見={visibleOnWall}/{climbRenderers.Length} submerged={squid.IsSubmerged} " +
+                $"沉入牆內={intoWallOffset:F2}m 視覺Y偏移={visual.localPosition.y:F2}(應接近 0)");
+
             // 案 3:繼續推到頂 → 翻越 → 落在平台上。
             // 只再推 1 秒:0.53s 到頂 + 0.35s 翻越 + 0.12s 前進;推太久會走過 3m 深的平台掉下去
             //(2026-09-02 首輪紅:多推 1.5s,落點 x=18.5 地面)。

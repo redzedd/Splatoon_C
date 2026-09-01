@@ -133,6 +133,14 @@
    - 驗證:EditMode 71 綠、DiveAutoTest 4/4(中間態確實存在:第 2 幀進度 0.10、Renderer 仍全開、視覺已下沉 0.04m;鑽出時進度 0.91、已重新可見、視覺仍在 -1.37m)、Aim 5/5、Feel 4/4、Squid 5/5。
    - 教訓再確認:0.12~0.18 秒的過場無法用 MCP 截圖驗證(往返 2~4 秒,連 timeScale 0.05 都來不及),瞬態一律用遊戲內協程斷言。
 
+3.12 ✅ **爬牆時不再露出實體**(2026-09-02,使用者回饋):
+   - 根因:`OnOwnInk` 是向下射線,爬牆時腳下沒墨 → 永遠不進入潛行狀態 → 整個角色掛在牆面外。
+   - `PlayerLocomotion` 公開 `IsInsideInkedWall`(只在 ClimbPhase.Climbing 為真;翻越是躍出牆面,該現形)與 `ClimbWallNormal`。
+   - `SquidController` 的潛行條件加上牆面狀態,且下沉方向改為 `-牆面法線`(往牆裡沉),不是向下。
+   - 方向在「下沉中」鎖住、鑽出時不重算:翻越瞬間爬牆狀態就消失,若跟著切回向下,角色會變成從地板裡冒出來。
+   - 驗證:ClimbAutoTest 4/4(新增案 2.5:爬牆中可見 0/2、submerged=True、沉入牆內 1.40m、Y 偏移 0.00)、Dive 4/4、Locomotion 6/6、Squid 5/5。
+   - 已知但未動(待使用者決定):爬在自家墨牆上時回墨仍走「站立」慢速率,因為 `PlayerInkTank` 判斷用的是 `OnOwnInk`。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 鋪路密度(0.5 秒成路)——2026-09-02 方案分析(✅ 已於步驟 3.10 實作方案 A)
