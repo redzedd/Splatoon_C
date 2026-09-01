@@ -6,15 +6,15 @@ namespace SplatoonC.Gameplay.Combat
     public sealed class WeaponConfig : ScriptableObject
     {
         [Header("連射")]
-        [SerializeField, Tooltip("連射間隔(秒);0.0625 = 每秒 16 發")]
-        private float _fireInterval = 0.0625f;
+        [SerializeField, Tooltip("連射間隔(秒);0.0769 = 每秒 13 發")]
+        private float _fireInterval = 0.0769231f;
 
         [SerializeField, Tooltip("長掉幀時單幀最大補射數,其餘欠帳丟棄")]
         private int _maxShotsPerFrame = 4;
 
         [Header("彈道")]
         [SerializeField, Tooltip("墨彈初速(公尺/秒)")]
-        private float _muzzleSpeed = 39f;
+        private float _muzzleSpeed = 48.75f;
 
         [SerializeField, Tooltip("墨彈重力(負值;比世界重力輕,飛出墨水拋物線)")]
         private float _projectileGravity = -10f;
@@ -25,10 +25,10 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("散布角(度):每發在瞄準方向的隨機錐形內偏移")]
         private float _spreadAngleDeg = 2.5f;
 
-        // 開火期間回墨照走,故淨消耗 = 射速 × 單發消耗 − 站立回墨率。
-        // 16 發/秒 × 0.01875 = 0.3/s,扣掉站立回墨 0.2/s → 淨 0.1/s = 連射 10 秒見底。
-        [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化);與射速、站立回墨率共同決定連射秒數")]
-        private float _inkCostPerShot = 0.01875f;
+        // 開火期間完全不回墨(PlayerInkTank 的 InkRefillGate),故連射秒數 = 1 ÷ (射速 × 單發消耗)。
+        // 13 發/秒 × 0.0076923 = 0.1/s → 滿槽連射 10 秒。
+        [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化);與射速共同決定連射秒數")]
+        private float _inkCostPerShot = 0.0076923f;
 
         [Header("兩段式彈道(Splatoon 式:直飛到射程極限後急墜)")]
         [SerializeField, Tooltip("直飛射程(公尺):在此距離內近乎直線,維持準心高度")]

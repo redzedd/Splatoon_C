@@ -65,36 +65,37 @@ namespace SplatoonC.Gameplay.Debugging
             yield return null;
             yield return null;
 
-            // 設計目標(使用者指定 2026-09-02):連射可撐 10 秒、站立從 0 回滿約 5 秒。
-            // 開火期間回墨照走,故淨消耗 = 射速 × 單發消耗 − 站立回墨率。
+            // 設計目標(使用者指定 2026-09-02):連射可撐 10 秒;開火期間完全不回墨,
+            // 放開 0.5 秒後才恢復;泡在自家墨裡(烏賊)從 0 回滿約 5 秒。
             // 案 1:連射 10 秒才見底,且 5 秒時仍過半(證明是 10 秒而不是 5 秒就空)
             intent.AttackHeld = true;
             yield return new WaitForSeconds(5f);
             float midpoint = tank.Normalized;
             yield return new WaitForSeconds(5.5f);
             float drained = tank.Normalized;
-            intent.AttackHeld = false;
             Check("連射 10 秒才見底", midpoint > 0.35f && drained < 0.12f,
                 $"5 秒時={midpoint:F3}(期望 >0.35) 10.5 秒時={drained:F3}(期望 <0.12)");
 
-            // 案 2:站立(非烏賊)從 0 回滿約 5 秒
-            yield return new WaitForSeconds(5f);
-            float standingRefilled = tank.Normalized;
-            Check("站立 5 秒回滿", standingRefilled > 0.9f, $"normalized={standingRefilled:F3}");
-
-            // 案 3:烏賊在自家墨上回墨更快——同樣 1 秒,烏賊的增量要明顯高於站立速率
-            intent.AttackHeld = true;
-            yield return new WaitForSeconds(5f);
+            // 案 2:放開後 0.5 秒內不回墨,過了延遲才開始回
+            //(仍按住時已由案 1 的持續下降證明「開火不回墨」)
             intent.AttackHeld = false;
-            float beforeSquid = tank.Normalized;
+            float atRelease = tank.Normalized;
+            yield return new WaitForSeconds(0.4f);
+            float inDelay = tank.Normalized;
+            yield return new WaitForSeconds(1.1f);
+            float afterDelay = tank.Normalized;
+            Check("放開 0.5 秒後才回墨",
+                Mathf.Abs(inDelay - atRelease) < 0.005f && afterDelay - inDelay > 0.01f,
+                $"放開瞬間={atRelease:F4} 0.4 秒後={inDelay:F4}(應幾乎不變) 1.5 秒後={afterDelay:F4}(應已上升)");
+
+            // 案 3:泡在自家墨裡(烏賊)從 0 回滿約 5 秒
             ground.Paint(player.transform.position, 3f, new Color(1f, 0.5f, 0f, 1f), 0.7f);
             yield return null;
             intent.SquidHeld = true;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(5f);
             intent.SquidHeld = false;
-            float squidGain = tank.Normalized - beforeSquid;
-            Check("烏賊回墨更快", squidGain > 0.3f,
-                $"1 秒增量={squidGain:F2}(站立同時間只有約 0.20)");
+            float squidRefilled = tank.Normalized;
+            Check("墨中 5 秒回滿", squidRefilled > 0.9f, $"normalized={squidRefilled:F3}");
 
             // 案 4:恢復射擊——以墨量下降證明實彈發射
             //(不依賴落彈區 delta:案 1 已塗滿 -Z 區,落舊墨區 delta 會假紅,2026-09-02 首輪教訓)。

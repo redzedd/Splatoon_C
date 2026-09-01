@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e2eeb923e46d64f9a01122875a5051, type: 3}
   m_Name: WeaponConfig
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponConfig
-  _fireInterval: 0.0625
+  _fireInterval: 0.07692308
   _maxShotsPerFrame: 4
-  _muzzleSpeed: 39
+  _muzzleSpeed: 48.75
   _projectileGravity: -11
   _projectileLifetime: 3
   _spreadAngleDeg: 2.5
-  _inkCostPerShot: 0.01875
+  _inkCostPerShot: 0.0076923077
   _straightRange: 10
   _straightGravity: -1.5
   _dropGravity: -60

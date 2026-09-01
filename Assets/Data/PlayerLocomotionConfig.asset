@@ -33,5 +33,6 @@ MonoBehaviour:
   _wallStickSpeed: 1
   _climbProbeDistance: 0.7
   _mantleDuration: 0.35
-  _squidInkRefillPerSecond: 0.5
-  _standingRefillPerSecond: 0.2
+  _squidInkRefillPerSecond: 0.2
+  _standingRefillPerSecond: 0.05
+  _refillDelayAfterFiring: 0.5

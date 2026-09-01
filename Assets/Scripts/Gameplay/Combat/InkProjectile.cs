@@ -36,6 +36,10 @@ namespace SplatoonC.Gameplay.Combat
             IObjectPool<InkProjectile> pool, IObjectPool<InkDrip> dripPool)
         {
             transform.position = position;
+            if (velocity.sqrMagnitude > 0.0001f)
+            {
+                transform.rotation = Quaternion.LookRotation(velocity);
+            }
             _velocity = velocity;
             _config = config;
             _pool = pool;
@@ -111,6 +115,11 @@ namespace SplatoonC.Gameplay.Combat
             }
 
             transform.position = next;
+            // 墨彈是橢球(prefab 的 z 軸被拉長),必須讓長軸對齊飛行方向
+            if (_velocity.sqrMagnitude > 0.0001f)
+            {
+                transform.rotation = Quaternion.LookRotation(_velocity);
+            }
             _travelledDistance += distance;
             ReleaseDueDrips(next);
             _remainingLifetime -= dt;
