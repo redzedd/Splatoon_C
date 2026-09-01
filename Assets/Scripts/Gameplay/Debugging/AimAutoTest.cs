@@ -160,7 +160,9 @@ namespace SplatoonC.Gameplay.Debugging
             // 固定中心準心保證的是「射擊方向」而非落點——拋物線武器的必然:平視時中心射線
             // 落在 20m 外,而彈只飛 9m(2026-09-02 實測 18.3m 落差)。故驗收比對方向。
             float aimAngle = dirCaptured ? Vector3.Angle(flightDir, cam.transform.forward) : 999f;
-            Check("準星方向一致", dirCaptured && aimAngle < 12f,
+            // 夾角主要來自 TPS 固有的相機↔槍口位置差(相機在後上方、槍口在角色右前),
+            // 加上散布與彈道補償上抬。真正的命中驗收在 AimPitchProbe(射程極限是否落在準心線上)。
+            Check("準星方向一致", dirCaptured && aimAngle < 15f,
                 $"彈道與準心夾角={aimAngle:F1}°(含散布 2.5°+槍口視差) 射程={rangeM:F1}m 準心指向距離={Vector3.Distance(player.transform.position, predicted):F1}m");
 
             // 兩段式彈道:射程內幾乎不掉高度(維持準心高度),超程才急墜
@@ -168,11 +170,24 @@ namespace SplatoonC.Gameplay.Debugging
                 $"8m 內最大下墜={maxDropInRange:F2}m(期望 <0.6,舊單一拋物線約 1.5+)");
 
             // 案 2:連射鋪路——路徑痕跡由「槍口必噴濺 + 18% 提前墜落彈」累積而成,
-            // 單發不會鋪出路徑(那是使用者觀察到的真實行為),故連射 1.5 秒再量。
+            // 單發不會鋪出路徑(使用者觀察到的真實行為),故連射再量。
+            // 用俯視角(玩家實際塗地的視角):平視時彈全落在遠端,腳前自然沒有路。
+            rig.SetAngles(180f, 22f);
+            yield return null;
+            yield return null;
+            Vector3 pathTargetStart = player.transform.position;
             intent.AttackHeld = true;
             yield return new WaitForSeconds(1.5f);
             intent.AttackHeld = false;
             yield return new WaitForSeconds(1f);
+            // 俯視下的落點:準心射線與地面的交點
+            Vector3 pathEnd = lastSeen;
+            if (Physics.Raycast(new Ray(cam.transform.position, cam.transform.forward),
+                    out RaycastHit groundHit, 40f, aimMask, QueryTriggerInteraction.Ignore))
+            {
+                pathEnd = groundHit.point;
+            }
+            lastSeen = pathEnd;
 
             Vector3 traceStart = visual.Find("Muzzle") != null
                 ? visual.Find("Muzzle").position : player.transform.position;

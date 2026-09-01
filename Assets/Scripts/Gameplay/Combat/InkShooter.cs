@@ -111,7 +111,9 @@ namespace SplatoonC.Gameplay.Combat
             }
         }
 
-        // 瞄準射線(槍口 → 相機中心落點)。AimReticle 用同一結果做彈道預測,準星才會等於真落點。
+        // 瞄準射線(槍口 → 準心目標),含彈道補償:
+        // 目標 = 準心射線上「射程極限處」的點(射程內先撞到東西就用命中點),
+        // 發射角略微上抬以抵銷直飛段的微重力下墜,讓彈在射程極限時剛好抵達準心那條線。
         public bool TryComputeAim(out Vector3 origin, out Vector3 direction)
         {
             origin = Vector3.zero;
@@ -129,14 +131,33 @@ namespace SplatoonC.Gameplay.Combat
                 }
             }
 
-            var aimRay = new Ray(_camera.transform.position, _camera.transform.forward);
-            Vector3 target = Physics.Raycast(aimRay, out RaycastHit hit, _aimMaxDistance, _aimMask,
+            origin = _muzzle.position - Vector3.up * _muzzleDropOffset;
+
+            // 準心射線的取樣上限 = 相機到槍口的距離 + 武器射程,如此射線上的目標點
+            // 正好對應「彈從槍口飛完射程」的位置。
+            Vector3 camPos = _camera.transform.position;
+            Vector3 camForward = _camera.transform.forward;
+            float camToMuzzle = Vector3.Distance(camPos, origin);
+            float aimReach = Mathf.Min(camToMuzzle + _config.StraightRange, _aimMaxDistance);
+
+            var aimRay = new Ray(camPos, camForward);
+            Vector3 target = Physics.Raycast(aimRay, out RaycastHit hit, aimReach, _aimMask,
                 QueryTriggerInteraction.Ignore)
                 ? hit.point
-                : aimRay.GetPoint(_aimMaxDistance);
+                : aimRay.GetPoint(aimReach);
 
-            origin = _muzzle.position - Vector3.up * _muzzleDropOffset;
-            direction = (target - origin).normalized;
+            // 重力補償:抬高瞄準點,補上飛到目標所需時間內的下墜量。
+            // 迭代兩次讓飛行時間與抬升量收斂(抬升會略微改變飛行距離)。
+            float gravity = Mathf.Abs(_config.StraightGravity);
+            float speed = Mathf.Max(_config.MuzzleSpeed, 0.01f);
+            Vector3 compensated = target;
+            for (int i = 0; i < 2; i++)
+            {
+                float flightTime = Vector3.Distance(origin, compensated) / speed;
+                compensated = target + Vector3.up * (0.5f * gravity * flightTime * flightTime);
+            }
+
+            direction = (compensated - origin).normalized;
             origin += direction * _muzzleForwardOffset;
             return true;
         }
