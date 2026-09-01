@@ -20,6 +20,7 @@ namespace SplatoonC.Gameplay.Player
 
         private CharacterController _controller;
         private MotionState _state;
+        private SquidController _squid;
 
         private void Awake()
         {
@@ -37,6 +38,7 @@ namespace SplatoonC.Gameplay.Player
             {
                 _cameraTransform = Camera.main.transform;
             }
+            _squid = GetComponent<SquidController>();
         }
 
         private void Update()
@@ -47,6 +49,7 @@ namespace SplatoonC.Gameplay.Player
             }
 
             float cameraYaw = _cameraTransform != null ? _cameraTransform.eulerAngles.y : 0f;
+            float speedMultiplier = _squid != null ? _squid.CurrentSpeedMultiplier : 1f;
             MotionStep step = CharacterMotionSolver.Step(
                 ref _state,
                 _input.MoveInput,
@@ -55,7 +58,8 @@ namespace SplatoonC.Gameplay.Player
                 _input.JumpPressedThisFrame,
                 _config.ToSettings(),
                 Time.time,
-                Time.deltaTime);
+                Time.deltaTime,
+                speedMultiplier);
 
             _controller.Move(step.Displacement);
 

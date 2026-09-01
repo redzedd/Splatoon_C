@@ -34,6 +34,7 @@ namespace SplatoonC.Gameplay.Combat
         private FireClock _fireClock;
         private ObjectPool<InkProjectile> _pool;
         private Transform _poolRoot;
+        private SquidController _squidController;
 
         private void Awake()
         {
@@ -51,6 +52,7 @@ namespace SplatoonC.Gameplay.Combat
             }
             _camera = Camera.main;
             _fireClock = FireClock.CreateReady();
+            _squidController = GetComponent<SquidController>();
 
             _poolRoot = new GameObject("InkProjectilePool").transform;
             _pool = new ObjectPool<InkProjectile>(
@@ -89,8 +91,11 @@ namespace SplatoonC.Gameplay.Combat
                 return;
             }
 
+            // 烏賊態不可射擊(視為未按住,冷卻照走)。
+            bool attackHeld = _input.AttackHeld
+                && (_squidController == null || !_squidController.IsSquid);
             int shots = _fireClock.ConsumeShots(
-                _input.AttackHeld, Time.time, _config.FireInterval, _config.MaxShotsPerFrame);
+                attackHeld, Time.time, _config.FireInterval, _config.MaxShotsPerFrame);
             for (int i = 0; i < shots; i++)
             {
                 Fire();

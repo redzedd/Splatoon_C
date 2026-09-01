@@ -48,7 +48,8 @@ namespace SplatoonC.Core.Locomotion
             bool jumpPressed,
             in LocomotionSettings settings,
             float time,
-            float deltaTime)
+            float deltaTime,
+            float speedMultiplier = 1f)
         {
             if (isGrounded)
             {
@@ -86,7 +87,8 @@ namespace SplatoonC.Core.Locomotion
             bool hasMove = clamped.sqrMagnitude > 0.0001f;
             Vector3 worldDir = Quaternion.Euler(0f, cameraYawDeg, 0f) * new Vector3(clamped.x, 0f, clamped.y);
             float control = isGrounded ? 1f : settings.AirControl;
-            Vector3 horizontal = worldDir * (settings.MoveSpeed * control);
+            // speedMultiplier:烏賊態在自家墨加速/乾地減速(由 Gameplay 層決定值,人形恆為 1)。
+            Vector3 horizontal = worldDir * (settings.MoveSpeed * speedMultiplier * control);
             float desiredYaw = hasMove ? Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg : 0f;
 
             Vector3 displacement = (horizontal + Vector3.up * state.VerticalVelocity) * deltaTime;

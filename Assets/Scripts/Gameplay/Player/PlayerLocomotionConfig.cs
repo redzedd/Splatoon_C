@@ -30,6 +30,24 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("著地時的下壓速度(負值),防著地旗標抖動")]
         private float _groundedStick = -2f;
 
+        [Header("烏賊態")]
+        [SerializeField, Tooltip("烏賊態在自家墨上的速度倍率")]
+        private float _squidInkSpeedMultiplier = 1.8f;
+
+        [SerializeField, Tooltip("烏賊態在無墨地面的速度倍率(蹲行慢)")]
+        private float _squidDrySpeedMultiplier = 0.7f;
+
+        [SerializeField, Range(0.1f, 1f), Tooltip("烏賊態視覺下沉:Visual 的 Y 縮放")]
+        private float _squidVisualScaleY = 0.3f;
+
+        [SerializeField, Tooltip("視覺壓扁/回彈速度(每秒縮放變化量)")]
+        private float _squidSquashSpeed = 6f;
+
+        public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
+        public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
+        public float SquidVisualScaleY => _squidVisualScaleY;
+        public float SquidSquashSpeed => _squidSquashSpeed;
+
         public float TurnSpeedDegPerSec => _turnSpeed;
 
         public LocomotionSettings ToSettings()

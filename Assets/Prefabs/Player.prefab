@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 6872619061180101399}
   - component: {fileID: 8544913390146337702}
   - component: {fileID: 6959154370674104649}
+  - component: {fileID: 3144797367385510914}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -322,6 +323,7 @@ MonoBehaviour:
   _look: {fileID: 6940538419726410420, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _jump: {fileID: 335763634227698153, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _attack: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  _squid: {fileID: 7040659881675835329, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _mouseSensitivity: 0.12
   _gamepadLookSpeed: 220
 --- !u!114 &8544913390146337702
@@ -361,3 +363,18 @@ MonoBehaviour:
     m_Bits: 4294967039
   _aimMaxDistance: 40
   _poolPrewarm: 32
+--- !u!114 &3144797367385510914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8997229261282655361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d28635a687e7444b82b0e651721ebd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Player.SquidController
+  _config: {fileID: 11400000, guid: d7faf4ba29b157542b74ca5108d67712, type: 2}
+  _input: {fileID: 6872619061180101399}
+  _visualRoot: {fileID: 4197822349549493834}

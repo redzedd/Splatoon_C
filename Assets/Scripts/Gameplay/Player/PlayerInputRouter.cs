@@ -22,6 +22,9 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("攻擊動作(Player/Attack,按住連射)")]
         private InputActionReference _attack;
 
+        [SerializeField, Tooltip("烏賊態動作(Player/Crouch,按住變形)")]
+        private InputActionReference _squid;
+
         [SerializeField, Tooltip("滑鼠靈敏度(度/像素);Pointer delta 已是每幀量,不乘 deltaTime")]
         private float _mouseSensitivity = 0.12f;
 
@@ -64,6 +67,18 @@ namespace SplatoonC.Gameplay.Player
             }
         }
 
+        public bool SquidHeld
+        {
+            get
+            {
+                if (_overrideSource != null)
+                {
+                    return _overrideSource.SquidHeld;
+                }
+                return _squid != null && _squid.action.IsPressed();
+            }
+        }
+
         // 回傳「已換算成角度增量」的視角輸入,呼叫端不需再管裝置量綱差異。
         public Vector2 LookDeltaDeg
         {
@@ -102,6 +117,7 @@ namespace SplatoonC.Gameplay.Player
             if (_look == null) Debug.LogError("PlayerInputRouter:缺少 Look 動作引用(Player/Look)", this);
             if (_jump == null) Debug.LogError("PlayerInputRouter:缺少 Jump 動作引用(Player/Jump)", this);
             if (_attack == null) Debug.LogError("PlayerInputRouter:缺少 Attack 動作引用(Player/Attack)", this);
+            if (_squid == null) Debug.LogError("PlayerInputRouter:缺少烏賊態動作引用(Player/Crouch)", this);
         }
 
         private void OnEnable()
@@ -111,6 +127,7 @@ namespace SplatoonC.Gameplay.Player
             if (_look != null) _look.action.Enable();
             if (_jump != null) _jump.action.Enable();
             if (_attack != null) _attack.action.Enable();
+            if (_squid != null) _squid.action.Enable();
         }
 
         private void OnDisable()
@@ -119,6 +136,7 @@ namespace SplatoonC.Gameplay.Player
             if (_look != null) _look.action.Disable();
             if (_jump != null) _jump.action.Disable();
             if (_attack != null) _attack.action.Disable();
+            if (_squid != null) _squid.action.Disable();
         }
     }
 }

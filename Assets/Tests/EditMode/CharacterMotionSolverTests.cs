@@ -124,6 +124,16 @@ namespace SplatoonC.Tests
         }
 
         [Test]
+        public void 速度倍率_直接乘在水平位移上()
+        {
+            var s = CreateSettings();
+            var state = MotionState.CreateInitial();
+            var step = CharacterMotionSolver.Step(
+                ref state, new Vector2(0f, 1f), 0f, true, false, s, 0f, 1f, 1.8f);
+            Assert.AreEqual(10.8f, step.Displacement.z, 1e-3f);
+        }
+
+        [Test]
         public void 輸入向量超長_被正規化不超速()
         {
             var s = CreateSettings();

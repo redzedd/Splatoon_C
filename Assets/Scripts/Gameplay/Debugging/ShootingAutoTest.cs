@@ -17,6 +17,7 @@ namespace SplatoonC.Gameplay.Debugging
             public Vector2 LookDeltaDeg { get; set; }
             public bool JumpPressedThisFrame { get; set; }
             public bool AttackHeld { get; set; }
+            public bool SquidHeld { get; set; }
         }
 
         public static void Run()

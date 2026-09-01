@@ -10,5 +10,6 @@ namespace SplatoonC.Gameplay.Player
         Vector2 LookDeltaDeg { get; }
         bool JumpPressedThisFrame { get; }
         bool AttackHeld { get; }
+        bool SquidHeld { get; }
     }
 }

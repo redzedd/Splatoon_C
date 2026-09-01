@@ -108,6 +108,12 @@ namespace SplatoonC.Gameplay.Painting
             _commandBuffer.SetGlobalFloat(SplatHardnessId, hardness);
             _commandBuffer.DrawRenderer(_renderer, _splatMaterial, 0, 0);
             Graphics.ExecuteCommandBuffer(_commandBuffer);
+
+            // 同步登記到腳下墨網格(M1 水平地面假設;之後牆面塗色要改按表面法線過濾)。
+            if (InkWorld.Instance != null)
+            {
+                InkWorld.Instance.RegisterSplat(worldPosition, radius);
+            }
         }
 
         private void OnDestroy()
