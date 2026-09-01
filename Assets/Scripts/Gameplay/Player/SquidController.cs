@@ -1,3 +1,4 @@
+using SplatoonC.Gameplay.Combat;
 using SplatoonC.Gameplay.Painting;
 using UnityEngine;
 
@@ -18,7 +19,16 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("腳下偵測射線圖層(場景接線時排除 Player)")]
         private LayerMask _groundMask = ~0;
 
+        [SerializeField, Tooltip("潛入自家墨時完全隱形(關閉視覺 Renderer)")]
+        private bool _hideWhenSubmerged = true;
+
+        [SerializeField, Tooltip("潛行游動的水花間距(公尺)")]
+        private float _swimSplashSpacing = 1.2f;
+
         public bool IsSquid { get; private set; }
+
+        // 潛行中(烏賊態 + 站在自家墨上):完全隱形
+        public bool IsSubmerged { get; private set; }
 
         public float CurrentSpeedMultiplier { get; private set; } = 1f;
 
@@ -29,6 +39,10 @@ namespace SplatoonC.Gameplay.Player
         private float _squashVelocity;
         private bool _wasGrounded;
         private float _lastVerticalSpeed;
+        private Renderer[] _visualRenderers;
+        private bool _renderersVisible = true;
+        private Vector3 _lastSplashPosition;
+        private float _swimDistance;
 
         private void Awake()
         {
@@ -41,6 +55,60 @@ namespace SplatoonC.Gameplay.Player
                 _input = GetComponent<PlayerInputRouter>();
             }
             _controller = GetComponent<CharacterController>();
+            if (_visualRoot != null)
+            {
+                _visualRenderers = _visualRoot.GetComponentsInChildren<Renderer>(true);
+            }
+            _lastSplashPosition = transform.position;
+        }
+
+        // 潛入自家墨 = 完全隱形;入墨與游動時濺出水花。
+        private void UpdateSubmergedVisual()
+        {
+            bool submerged = _hideWhenSubmerged && IsSquid && OnOwnInk;
+            if (submerged != IsSubmerged)
+            {
+                IsSubmerged = submerged;
+                if (submerged)
+                {
+                    SpawnSplash();
+                    _swimDistance = 0f;
+                }
+            }
+            _lastSplashPosition = transform.position;
+
+            bool shouldShow = !submerged;
+            if (_visualRenderers != null && shouldShow != _renderersVisible)
+            {
+                _renderersVisible = shouldShow;
+                for (int i = 0; i < _visualRenderers.Length; i++)
+                {
+                    if (_visualRenderers[i] != null)
+                    {
+                        _visualRenderers[i].enabled = shouldShow;
+                    }
+                }
+            }
+
+            if (submerged && _swimSplashSpacing > 0f)
+            {
+                Vector3 delta = _controller != null ? _controller.velocity * Time.deltaTime : Vector3.zero;
+                delta.y = 0f;
+                _swimDistance += delta.magnitude;
+                if (_swimDistance >= _swimSplashSpacing)
+                {
+                    _swimDistance = 0f;
+                    SpawnSplash();
+                }
+            }
+        }
+
+        private void SpawnSplash()
+        {
+            if (InkSplashFxPool.Instance != null)
+            {
+                InkSplashFxPool.Instance.Spawn(transform.position + Vector3.up * 0.05f, Vector3.up);
+            }
         }
 
         private void Update()
@@ -67,6 +135,8 @@ namespace SplatoonC.Gameplay.Player
             CurrentSpeedMultiplier = IsSquid
                 ? (OnOwnInk ? _config.SquidInkSpeedMultiplier : _config.SquidDrySpeedMultiplier)
                 : 1f;
+
+            UpdateSubmergedVisual();
 
             // 落地擠壓:夠快落地時往壓扁方向踢一下,交給彈簧自然回彈
             bool grounded = _controller != null && _controller.isGrounded;

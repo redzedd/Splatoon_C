@@ -29,6 +29,16 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化;0.045 約 22 發射空)")]
         private float _inkCostPerShot = 0.045f;
 
+        [Header("飛行滴墨(步槍沿途留痕)")]
+        [SerializeField, Tooltip("滴墨間距(公尺):彈每飛這麼遠就往正下方滴一滴;0 = 關閉")]
+        private float _dripSpacing = 1.1f;
+
+        [SerializeField, Tooltip("滴墨半徑(公尺),應明顯小於主 splat")]
+        private float _dripRadius = 0.22f;
+
+        [SerializeField, Tooltip("滴墨往下探測的最大距離(公尺)")]
+        private float _dripMaxDrop = 8f;
+
         [SerializeField, Tooltip("墨彈命中偵測圖層(排除 Player)")]
         private LayerMask _hitMask = ~0;
 
@@ -58,6 +68,9 @@ namespace SplatoonC.Gameplay.Combat
         public float ProjectileLifetime => _projectileLifetime;
         public float SpreadAngleDeg => _spreadAngleDeg;
         public float InkCostPerShot => _inkCostPerShot;
+        public float DripSpacing => _dripSpacing;
+        public float DripRadius => _dripRadius;
+        public float DripMaxDrop => _dripMaxDrop;
         public LayerMask HitMask => _hitMask;
         public Color InkColor => _inkColor;
         public float SplatRadius => _splatRadius;

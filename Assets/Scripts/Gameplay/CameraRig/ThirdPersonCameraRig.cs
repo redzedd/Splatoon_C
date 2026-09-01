@@ -26,6 +26,9 @@ namespace SplatoonC.Gameplay.CameraRig
         [SerializeField, Tooltip("樞紐位置平滑時間(秒);只平滑位置,角度零延遲")]
         private float _followSmoothTime = 0.04f;
 
+        [SerializeField, Tooltip("取景抬高(公尺):把角色壓到畫面下半,準星(畫面中心)落在角色頭上方")]
+        private float _aimHeightOffset = 1.1f;
+
         [SerializeField, Tooltip("遮擋偵測球半徑(公尺)")]
         private float _occlusionRadius = 0.25f;
 
@@ -94,8 +97,10 @@ namespace SplatoonC.Gameplay.CameraRig
             Vector2 lookDelta = _input != null ? _input.LookDeltaDeg : Vector2.zero;
             CameraOrbitSolver.AdvanceAngles(ref _yaw, ref _pitch, lookDelta, _minPitch, _maxPitch);
 
+            // 取景點抬高於角色:相機中心(=準星)看向角色頭上方,角色落在畫面下半
+            Vector3 framedTarget = _target.position + Vector3.up * _aimHeightOffset;
             _smoothedPivot = Vector3.SmoothDamp(
-                _smoothedPivot, _target.position, ref _pivotVelocity, _followSmoothTime);
+                _smoothedPivot, framedTarget, ref _pivotVelocity, _followSmoothTime);
 
             Vector3 desired = CameraOrbitSolver.ResolvePosition(_smoothedPivot, _yaw, _pitch, _distance);
             Vector3 toCamera = desired - _smoothedPivot;

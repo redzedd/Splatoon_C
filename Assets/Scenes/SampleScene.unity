@@ -352,8 +352,8 @@ Transform:
   m_GameObject: {fileID: 160847165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 1, z: 0}
-  m_LocalScale: {x: 0.5, y: 2, z: 3}
+  m_LocalPosition: {x: 1.5, y: 1.75, z: 0}
+  m_LocalScale: {x: 0.5, y: 3.5, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 953528110}
@@ -707,11 +707,17 @@ MonoBehaviour:
   _minPitch: -30
   _maxPitch: 60
   _followSmoothTime: 0.04
+  _aimHeightOffset: 1.1
   _occlusionRadius: 0.25
   _occlusionMask:
     serializedVersion: 2
     m_Bits: 4294967039
   _lockCursor: 1
+  _baseFov: 60
+  _maxFovBoost: 8
+  _fovSpeedThreshold: 7
+  _fovMaxSpeed: 11
+  _fovLerpSpeed: 6
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,6 +1064,7 @@ GameObject:
   - component: {fileID: 562471926}
   - component: {fileID: 562471925}
   - component: {fileID: 562471930}
+  - component: {fileID: 562471931}
   m_Layer: 0
   m_Name: HudCanvas
   m_TagString: Untagged
@@ -1182,6 +1189,23 @@ MonoBehaviour:
   _tank: {fileID: 5267258545148411289}
   _fill: {fileID: 1183467254}
   _fullWidth: 240
+--- !u!114 &562471931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562471924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43bbdae58b8127f45b6c4faae00b209c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.AimReticle
+  _shooter: {fileID: 5267258545148411291}
+  _reticle: {fileID: 791250925}
+  _stepTime: 0.05
+  _maxSteps: 40
+  _reticleLift: 0.05
 --- !u!1 &714606715
 GameObject:
   m_ObjectHideFlags: 0
@@ -2212,6 +2236,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c51407096402a946b92e7c54182c684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Player.PlayerInkTank
+--- !u!114 &5267258545148411291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6959154370674104649, guid: d47a030c5d483724da404d9bef0e797e, type: 3}
+  m_PrefabInstance: {fileID: 5267258545148411286}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c374f17dceebb48a893c2d75d57b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.InkShooter
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

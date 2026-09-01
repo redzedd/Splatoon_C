@@ -30,11 +30,11 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("物件池預熱數量")]
         private int _poolPrewarm = 32;
 
-        [SerializeField, Tooltip("發射點沿瞄準方向前移(公尺),讓彈從身前射出")]
-        private float _muzzleForwardOffset = 0.4f;
+        [SerializeField, Tooltip("發射點沿瞄準方向前移(公尺);_muzzle 已在槍口時設 0")]
+        private float _muzzleForwardOffset;
 
-        [SerializeField, Tooltip("發射點下移(公尺),從頭頂壓到胸口高度")]
-        private float _muzzleDropOffset = 0.3f;
+        [SerializeField, Tooltip("發射點下移(公尺);_muzzle 已在槍口時設 0")]
+        private float _muzzleDropOffset;
 
         private Camera _camera;
         private FireClock _fireClock;
@@ -110,6 +110,38 @@ namespace SplatoonC.Gameplay.Combat
             }
         }
 
+        // 瞄準射線(槍口 → 相機中心落點)。AimReticle 用同一結果做彈道預測,準星才會等於真落點。
+        public bool TryComputeAim(out Vector3 origin, out Vector3 direction)
+        {
+            origin = Vector3.zero;
+            direction = Vector3.forward;
+            if (_muzzle == null)
+            {
+                return false;
+            }
+            if (_camera == null)
+            {
+                _camera = Camera.main;
+                if (_camera == null)
+                {
+                    return false;
+                }
+            }
+
+            var aimRay = new Ray(_camera.transform.position, _camera.transform.forward);
+            Vector3 target = Physics.Raycast(aimRay, out RaycastHit hit, _aimMaxDistance, _aimMask,
+                QueryTriggerInteraction.Ignore)
+                ? hit.point
+                : aimRay.GetPoint(_aimMaxDistance);
+
+            origin = _muzzle.position - Vector3.up * _muzzleDropOffset;
+            direction = (target - origin).normalized;
+            origin += direction * _muzzleForwardOffset;
+            return true;
+        }
+
+        public WeaponConfig Config => _config;
+
         private void Fire()
         {
             // 空墨不發射(整發判定,FireClock 的節奏槽照走 = 乾扣扳機)。
@@ -117,29 +149,10 @@ namespace SplatoonC.Gameplay.Combat
             {
                 return;
             }
-            if (_camera == null)
+            if (!TryComputeAim(out Vector3 origin, out Vector3 direction))
             {
-                _camera = Camera.main;
-                if (_camera == null)
-                {
-                    return;
-                }
+                return;
             }
-
-            var aimRay = new Ray(_camera.transform.position, _camera.transform.forward);
-            Vector3 target;
-            if (Physics.Raycast(aimRay, out RaycastHit hit, _aimMaxDistance, _aimMask, QueryTriggerInteraction.Ignore))
-            {
-                target = hit.point;
-            }
-            else
-            {
-                target = aimRay.GetPoint(_aimMaxDistance);
-            }
-
-            Vector3 origin = _muzzle.position - Vector3.up * _muzzleDropOffset;
-            Vector3 direction = (target - origin).normalized;
-            origin += direction * _muzzleForwardOffset;
             if (_config.SpreadAngleDeg > 0f)
             {
                 Vector2 offset = Random.insideUnitCircle * _config.SpreadAngleDeg;

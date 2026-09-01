@@ -25,6 +25,15 @@ namespace SplatoonC.Core.Painting
 
         public void MarkCircle(float worldX, float worldZ, float radius, byte team)
         {
+            // 半徑小於 cell 時圓內可能不含任何 cell 中心(滴墨 0.22m vs cell 0.25m),
+            // 先無條件標記圓心那格:任何塗色都該讓落點成為自家墨。
+            int originCellX = Mathf.FloorToInt((worldX - _minX) / _cellSize);
+            int originCellZ = Mathf.FloorToInt((worldZ - _minZ) / _cellSize);
+            if (originCellX >= 0 && originCellX < _width && originCellZ >= 0 && originCellZ < _height)
+            {
+                _cells[originCellZ * _width + originCellX] = team;
+            }
+
             int minCx = Mathf.FloorToInt((worldX - radius - _minX) / _cellSize);
             int maxCx = Mathf.FloorToInt((worldX + radius - _minX) / _cellSize);
             int minCz = Mathf.FloorToInt((worldZ - radius - _minZ) / _cellSize);

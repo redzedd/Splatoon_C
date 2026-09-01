@@ -53,6 +53,15 @@ namespace SplatoonC.Tests
         }
 
         [Test]
+        public void 半徑小於格距_仍標記圓心那格()
+        {
+            // 滴墨半徑(0.22m 世界 → 局部更小)小於 cell,圓內無 cell 中心也必須有歸屬
+            var grid = CreateGrid();
+            grid.MarkCircle(1.13f, 2.37f, 0.05f, 1);
+            Assert.AreEqual(1, grid.Sample(1.13f, 2.37f));
+        }
+
+        [Test]
         public void 後標記覆蓋先標記()
         {
             var grid = CreateGrid();

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &133692737616188984
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6253005704661832887}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6253005704661832887
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133692737616188984}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.52, y: 1.05, z: 1.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4197822349549493834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2515329830524636052
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,7 +164,7 @@ GameObject:
   - component: {fileID: 226167215459747560}
   - component: {fileID: 6664561530175722991}
   m_Layer: 8
-  m_Name: Forward
+  m_Name: GunBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,8 +179,8 @@ Transform:
   m_GameObject: {fileID: 3758702717369116545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.5}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.6}
+  m_LocalPosition: {x: 0.52, y: 1.05, z: 0.45}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4197822349549493834}
@@ -187,7 +218,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: aa41d8729318c2e47975002f14cecf4d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -242,6 +273,7 @@ Transform:
   m_Children:
   - {fileID: 5960221147029734431}
   - {fileID: 3311583369710755480}
+  - {fileID: 6253005704661832887}
   m_Father: {fileID: 64528052148103404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8997229261282655361
@@ -360,13 +392,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.InkShooter
   _config: {fileID: 11400000, guid: 6f12c0e07ee3c9247811d95d679fee92, type: 2}
   _input: {fileID: 6872619061180101399}
-  _muzzle: {fileID: 5164912641134097753}
+  _muzzle: {fileID: 6253005704661832887}
   _projectilePrefab: {fileID: 3764897678730173231, guid: 782fcc661f371f44ab40aa59a302a632, type: 3}
   _aimMask:
     serializedVersion: 2
     m_Bits: 4294967039
   _aimMaxDistance: 40
   _poolPrewarm: 32
+  _muzzleForwardOffset: 0
+  _muzzleDropOffset: 0
 --- !u!114 &3144797367385510914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,6 +419,8 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 4294967039
+  _hideWhenSubmerged: 1
+  _swimSplashSpacing: 1.2
 --- !u!114 &5233738947475570186
 MonoBehaviour:
   m_ObjectHideFlags: 0

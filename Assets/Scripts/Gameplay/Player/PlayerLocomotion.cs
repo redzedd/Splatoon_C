@@ -88,11 +88,14 @@ namespace SplatoonC.Gameplay.Player
 
             _controller.Move(step.Displacement);
 
-            if (step.HasMoveInput && _visualRoot != null)
+            // 開火中一律面向瞄準方向(槍口才對得上準星);否則面向移動方向。
+            bool aiming = _input.AttackHeld && (_squid == null || !_squid.IsSquid);
+            if (_visualRoot != null && (aiming || step.HasMoveInput))
             {
+                float targetYaw = aiming ? cameraYaw : step.DesiredYawDeg;
                 float currentYaw = _visualRoot.eulerAngles.y;
                 float nextYaw = Mathf.MoveTowardsAngle(
-                    currentYaw, step.DesiredYawDeg, _config.TurnSpeedDegPerSec * Time.deltaTime);
+                    currentYaw, targetYaw, _config.TurnSpeedDegPerSec * Time.deltaTime);
                 _visualRoot.rotation = Quaternion.Euler(0f, nextYaw, 0f);
             }
         }

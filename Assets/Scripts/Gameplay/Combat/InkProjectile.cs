@@ -14,6 +14,7 @@ namespace SplatoonC.Gameplay.Combat
         private float _remainingLifetime;
         private bool _released;
         private TrailRenderer _trail;
+        private float _distanceSinceDrip;
 
         private void Awake()
         {
@@ -28,6 +29,7 @@ namespace SplatoonC.Gameplay.Combat
             _pool = pool;
             _remainingLifetime = config.ProjectileLifetime;
             _released = false;
+            _distanceSinceDrip = 0f;
             // 池化重用鐵律:清掉上一輪殘留拖尾,否則會從回收點畫一條線到槍口
             if (_trail != null)
             {
@@ -58,10 +60,36 @@ namespace SplatoonC.Gameplay.Combat
             }
 
             transform.position = next;
+            DripAlongPath(distance);
             _remainingLifetime -= dt;
             if (_remainingLifetime <= 0f)
             {
                 Release();
+            }
+        }
+
+        // 步槍沿途留痕:每飛一個間距,往正下方滴一滴小墨(Splatoon 的整條彈道都會沾墨)。
+        private void DripAlongPath(float travelled)
+        {
+            if (_config.DripSpacing <= 0f)
+            {
+                return;
+            }
+            _distanceSinceDrip += travelled;
+            if (_distanceSinceDrip < _config.DripSpacing)
+            {
+                return;
+            }
+            _distanceSinceDrip = 0f;
+
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit drop,
+                    _config.DripMaxDrop, _config.HitMask, QueryTriggerInteraction.Ignore))
+            {
+                var surface = drop.collider.GetComponent<PaintableSurface>();
+                if (surface != null)
+                {
+                    surface.Paint(drop.point, _config.DripRadius, _config.InkColor, _config.SplatHardness);
+                }
             }
         }
 
