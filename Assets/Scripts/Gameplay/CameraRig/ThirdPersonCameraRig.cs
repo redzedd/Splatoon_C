@@ -17,8 +17,8 @@ namespace SplatoonC.Gameplay.CameraRig
         [SerializeField, Tooltip("相機距離(公尺)")]
         private float _distance = 5f;
 
-        [SerializeField, Tooltip("俯仰角下限(度,負值 = 仰視)")]
-        private float _minPitch = -30f;
+        [SerializeField, Tooltip("俯仰角下限(度,負值 = 仰視);太小會讓準心指向天邊而打不到落點")]
+        private float _minPitch = -15f;
 
         [SerializeField, Tooltip("俯仰角上限(度,正值 = 俯視)")]
         private float _maxPitch = 60f;
@@ -58,7 +58,8 @@ namespace SplatoonC.Gameplay.CameraRig
         private const float MinCameraDistance = 0.3f;
 
         private float _yaw;
-        private float _pitch = 10f;
+        // 預設俯角落在「準心=落點」的甜蜜區(2026-09-02 實測:24° 落差 0.1m,18° 2.2m,12° 5.7m)
+        private float _pitch = 22f;
         private Vector3 _smoothedPivot;
         private Vector3 _pivotVelocity;
         private Camera _camera;
