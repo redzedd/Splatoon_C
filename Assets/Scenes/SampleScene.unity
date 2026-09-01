@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 237083885}
   - component: {fileID: 237083884}
   - component: {fileID: 237083883}
+  - component: {fileID: 237083886}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -294,6 +295,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &237083886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237083882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa9d2f48ba7367943a175e308e8d9749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Debugging.AutoPerfRun
+  _duration: 60
+  _warmup: 3
+  _targetFps: 60
+  _quitWhenDone: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,7 +726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Painting.PaintableSurface
   _resolution: 512
-  _splatShader: {fileID: 0}
+  _splatShader: {fileID: 4800000, guid: 6565dfb3b6ea5424a933791894e34e97, type: 3}
 --- !u!1 &562471924
 GameObject:
   m_ObjectHideFlags: 0

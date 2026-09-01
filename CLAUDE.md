@@ -21,7 +21,7 @@
 |Input|Input System 1.19.0 — actions asset `Assets/InputSystem_Actions.inputactions` (template default Player/UI maps; active input handler setting: unverified)|
 |Target platform|PC / Windows (working assumption — final target 尚未決定)|
 |Source root|`Assets/Scripts/` (Core = pure logic, Gameplay = MonoBehaviour glue), tests in `Assets/Tests/`|
-|Build command|none for M1 (editor-driven prototype)|
+|Build command|`Unity.exe -batchmode -quit -projectPath <proj> -executeMethod SplatoonC.EditorBuild.ProjectBuilder.BuildWindows` (editor must be CLOSED; details in verify skill §5)|
 |Test command|see `.claude/skills/verify/` (EditMode tests via test bridge)|
 
 ## 2. Dependencies (use these — do NOT reinvent)
@@ -45,6 +45,7 @@
 - **Coverage scoring:** GPU readback goes through `AsyncGPUReadback` on a downsampled target ONLY. Synchronous `Texture2D.ReadPixels`/`GetPixels` in runtime code is forbidden (content-lint enforced).
 - **Ink projectiles / splat FX:** object-pooled from day one. No `Instantiate`/`Destroy` per shot in steady state.
 - **Paintable surfaces:** UVs must be unique/non-overlapping per surface (use UV2/lightmap UVs if needed). A new paintable mesh with overlapping UVs is a bug.
+- **Shader packaging:** any shader used only via runtime `Shader.Find` gets STRIPPED from standalone builds (2026-09-01: InkSplat missing killed all painting in-build, silently except one log line). Every such shader must be referenced from a serialized field on a scene/prefab object (PaintableSurface._splatShader is wired for this) — check this when adding new runtime-found shaders.
 - **Input:** add actions to the existing `.inputactions` asset; read via generated wrapper or `InputActionReference` — no string lookups scattered in code.
 
 ## 3. Code Style
@@ -73,6 +74,7 @@
 - **Ink painting (M1 step 3, done):** `PaintableSurface` holds a per-surface ink RT (ARGB32, alpha = coverage mask); `Paint(worldPos, radius, color, hardness)` = CommandBuffer.DrawRenderer with `SplatoonC/InkSplat` (texture-space render, world-distance brush — NOT hit-UV blits). The `UNITY_UV_STARTS_AT_TOP` flip in InkSplat is REQUIRED (top-down 3-color probe verified 2026-09-01; do not remove). Ink colors pass through `.linear` (project is Linear color space). Surface renders via `SplatoonC/PaintableSurface` (main-light lambert only, no shadow receive yet). Smoke test: `PaintAutoTest.Run()` in play mode.
 - **(deleted 2026-09-01)** step-3's `InkPaintDebugger`/`DebugTools` — replaced by the real weapon; do not recreate.
 - **Play-mode smoke tests:** `LocomotionAutoTest.Run()` in play mode → `[AUTOTEST] PASS/FAIL/DONE` console markers. Copy this pattern for future systems.
+- **Build pipeline (M2 step 1, done):** `ProjectBuilder.BuildWindows` (menu Tools/SplatoonC/Build Windows or batchmode) → `Builds/Windows/Splatoon_C.exe`; `M2Setup.Apply` is the idempotent wiring pass. Standalone perf sentinel: `AutoPerfRun` on GameSystems, triggered by `-autotest` arg — 60s spray, logs `[PERFRUN] ... result=PASS/FAIL` + coverage (painting-aliveness check) to Player.log. Baseline 2026-09-01: avgFps=1053, p95Ms=1.69.
 - **Scene:** `SampleScene` has Ground (50×50 plane), Obstacles (wall near spawn for occlusion test, far box, low step), Player prefab instance (`Assets/Prefabs/Player.prefab`, layer `Player` slot 8).
 - **Tests:** 32 EditMode tests green (`Assets/Tests/EditMode/`) — pure logic + NUnit template; copy this pattern for all new pure logic. Play-mode: `LocomotionAutoTest` / `PaintAutoTest` / `ShootingAutoTest` / `SquidCoverageAutoTest` (`[AUTOTEST]` markers; aim/move cases point at open ground -Z — obstacles at +Z/+X create false results).
 - **Modules/assemblies:** `SplatoonC.Core` (pure), `SplatoonC.Gameplay` (MonoBehaviour glue, refs Core + Unity.InputSystem), `SplatoonC.Tests.EditMode`, `SplatoonC.EditorTools` (test bridge).

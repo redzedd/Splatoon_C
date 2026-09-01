@@ -24,3 +24,6 @@ Thumbs.db
 # Crash dumps
 sysinfo.txt
 *.stackdump
+
+# Build 產物(log 與測試結果留在 Builds/ 但不進版控)
+Builds/

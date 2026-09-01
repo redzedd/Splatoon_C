@@ -5,7 +5,11 @@ description: Splatoon_C 的驗證管道——任何程式碼變更後、宣稱�
 
 # Splatoon_C Verify Pipeline
 
-前提:Unity Editor 開著且 unity-mcp 已連線(工具名前綴 `mcp__unity-mcp__Unity_*`,schema 用 ToolSearch 載入)。**MCP 斷線時:所有層級改為「請使用者操作 + 回報 [假設]/未驗證」,不准跳過不提。**
+前提:Unity Editor 開著且 MCP 已連線(工具 schema 用 ToolSearch 載入)。歷來 session 出現過兩套 MCP,先探測哪套活著:
+- **unity-mcp**(`mcp__unity-mcp__Unity_*`):GetConsoleLogs / ManageEditor(GetState/Play/Stop)/ RunCommand / ManageMenuItem。
+- **coplay-mcp**(`mcp__coplay-mcp__*`):get_unity_logs / get_unity_editor_state / play_game / stop_game / execute_script(怪癖見全域 skill unity-playmode-testing)/ check_compile_errors。
+- **編輯器關閉時**(process 不在):改走 **batchmode CLI**(見第 6 節)——編譯/測試/建置全可作業;play mode 煙霧測試不可用,改跑 standalone build 的 `-autotest`。
+- 全部管道都不可用時:改為「請使用者操作 + 回報 [假設]/未驗證」,不准跳過不提。
 
 ## 1. 編譯檢查(每次 .cs 變更後,強制)
 
@@ -42,7 +46,15 @@ description: Splatoon_C 的驗證管道——任何程式碼變更後、宣稱�
 2. `Unity_Profiler_GetFrameRangeTopTimeSummary` 看幀時間;`Unity_Profiler_GetFrameRangeGcAll...`(GC 系列工具)確認塗地穩態**零每幀 GC 配置**。
 3. 紅線:60fps(16.6ms)、paint/score/projectile 路徑 0 B/frame。超標 = 未完成,回報數字。
 
-## 5. 回報格式(鐵律)
+## 5. Batchmode CLI 與 standalone build(2026-09-01 起,M2 步驟 1 建立)
+
+編輯器必須「關閉」才能跑(專案鎖互斥)。Unity 路徑:`C:/Program Files/Unity/Hub/Editor/6000.4.3f1/Editor/Unity.exe`。
+
+- EditMode 測試:`Unity.exe -batchmode -projectPath <專案> -runTests -testPlatform EditMode -testResults Builds/test-results.xml -logFile Builds/test-run.log`(自動退出;結果掃 xml 的 result 屬性或 log)。
+- 建置:`Unity.exe -batchmode -quit -projectPath <專案> -executeMethod SplatoonC.EditorBuild.ProjectBuilder.BuildWindows -logFile Builds/build.log` → 掃 log 的 `[BUILD] result=Succeeded`;失敗 exit code 1。
+- Standalone FPS 驗收:`Builds/Windows/Splatoon_C.exe -autotest`(視窗會跳出,約 65 秒後自動退出)→ 掃 `%USERPROFILE%/AppData/LocalLow/DefaultCompany/Splatoon_C/Player.log` 的 `[PERFRUN] ... result=PASS`。效能紅線的最終裁決以此為準(編輯器內 GPU 有環境噪音,見 CLAUDE.md)。
+
+## 6. 回報格式(鐵律)
 
 - 證據分級:[驗證] 跑過看過 / [推論] 讀碼推出 / [假設] 未驗證。逐條標註。
 - 失敗附原始輸出(console 行、測試名、profiler 數字),不寫敘事性的「應該沒問題」。

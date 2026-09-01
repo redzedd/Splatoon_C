@@ -43,6 +43,13 @@ namespace SplatoonC.Gameplay.Scoring
             {
                 return;
             }
+            if (_surface.InkMap == null)
+            {
+                // shader 缺失等初始化失敗:大聲報錯後停用,不進例外風暴。
+                Debug.LogError("CoverageScorer:表面的 InkMap 不存在(塗色系統初始化失敗?),計分停用", this);
+                enabled = false;
+                return;
+            }
             _nextRequestTime = Time.time + _interval;
             _pending = true;
             AsyncGPUReadback.Request(_surface.InkMap, 0, TextureFormat.RGBA32, _onReadback);

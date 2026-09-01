@@ -43,10 +43,7 @@
 
 ## 步驟
 
-1. **Standalone build 管道 + FPS 哨兵**(~1 段落):
-   - Editor build script(BuildPipeline → `Builds/`,Windows x64,SampleScene)。
-   - 遊戲內 FPS 探針(dev 限定):`-autotest` 命令列參數觸發 scripted intent 60 秒連射,結束把平均/p95 FPS 寫進 player log。
-   - verify skill 增補 build 管道章節。
+1. ✅ **Standalone build 管道 + FPS 哨兵**(2026-09-01 完成):ProjectBuilder + M2Setup(batchmode CLI,編輯器關閉時跑)+ AutoPerfRun(`-autotest` 60 秒連射寫 [PERFRUN] 進 Player.log,含 coverage 塗色活性證據)。驗證:batch EditMode 32 綠、build Succeeded、**avgFps=1053 / p95Ms=1.69 PASS——M1 的 60fps 保留項正式收掉**(編輯器內 16ms 全是編輯器成本)。墨彈調參 32/-10 落地。抓到並修復 shipping-blocker:僅靠 Shader.Find 的 InkSplat 被 build 剔除(場景欄位引用修復,鐵律記入 CLAUDE.md §2)。注:play-mode AutoTest 迴歸與新彈道閾值適配待編輯器下次開啟時跑(standalone 全鏈 coverage=4.1% 已覆蓋主要風險)。
 2. **表面歸屬重構**(~1 段落,行為敏感):
    - `InkOwnershipGrid` 從「世界水平網格」泛化為「per-surface 局部 UV 網格」,`PaintableSurface.Paint` 同步標記自身。
    - `InkWorld` 查詢改為(surface, worldPos);地面行為不變——先跑 M1 迴歸再動手,改完必須全綠。

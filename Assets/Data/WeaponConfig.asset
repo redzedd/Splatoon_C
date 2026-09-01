@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponConfig
   _fireInterval: 0.125
   _maxShotsPerFrame: 4
-  _muzzleSpeed: 22
-  _projectileGravity: -18
+  _muzzleSpeed: 32
+  _projectileGravity: -10
   _projectileLifetime: 3
+  _spreadAngleDeg: 2.5
   _hitMask:
     serializedVersion: 2
     m_Bits: 4294967039

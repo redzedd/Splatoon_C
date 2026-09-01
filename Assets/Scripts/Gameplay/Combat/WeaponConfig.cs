@@ -13,11 +13,12 @@ namespace SplatoonC.Gameplay.Combat
         private int _maxShotsPerFrame = 4;
 
         [Header("彈道")]
+        // 2026-09-01 調參:22/-18 落點僅約 5.6m 遠短於準星;32/-10 在 14m 瞄準點只低約 1m。
         [SerializeField, Tooltip("墨彈初速(公尺/秒)")]
-        private float _muzzleSpeed = 22f;
+        private float _muzzleSpeed = 32f;
 
         [SerializeField, Tooltip("墨彈重力(負值;比世界重力輕,飛出墨水拋物線)")]
-        private float _projectileGravity = -18f;
+        private float _projectileGravity = -10f;
 
         [SerializeField, Tooltip("墨彈存活秒數,超時自動回收")]
         private float _projectileLifetime = 3f;
