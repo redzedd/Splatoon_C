@@ -45,10 +45,7 @@
 
 1. ✅ **Standalone build 管道 + FPS 哨兵**(2026-09-01 完成):ProjectBuilder + M2Setup(batchmode CLI,編輯器關閉時跑)+ AutoPerfRun(`-autotest` 60 秒連射寫 [PERFRUN] 進 Player.log,含 coverage 塗色活性證據)。驗證:batch EditMode 32 綠、build Succeeded、**avgFps=1053 / p95Ms=1.69 PASS——M1 的 60fps 保留項正式收掉**(編輯器內 16ms 全是編輯器成本)。墨彈調參 32/-10 落地。抓到並修復 shipping-blocker:僅靠 Shader.Find 的 InkSplat 被 build 剔除(場景欄位引用修復,鐵律記入 CLAUDE.md §2)。注:play-mode AutoTest 迴歸與新彈道閾值適配待編輯器下次開啟時跑(standalone 全鏈 coverage=4.1% 已覆蓋主要風險)。
 2. ✅ **表面歸屬重構**(2026-09-01 完成):Core 新增 `PlanarSurfaceMap`(bounds 最薄軸當法線,局部 3D→2D,平面 mesh 假設)+ 4 測試;PaintableSurface 自持局部 `InkOwnershipGrid`(Paint 同步標記)+ `SampleOwnership(worldPos)`;SquidController 改「腳下射線→表面查詢」;InkWorld 單例刪除。驗證:重構前四套 AutoTest 全綠建立基線(Paint 3/3、Squid 5/5、Shooting 3/3 新彈道 delta=406、Locomotion 6/6)→ 重構後 EditMode 36 綠 + Paint/Squid 重跑全綠,加速/減速數字與基線一致(10.85/4.20)。
-3. **可塗牆面 + 關卡幾何**(~1 段落):
-   - 牆一律用 Quad/自建 mesh(**Cube primitive 六面共用 UV,違反唯一 UV 鐵律,不可直接掛 PaintableSurface**)。
-   - 場景加:高牆、矮牆、斜坡、平台(爬牆目標)。
-   - 牆面塗色驗證:側視三色探針(沿用 M1 步驟 3 的 UV 對位手法)。
+3. ✅ **可塗牆面 + 關卡幾何**(2026-09-02 完成):ClimbArea——高牆 6×4m(12,2,0 面向 -X)/矮牆 4×2m/30° 斜坡(全為 Quad + PaintableSurface 256 RT;Cube 共用 UV 不可塗)+ 平台(頂 y=4)。驗證:WallPaintAutoTest 4/4(RT 寫入 delta=1868、垂直面歸屬「塗點1/遠角0」、真路徑射擊塗牆 delta=4289)+ 側視截圖牆上橘點 + Shooting/Locomotion 迴歸全綠。教訓:出生點朝 +X 的瞄準線被舊遮擋牆(x=1.25)擋住,牆面射擊測試須先傳送越過(首輪天然紅即此因,同時證明測試判定路徑真實)。
 4. **烏賊爬牆**(~1–2 段落,M2 技術風險最高):
    - 偵測:烏賊態 + 貼牆(前方 raycast)+ 牆面該點自家墨 → climb 模式。
    - Climb 數學進 Core(純邏輯+測試):重力關閉、輸入映射到牆面切面、離牆/到頂條件。
