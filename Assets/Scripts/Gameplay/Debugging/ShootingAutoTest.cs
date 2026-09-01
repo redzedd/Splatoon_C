@@ -79,7 +79,7 @@ namespace SplatoonC.Gameplay.Debugging
                 $"delta={afterVolley - baseline}(8 發主點+噴濺,期望 >200)");
 
             // 案 2:所有墨彈回收,場上無殘留活彈
-            var activeProjectiles = FindObjectsByType<InkProjectile>(FindObjectsSortMode.None);
+            var activeProjectiles = FindObjectsByType<InkProjectile>();
             int stillActive = 0;
             foreach (var p in activeProjectiles)
             {

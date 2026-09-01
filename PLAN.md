@@ -47,7 +47,14 @@
 2. ✅ **表面歸屬重構**(2026-09-01 完成):Core 新增 `PlanarSurfaceMap`(bounds 最薄軸當法線,局部 3D→2D,平面 mesh 假設)+ 4 測試;PaintableSurface 自持局部 `InkOwnershipGrid`(Paint 同步標記)+ `SampleOwnership(worldPos)`;SquidController 改「腳下射線→表面查詢」;InkWorld 單例刪除。驗證:重構前四套 AutoTest 全綠建立基線(Paint 3/3、Squid 5/5、Shooting 3/3 新彈道 delta=406、Locomotion 6/6)→ 重構後 EditMode 36 綠 + Paint/Squid 重跑全綠,加速/減速數字與基線一致(10.85/4.20)。
 3. ✅ **可塗牆面 + 關卡幾何**(2026-09-02 完成):ClimbArea——高牆 6×4m(12,2,0 面向 -X)/矮牆 4×2m/30° 斜坡(全為 Quad + PaintableSurface 256 RT;Cube 共用 UV 不可塗)+ 平台(頂 y=4)。驗證:WallPaintAutoTest 4/4(RT 寫入 delta=1868、垂直面歸屬「塗點1/遠角0」、真路徑射擊塗牆 delta=4289)+ 側視截圖牆上橘點 + Shooting/Locomotion 迴歸全綠。教訓:出生點朝 +X 的瞄準線被舊遮擋牆(x=1.25)擋住,牆面射擊測試須先傳送越過(首輪天然紅即此因,同時證明測試判定路徑真實)。
 4. ✅ **烏賊爬牆**(2026-09-02 完成):WallClimbSolver(Core 純邏輯:up 投影牆切面 + 貼牆分量,斜面沿坡爬)+ PlayerLocomotion 整合(胸口射線偵測自家墨牆 → 接管位移、重力歸零;到頂射線落空 → Mantle 翻越 up×1.4+fwd×0.8)。CC 貼牆 spike 一次成功,免手動位移備案。驗證:EditMode 41 綠、ClimbAutoTest 3/3(乾牆不可爬 y=0.04 / 墨牆爬升 y=2.15 / 翻越登台 (13.45, 4.04) grounded)、Squid 5/5 + Locomotion 6/6 迴歸綠。教訓:LocomotionAutoTest 遮擋案假設玩家在出生點,必須乾淨 session 跑(已記入 CLAUDE.md);首輪翻越紅是測試多推 1.5 秒把玩家推下 3m 深平台,非功能缺陷。
-5. **M2 收官驗收**:standalone FPS 達標 + 爬牆全鏈 + 全 AutoTest 迴歸 + 文件/harness 更新(`/harness-audit`)。
+5. ✅ **M2 收官驗收**(2026-09-02 完成):六套 AutoTest 總迴歸全綠(Paint 3/3、Squid 5/5、Shooting 3/3、WallPaint 4/4、Climb 3/3、Locomotion 6/6,共 24 案,按 session 相容性分四組);standalone 重建(19s 增量)+ FPS 驗收 avgFps=1022.5 / p95Ms=1.77 PASS、coverage=4.1%、零例外;清掉三處 FindObjectsByType 棄用警告。`/harness-audit` 判定延後:文件全程逐步同步維護且無矛盾跡象,照常規節奏(數週活躍開發後)再跑。
+
+## M2 驗收結果(2026-09-02)
+
+- ✅ 一鍵 build(選單/batchmode/編輯器內三路皆通)+ `-autotest` FPS 驗收管道;avgFps 1022(紅線 60)。
+- ✅ 牆面持久染色:RT readback + 歸屬查詢 + 側視截圖三層證據。
+- ✅ 烏賊沿自家墨牆爬升 4m 並翻越登上平台頂;乾牆不可爬;斜坡沿坡面爬(數學通用)。
+- ✅ M1 全部 AutoTest 迴歸綠;塗色/計分/彈道/爬牆路徑 GC 紅線維持。
 
 ## 已知風險與交接注意
 

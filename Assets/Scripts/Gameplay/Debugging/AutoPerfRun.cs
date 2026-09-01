@@ -90,7 +90,7 @@ namespace SplatoonC.Gameplay.Debugging
                 $"avgFps={averageFps:F1} target={_targetFps:F0} result={verdict}");
 
             // 塗色系統活性證據:60 秒連射後佔地率必須明顯 > 0(shader 沒打包時這裡會抓到)。
-            var scorer = FindFirstObjectByType<Scoring.CoverageScorer>();
+            var scorer = FindAnyObjectByType<Scoring.CoverageScorer>();
             if (scorer != null)
             {
                 Debug.Log($"[PERFRUN] coverage={scorer.Latest.PaintedRatio:P1} scorerEnabled={scorer.enabled}");

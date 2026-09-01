@@ -93,7 +93,7 @@ namespace SplatoonC.Gameplay.Debugging
             intent.AttackHeld = true;
             yield return new WaitForSeconds(0.5f);
             // 放開前先數活彈:禁射生效 = 按住期間完全沒出彈(雙保險,不只看塗色)。
-            var projectiles = FindObjectsByType<SplatoonC.Gameplay.Combat.InkProjectile>(FindObjectsSortMode.None);
+            var projectiles = FindObjectsByType<SplatoonC.Gameplay.Combat.InkProjectile>();
             int liveShots = 0;
             foreach (var p in projectiles)
             {
