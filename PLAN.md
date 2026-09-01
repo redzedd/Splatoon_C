@@ -123,6 +123,16 @@
    - **測試有效性反證**:把 `DripsPerShot` 暫設 0 重跑 → 覆蓋率掉到 62%、最長缺口 5.75m(正是使用者回報的「中段塗不到」),確認 RoadAutoTest 不是永遠會綠的空測試。
    - 中途被測試抓到一個真 bug:`DripPlanner` 在區間倒置(min > max)時,上限夾制用了較小的 max,反而把值拉回 max。改用 `min + span` 夾制。
 
+3.11 ✅ **鑽進/鑽出墨水的過場動畫**(2026-09-02,使用者回饋:原本是突然出現突然消失):
+   - 新增 Core `DiveTransition`(0~1 進度、進出分別計時、smoothstep 平滑)+ 7 個 EditMode 測試。
+   - `SquidController` 不再直接開關 Renderer:過場期間 Renderer 保持開啟,視覺根往下沉 `DiveDepth` 1.4m(要超過角色高度才會被不透明地面遮住)並橫向收縮 45%,進度到 1 才關 Renderer。
+   - `IsSubmerged` 的語意隨之變成「過場走完、完全隱形」;遊戲邏輯(如回墨)要用 `IsSquid && OnOwnInk`。
+   - 水花改為進出兩邊都濺(原本只有入墨濺)。
+   - 參數在 PlayerLocomotionConfig「鑽進/鑽出墨水的過場」區:進 0.18 秒、出 0.12 秒、深度 1.4m、橫向收縮 0.45。
+   - 下沉寫 localPosition 與 x/z 縮放,壓扁彈簧只寫 y,兩者不互相覆蓋。
+   - 驗證:EditMode 71 綠、DiveAutoTest 4/4(中間態確實存在:第 2 幀進度 0.10、Renderer 仍全開、視覺已下沉 0.04m;鑽出時進度 0.91、已重新可見、視覺仍在 -1.37m)、Aim 5/5、Feel 4/4、Squid 5/5。
+   - 教訓再確認:0.12~0.18 秒的過場無法用 MCP 截圖驗證(往返 2~4 秒,連 timeScale 0.05 都來不及),瞬態一律用遊戲內協程斷言。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 鋪路密度(0.5 秒成路)——2026-09-02 方案分析(✅ 已於步驟 3.10 實作方案 A)

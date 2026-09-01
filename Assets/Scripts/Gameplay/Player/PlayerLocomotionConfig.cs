@@ -58,6 +58,19 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("觸發落地擠壓的最小下落速度(公尺/秒)")]
         private float _landSquashMinFallSpeed = 6f;
 
+        [Header("鑽進/鑽出墨水的過場")]
+        [SerializeField, Tooltip("鑽進墨裡的秒數;過場期間視覺仍顯示,只是往下沉")]
+        private float _diveDuration = 0.18f;
+
+        [SerializeField, Tooltip("鑽出墨面的秒數(通常比鑽進快,起身要俐落)")]
+        private float _surfaceDuration = 0.12f;
+
+        [SerializeField, Tooltip("下沉深度(公尺);要大於角色高度才會被地面完全遮住")]
+        private float _diveDepth = 1.4f;
+
+        [SerializeField, Range(0f, 1f), Tooltip("下沉過程的橫向收縮量;0 = 不縮,做出被墨吸進去的感覺")]
+        private float _diveHorizontalShrink = 0.45f;
+
         [Header("爬牆(烏賊態,自家墨牆)")]
         [SerializeField, Tooltip("爬牆速度(公尺/秒)")]
         private float _climbSpeed = 3.5f;
@@ -93,6 +106,10 @@ namespace SplatoonC.Gameplay.Player
         public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
         public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
         public float SquidVisualScaleY => _squidVisualScaleY;
+        public float DiveDuration => _diveDuration;
+        public float SurfaceDuration => _surfaceDuration;
+        public float DiveDepth => _diveDepth;
+        public float DiveHorizontalShrink => _diveHorizontalShrink;
         public float SquashStiffness => _squashStiffness;
         public float SquashDamping => _squashDamping;
         public float LandSquashKick => _landSquashKick;
