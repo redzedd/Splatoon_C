@@ -43,6 +43,24 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("視覺壓扁/回彈速度(每秒縮放變化量)")]
         private float _squidSquashSpeed = 6f;
 
+        [Header("爬牆(烏賊態,自家墨牆)")]
+        [SerializeField, Tooltip("爬牆速度(公尺/秒)")]
+        private float _climbSpeed = 3.5f;
+
+        [SerializeField, Tooltip("貼牆速度(公尺/秒),維持吸附不脫落")]
+        private float _wallStickSpeed = 1f;
+
+        [SerializeField, Tooltip("牆面探測距離(公尺,自胸口向前)")]
+        private float _climbProbeDistance = 0.7f;
+
+        [SerializeField, Tooltip("到頂翻越時間(秒):斜上位移把角色送上牆頂")]
+        private float _mantleDuration = 0.35f;
+
+        public float ClimbSpeed => _climbSpeed;
+        public float WallStickSpeed => _wallStickSpeed;
+        public float ClimbProbeDistance => _climbProbeDistance;
+        public float MantleDuration => _mantleDuration;
+
         public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
         public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
         public float SquidVisualScaleY => _squidVisualScaleY;

@@ -342,6 +342,9 @@ MonoBehaviour:
   _input: {fileID: 6872619061180101399}
   _visualRoot: {fileID: 4197822349549493834}
   _cameraTransform: {fileID: 0}
+  _climbMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
 --- !u!114 &6959154370674104649
 MonoBehaviour:
   m_ObjectHideFlags: 0
