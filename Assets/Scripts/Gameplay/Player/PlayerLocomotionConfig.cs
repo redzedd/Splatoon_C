@@ -80,8 +80,8 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("烏賊在自家墨上的回墨速率(每秒,0~1;0.5 = 兩秒回滿)")]
         private float _squidInkRefillPerSecond = 0.5f;
 
-        [SerializeField, Tooltip("非烏賊回墨時的緩慢回墨速率(每秒,0~1)")]
-        private float _standingRefillPerSecond = 0.05f;
+        [SerializeField, Tooltip("非烏賊時的回墨速率(每秒,0~1;0.2 = 五秒回滿)")]
+        private float _standingRefillPerSecond = 0.2f;
 
         public float SquidInkRefillPerSecond => _squidInkRefillPerSecond;
         public float StandingRefillPerSecond => _standingRefillPerSecond;

@@ -34,4 +34,4 @@ MonoBehaviour:
   _climbProbeDistance: 0.7
   _mantleDuration: 0.35
   _squidInkRefillPerSecond: 0.5
-  _standingRefillPerSecond: 0.05
+  _standingRefillPerSecond: 0.2

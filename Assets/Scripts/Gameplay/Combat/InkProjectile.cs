@@ -59,6 +59,11 @@ namespace SplatoonC.Gameplay.Combat
             {
                 return;
             }
+            // 不是每發都滴:約每 4 發滴一次(否則連射會糊成一整片)
+            if (Random.value >= config.DripChancePerShot)
+            {
+                return;
+            }
             int min = Mathf.Max(0, config.DripCountMin);
             int max = Mathf.Max(min, config.DripCountMax);
             int count = Random.Range(min, max + 1);
@@ -67,7 +72,8 @@ namespace SplatoonC.Gameplay.Combat
                 _dripSamples[i] = Random.value;
             }
             _dripCount = DripPlanner.Plan(_dripDistances, count,
-                config.DripStartDistance, config.StraightRange, _dripSamples);
+                config.DripStartDistance, config.StraightRange, _dripSamples,
+                config.DripDistanceBias);
         }
 
         private void Update()

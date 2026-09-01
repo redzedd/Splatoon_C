@@ -25,8 +25,10 @@ namespace SplatoonC.Gameplay.Combat
         [SerializeField, Tooltip("散布角(度):每發在瞄準方向的隨機錐形內偏移")]
         private float _spreadAngleDeg = 2.5f;
 
-        [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化;0.045 約 22 發射空)")]
-        private float _inkCostPerShot = 0.045f;
+        // 開火期間回墨照走,故淨消耗 = 射速 × 單發消耗 − 站立回墨率。
+        // 16 發/秒 × 0.01875 = 0.3/s,扣掉站立回墨 0.2/s → 淨 0.1/s = 連射 10 秒見底。
+        [SerializeField, Range(0f, 1f), Tooltip("每發墨量消耗(0~1 正規化);與射速、站立回墨率共同決定連射秒數")]
+        private float _inkCostPerShot = 0.01875f;
 
         [Header("兩段式彈道(Splatoon 式:直飛到射程極限後急墜)")]
         [SerializeField, Tooltip("直飛射程(公尺):在此距離內近乎直線,維持準心高度")]
@@ -42,17 +44,23 @@ namespace SplatoonC.Gameplay.Combat
         private float _dropHorizontalDrag = 7f;
 
         [Header("地面痕跡來源:沿路滴墨")]
-        [SerializeField, Tooltip("每發墨彈沿路滴下的墨滴數下限")]
+        [SerializeField, Range(0f, 1f), Tooltip("每發墨彈「會滴墨」的機率;0.25 = 約每 4 發滴一次")]
+        private float _dripChancePerShot = 0.25f;
+
+        [SerializeField, Tooltip("滴墨時的墨滴數下限")]
         private int _dripCountMin = 1;
 
-        [SerializeField, Tooltip("每發墨彈沿路滴下的墨滴數上限")]
-        private int _dripCountMax = 3;
+        [SerializeField, Tooltip("滴墨時的墨滴數上限")]
+        private int _dripCountMax = 2;
 
-        [SerializeField, Tooltip("第一滴最早出現的飛行距離(公尺);太小會全部堆在腳邊")]
-        private float _dripStartDistance = 1.5f;
+        [SerializeField, Tooltip("第一滴最早出現的飛行距離(公尺)")]
+        private float _dripStartDistance = 0.8f;
 
-        [SerializeField, Tooltip("墨滴落地的塗色半徑(公尺);明顯小於主 splat 才像滴痕")]
-        private float _dripRadius = 0.55f;
+        [SerializeField, Tooltip("滴落點的偏早權重;>1 壓向近端(腳邊也塗得到),1 = 沿彈道均勻")]
+        private float _dripDistanceBias = 2.5f;
+
+        [SerializeField, Tooltip("墨滴落地的塗色半徑(公尺)")]
+        private float _dripRadius = 1.82f;
 
         [SerializeField, Tooltip("墨滴繼承墨彈速度的比例;越小越接近原地垂直落下")]
         private float _dripInheritSpeed = 0.25f;
@@ -105,9 +113,11 @@ namespace SplatoonC.Gameplay.Combat
         public float StraightGravity => _straightGravity;
         public float DropGravity => _dropGravity;
         public float DropHorizontalDrag => _dropHorizontalDrag;
+        public float DripChancePerShot => _dripChancePerShot;
         public int DripCountMin => _dripCountMin;
         public int DripCountMax => _dripCountMax;
         public float DripStartDistance => _dripStartDistance;
+        public float DripDistanceBias => _dripDistanceBias;
         public float DripRadius => _dripRadius;
         public float DripInheritSpeed => _dripInheritSpeed;
         public float DripGravity => _dripGravity;

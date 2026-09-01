@@ -65,6 +65,32 @@ namespace SplatoonC.Tests.EditMode
         }
 
         [Test]
+        public void 偏早權重把滴落點壓向近端()
+        {
+            var uniform = new float[1];
+            var biased = new float[1];
+            var samples = new[] { 0.5f };
+
+            DripPlanner.Plan(uniform, 1, 0f, 10f, samples);
+            DripPlanner.Plan(biased, 1, 0f, 10f, samples, 2.5f);
+
+            Assert.AreEqual(5f, uniform[0], 0.0001f);
+            Assert.Less(biased[0], uniform[0]);
+        }
+
+        [Test]
+        public void 偏早權重不會超出區間()
+        {
+            var distances = new float[2];
+            var samples = new[] { 0f, 1f };
+
+            DripPlanner.Plan(distances, 2, 2f, 10f, samples, 3f);
+
+            Assert.AreEqual(2f, distances[0], 0.0001f);
+            Assert.AreEqual(10f, distances[1], 0.0001f);
+        }
+
+        [Test]
         public void 區間倒置時全部落在起點()
         {
             var distances = new float[2];

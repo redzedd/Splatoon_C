@@ -58,53 +58,55 @@ namespace SplatoonC.Gameplay.Debugging
                 yield break;
             }
 
+            // 滴墨已改成機率制(約每 4 發滴一次),單發量測沒有統計意義:射 20 發看總量與分佈。
+            const int shots = 20;
+            float range = player.GetComponent<InkShooter>().Config.StraightRange;
             Vector3 muzzle = player.transform.position;
-            var firstSeen = new Dictionary<Transform, Vector3>();
-            var lastSeen = new Dictionary<Transform, Vector3>();
-            int peakActive = 0;
-
-            intent.AttackHeld = true;
-            yield return null;
-            yield return null;
-            intent.AttackHeld = false;
-
-            float watchdog = 0f;
-            while (watchdog < 4f)
-            {
-                int active = 0;
-                foreach (Transform d in dripRoot.transform)
-                {
-                    if (!d.gameObject.activeInHierarchy)
-                    {
-                        continue;
-                    }
-                    active++;
-                    if (!firstSeen.ContainsKey(d))
-                    {
-                        firstSeen[d] = d.position;
-                    }
-                    lastSeen[d] = d.position;
-                }
-                if (active > peakActive)
-                {
-                    peakActive = active;
-                }
-                watchdog += Time.deltaTime;
-                yield return null;
-            }
-
             var spawnDistances = new List<float>();
-            foreach (var pair in firstSeen)
-            {
-                Vector3 p = pair.Value;
-                spawnDistances.Add(new Vector2(p.x - muzzle.x, p.z - muzzle.z).magnitude);
-            }
-            spawnDistances.Sort();
+            var seen = new HashSet<Transform>();
 
-            string list = string.Join(" / ", spawnDistances.ConvertAll(d => d.ToString("F1")));
-            bool ok = firstSeen.Count >= 1 && firstSeen.Count <= 3;
-            Debug.Log($"[PROBE] 單發滴墨數={firstSeen.Count}(期望 1~3,同時最多 {peakActive} 顆在空中)" +
-                $" 生成點距槍口={list}m {(ok ? "OK" : "異常")}");
+            for (int s = 0; s < shots; s++)
+            {
+                intent.AttackHeld = true;
+                yield return null;
+                yield return null;
+                intent.AttackHeld = false;
+
+                float watchdog = 0f;
+                while (watchdog < 0.9f)
+                {
+                    foreach (Transform d in dripRoot.transform)
+                    {
+                        if (!d.gameObject.activeInHierarchy || seen.Contains(d))
+                        {
+                            continue;
+                        }
+                        seen.Add(d);
+                        Vector3 p = d.position;
+                        spawnDistances.Add(new Vector2(p.x - muzzle.x, p.z - muzzle.z).magnitude);
+                    }
+                    watchdog += Time.deltaTime;
+                    yield return null;
+                }
+                seen.Clear();
+            }
+
+            spawnDistances.Sort();
+            int nearHalf = 0;
+            foreach (float d in spawnDistances)
+            {
+                if (d <= range * 0.5f)
+                {
+                    nearHalf++;
+                }
+            }
+            float perShot = spawnDistances.Count / (float)shots;
+            float median = spawnDistances.Count > 0 ? spawnDistances[spawnDistances.Count / 2] : -1f;
+            // 期望:每發平均 0.2~0.8 滴(3~5 發滴 1~2 滴),且多數落在射程近半(腳邊也塗得到)
+            bool ok = perShot > 0.2f && perShot < 0.8f && nearHalf * 2 >= spawnDistances.Count;
+            Debug.Log($"[PROBE] {shots} 發共滴 {spawnDistances.Count} 滴(每發 {perShot:F2},期望 0.2~0.8)" +
+                $" 中位距離={median:F1}m 落在近半({range * 0.5f:F1}m 內)={nearHalf}/{spawnDistances.Count}" +
+                $" {(ok ? "OK" : "異常")}");
 
             router.ClearOverrideSource();
             Debug.Log("[PROBE] DONE 滴墨隔離驗證");

@@ -18,15 +18,17 @@ MonoBehaviour:
   _projectileGravity: -11
   _projectileLifetime: 3
   _spreadAngleDeg: 2.5
-  _inkCostPerShot: 0.045
+  _inkCostPerShot: 0.01875
   _straightRange: 10
   _straightGravity: -1.5
   _dropGravity: -60
   _dropHorizontalDrag: 7
+  _dripChancePerShot: 0.25
   _dripCountMin: 1
-  _dripCountMax: 3
-  _dripStartDistance: 1.5
-  _dripRadius: 0.55
+  _dripCountMax: 2
+  _dripStartDistance: 0.8
+  _dripDistanceBias: 2.5
+  _dripRadius: 1.82
   _dripInheritSpeed: 0.25
   _dripGravity: -25
   _dripSideSpeed: 0.8

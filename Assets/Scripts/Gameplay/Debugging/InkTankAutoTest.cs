@@ -65,30 +65,47 @@ namespace SplatoonC.Gameplay.Debugging
             yield return null;
             yield return null;
 
-            // 案 1:連射 5 秒耗盡墨(消耗 0.36/s vs 站立回墨 0.05/s → 約 3.2 秒見底)
+            // 設計目標(使用者指定 2026-09-02):連射可撐 10 秒、站立從 0 回滿約 5 秒。
+            // 開火期間回墨照走,故淨消耗 = 射速 × 單發消耗 − 站立回墨率。
+            // 案 1:連射 10 秒才見底,且 5 秒時仍過半(證明是 10 秒而不是 5 秒就空)
             intent.AttackHeld = true;
             yield return new WaitForSeconds(5f);
+            float midpoint = tank.Normalized;
+            yield return new WaitForSeconds(5.5f);
             float drained = tank.Normalized;
-            Check("連射耗盡", drained < 0.12f, $"normalized={drained:F3}");
             intent.AttackHeld = false;
+            Check("連射 10 秒才見底", midpoint > 0.35f && drained < 0.12f,
+                $"5 秒時={midpoint:F3}(期望 >0.35) 10.5 秒時={drained:F3}(期望 <0.12)");
 
-            // 案 2:烏賊在自家墨上快速回墨(0.5/s → 2.5 秒回滿)
+            // 案 2:站立(非烏賊)從 0 回滿約 5 秒
+            yield return new WaitForSeconds(5f);
+            float standingRefilled = tank.Normalized;
+            Check("站立 5 秒回滿", standingRefilled > 0.9f, $"normalized={standingRefilled:F3}");
+
+            // 案 3:烏賊在自家墨上回墨更快——同樣 1 秒,烏賊的增量要明顯高於站立速率
+            intent.AttackHeld = true;
+            yield return new WaitForSeconds(5f);
+            intent.AttackHeld = false;
+            float beforeSquid = tank.Normalized;
             ground.Paint(player.transform.position, 3f, new Color(1f, 0.5f, 0f, 1f), 0.7f);
             yield return null;
             intent.SquidHeld = true;
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(1f);
             intent.SquidHeld = false;
-            float refilled = tank.Normalized;
-            Check("烏賊回墨", refilled > 0.9f, $"normalized={refilled:F3}");
+            float squidGain = tank.Normalized - beforeSquid;
+            Check("烏賊回墨更快", squidGain > 0.3f,
+                $"1 秒增量={squidGain:F2}(站立同時間只有約 0.20)");
 
-            // 案 3:回墨後恢復射擊——以墨量下降證明實彈發射
+            // 案 4:恢復射擊——以墨量下降證明實彈發射
             //(不依賴落彈區 delta:案 1 已塗滿 -Z 區,落舊墨區 delta 會假紅,2026-09-02 首輪教訓)。
+            float costPerShot = player.GetComponent<Combat.InkShooter>().Config.InkCostPerShot;
             float beforeResume = tank.Normalized;
             intent.AttackHeld = true;
             yield return new WaitForSeconds(0.8f);
             intent.AttackHeld = false;
             float consumed = beforeResume - tank.Normalized;
-            Check("恢復射擊", consumed > 0.15f, $"消耗={consumed:F2}(約 {consumed / 0.045f:F0} 發)");
+            Check("恢復射擊", consumed > 0.02f,
+                $"淨消耗={consumed:F3}(單發 {costPerShot:F5})");
 
             // 案 4:HUD 墨量條寬度與墨量同步
             yield return null;
