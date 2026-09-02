@@ -27,6 +27,9 @@ namespace SplatoonC.Gameplay.Combat
         private ObjectPool<ParticleSystem> _pool;
         private readonly List<ActiveFx> _active = new List<ActiveFx>(32);
 
+        // 供 AutoTest 驗證「有沒有真的濺出水花」——視覺特效沒有其他可量測的痕跡。
+        public int ActiveCount => _active.Count;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)

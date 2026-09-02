@@ -212,5 +212,67 @@ namespace SplatoonC.Tests
             var horizontal = new Vector2(step.Displacement.x, step.Displacement.z);
             Assert.AreEqual(6f, horizontal.magnitude, 1e-3f);
         }
+    
+        [Test]
+        public void 保留動量_空中維持起跳時的水平速度與方向()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            // 先以 1.56 倍(潛水速度)在地面加速到滿速
+            for (int i = 0; i < 30; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt, 1.56f);
+            }
+            Vector3 launched = state.HorizontalVelocity;
+            Assert.AreEqual(6f * 1.56f, launched.z, 0.1f);
+
+            // 空中鬆開輸入、倍率掉回 1:保留動量時水平速度不得改變
+            for (int i = 30; i < 40; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, Vector2.zero, 0f, false, false, s, i * dt, dt, 1f, true);
+            }
+
+            Assert.AreEqual(launched.z, state.HorizontalVelocity.z, 1e-4f, "應維持原潛水速度");
+            Assert.AreEqual(launched.x, state.HorizontalVelocity.x, 1e-4f, "應維持原行進方向");
+        }
+
+        [Test]
+        public void 保留動量_關閉時空中會被輸入與倍率拉走()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            for (int i = 0; i < 30; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt, 1.56f);
+            }
+            float launched = state.HorizontalVelocity.z;
+
+            for (int i = 30; i < 40; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, Vector2.zero, 0f, false, false, s, i * dt, dt, 1f, false);
+            }
+
+            Assert.Less(state.HorizontalVelocity.z, launched - 0.5f, "沒開保留動量就該被減速拉走");
+        }
+
+        [Test]
+        public void 保留動量_重力與跳躍仍照常運作()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+
+            CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, false, false, s, 0f, dt, 1f, true);
+
+            Assert.Less(state.VerticalVelocity, 0f, "保留水平動量不該影響重力");
+        }
     }
 }
+

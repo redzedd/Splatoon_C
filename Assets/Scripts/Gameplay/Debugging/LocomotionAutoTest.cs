@@ -91,8 +91,8 @@ namespace SplatoonC.Gameplay.Debugging
             intent.MoveInput = Vector2.zero;
             Vector3 moved = player.transform.position - before;
             moved.y = 0f;
-            Check("前進位移", moved.magnitude > 4.5f && moved.magnitude < 7.5f,
-                $"|d|={moved.magnitude:F2}(期望約 6)");
+            Check("前進位移", moved.magnitude > 7f && moved.magnitude < 11f,
+                $"|d|={moved.magnitude:F2}(期望約 9 = MoveSpeed)");
 
             // 案 6:跳躍峰值 ≈ 跳躍高度(1.6)
             yield return new WaitForSeconds(0.5f);

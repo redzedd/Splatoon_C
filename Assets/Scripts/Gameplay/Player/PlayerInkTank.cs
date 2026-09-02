@@ -48,7 +48,8 @@ namespace SplatoonC.Gameplay.Player
             {
                 return;
             }
-            bool squidOnInk = squid && _squid.OnOwnInk;
+            // 貼在自家墨牆上爬也算泡在墨裡(IsInOwnInk 同時涵蓋地面與牆面)
+            bool squidOnInk = squid && _squid.IsInOwnInk;
             float rate = squidOnInk
                 ? _config.SquidInkRefillPerSecond
                 : _config.StandingRefillPerSecond;

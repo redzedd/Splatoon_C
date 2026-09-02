@@ -116,7 +116,7 @@ namespace SplatoonC.Gameplay.Debugging
             }
             yield return null;
 
-            // 案 3:烏賊態在自家墨上加速(期望 6 × 1.8 ≈ 10.8);yaw=180 下 move(0,1) = 世界 -Z 沿墨帶
+            // 案 3:烏賊態在自家墨上加速(期望 9 × 1.56 ≈ 14.0);yaw=180 下 move(0,1) = 世界 -Z 沿墨帶
             intent.SquidHeld = true;
             yield return new WaitForSeconds(0.2f);
             Vector3 before = player.transform.position;
@@ -125,10 +125,10 @@ namespace SplatoonC.Gameplay.Debugging
             intent.MoveInput = Vector2.zero;
             Vector3 moved = player.transform.position - before;
             moved.y = 0f;
-            Check("墨上加速", moved.magnitude > 8.5f && moved.magnitude < 12.6f,
-                $"|d|={moved.magnitude:F2}(期望約 10.8)");
+            Check("墨上加速", moved.magnitude > 11.5f && moved.magnitude < 16f,
+                $"|d|={moved.magnitude:F2}(期望約 14.0)");
 
-            // 案 4:烏賊態在乾地減速(期望 6 × 0.7 ≈ 4.2)
+            // 案 4:烏賊態在乾地減速(期望 9 × 0.7 ≈ 6.3;離墨後倍率有 0.36 秒緩降,量測窗要夠長)
             // 先橫移 0.6 秒脫離墨帶(半寬 2m)再量測,避免混速;yaw=180 下 move(1,0) = 世界 -X 空地
             intent.MoveInput = new Vector2(1f, 0f);
             yield return new WaitForSeconds(0.6f);
@@ -138,8 +138,8 @@ namespace SplatoonC.Gameplay.Debugging
             intent.SquidHeld = false;
             moved = player.transform.position - before;
             moved.y = 0f;
-            Check("乾地減速", moved.magnitude > 3.2f && moved.magnitude < 5.2f,
-                $"|d|={moved.magnitude:F2}(期望約 4.2)");
+            Check("乾地減速", moved.magnitude > 5f && moved.magnitude < 8.5f,
+                $"|d|={moved.magnitude:F2}(期望約 6.3)");
 
             // 案 5:佔地率與 HUD(墨帶約佔 50×50 場地的 2~10%)
             yield return new WaitForSeconds(1f);

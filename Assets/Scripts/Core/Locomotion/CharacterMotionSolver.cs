@@ -51,7 +51,8 @@ namespace SplatoonC.Core.Locomotion
             in LocomotionSettings settings,
             float time,
             float deltaTime,
-            float speedMultiplier = 1f)
+            float speedMultiplier = 1f,
+            bool preserveHorizontalMomentum = false)
         {
             if (isGrounded)
             {
@@ -88,22 +89,27 @@ namespace SplatoonC.Core.Locomotion
             Vector2 clamped = moveInput.sqrMagnitude > 1f ? moveInput.normalized : moveInput;
             bool hasMove = clamped.sqrMagnitude > 0.0001f;
             Vector3 worldDir = Quaternion.Euler(0f, cameraYawDeg, 0f) * new Vector3(clamped.x, 0f, clamped.y);
-            float control = isGrounded ? 1f : settings.AirControl;
-            // speedMultiplier:烏賊態在自家墨加速/乾地減速(由 Gameplay 層決定值,人形恆為 1)。
-            Vector3 targetHorizontal = worldDir * (settings.MoveSpeed * speedMultiplier * control);
 
-            // 加減速曲線:朝目標速度線性逼近;時間 ≤0 = 瞬時(舊行為)。
-            // 速率以基準 MoveSpeed 計——倍率只拉高目標速度,不改加速率的手感基準。
-            float rampTime = hasMove ? settings.AccelTime : settings.DecelTime;
-            if (rampTime > 0f)
+            // 潛水跳躍:整段滯空維持起跳瞬間的水平速度與方向,輸入與倍率都不介入。
+            if (!preserveHorizontalMomentum)
             {
-                float rate = settings.MoveSpeed / rampTime;
-                state.HorizontalVelocity = Vector3.MoveTowards(
-                    state.HorizontalVelocity, targetHorizontal, rate * deltaTime);
-            }
-            else
-            {
-                state.HorizontalVelocity = targetHorizontal;
+                float control = isGrounded ? 1f : settings.AirControl;
+                // speedMultiplier:烏賊態在自家墨加速/乾地減速(由 Gameplay 層決定值,人形恆為 1)。
+                Vector3 targetHorizontal = worldDir * (settings.MoveSpeed * speedMultiplier * control);
+
+                // 加減速曲線:朝目標速度線性逼近;時間 ≤0 = 瞬時(舊行為)。
+                // 速率以基準 MoveSpeed 計——倍率只拉高目標速度,不改加速率的手感基準。
+                float rampTime = hasMove ? settings.AccelTime : settings.DecelTime;
+                if (rampTime > 0f)
+                {
+                    float rate = settings.MoveSpeed / rampTime;
+                    state.HorizontalVelocity = Vector3.MoveTowards(
+                        state.HorizontalVelocity, targetHorizontal, rate * deltaTime);
+                }
+                else
+                {
+                    state.HorizontalVelocity = targetHorizontal;
+                }
             }
 
             float desiredYaw = hasMove ? Mathf.Atan2(worldDir.x, worldDir.z) * Mathf.Rad2Deg : 0f;

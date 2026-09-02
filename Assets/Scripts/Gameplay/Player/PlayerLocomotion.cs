@@ -35,6 +35,8 @@ namespace SplatoonC.Gameplay.Player
         private ClimbPhase _climbPhase;
         private Vector3 _climbWallNormal;
         private float _mantleEndTime;
+        // 潛水跳躍:起跳當下鎖住水平速度,整段滯空維持原方向與原潛水速度
+        private bool _squidJumpMomentum;
 
         public bool IsClimbing => _climbPhase != ClimbPhase.None;
 
@@ -76,10 +78,12 @@ namespace SplatoonC.Gameplay.Player
             {
                 _state.VerticalVelocity = 0f;
                 _state.HorizontalVelocity = Vector3.zero;
+                _squidJumpMomentum = false;
                 return;
             }
 
             float speedMultiplier = _squid != null ? _squid.CurrentSpeedMultiplier : 1f;
+            bool swimming = _squid != null && _squid.IsSquid && _squid.IsInOwnInk;
             MotionStep step = CharacterMotionSolver.Step(
                 ref _state,
                 _input.MoveInput,
@@ -89,9 +93,21 @@ namespace SplatoonC.Gameplay.Player
                 _config.ToSettings(),
                 Time.time,
                 Time.deltaTime,
-                speedMultiplier);
+                speedMultiplier,
+                _squidJumpMomentum);
 
             _controller.Move(step.Displacement);
+
+            // 潛水中起跳 → 鎖住這一幀算出的水平速度,直到落地為止都不受輸入與倍率影響。
+            // 判定放在 Step 之後:起跳當幀的水平速度已是潛水速度,鎖從下一幀生效才連續。
+            if (step.Jumped && swimming)
+            {
+                _squidJumpMomentum = true;
+            }
+            else if (_controller.isGrounded && !step.Jumped)
+            {
+                _squidJumpMomentum = false;
+            }
 
             // 開火中一律面向瞄準方向(槍口才對得上準星);否則面向移動方向。
             bool aiming = _input.AttackHeld && (_squid == null || !_squid.IsSquid);

@@ -43,6 +43,9 @@ namespace SplatoonC.Gameplay.Player
         [SerializeField, Tooltip("烏賊態在無墨地面的速度倍率(蹲行慢)")]
         private float _squidDrySpeedMultiplier = 0.7f;
 
+        [SerializeField, Tooltip("離開墨水後速度倍率滑落到平時速度所需的秒數(0 = 立刻歸位)")]
+        private float _inkExitSpeedDecayDuration = 0.36f;
+
         [SerializeField, Range(0.1f, 1f), Tooltip("烏賊態視覺下沉:Visual 的 Y 縮放")]
         private float _squidVisualScaleY = 0.3f;
 
@@ -106,6 +109,7 @@ namespace SplatoonC.Gameplay.Player
         public float SquidInkSpeedMultiplier => _squidInkSpeedMultiplier;
         public float SquidDrySpeedMultiplier => _squidDrySpeedMultiplier;
         public float SquidVisualScaleY => _squidVisualScaleY;
+        public float InkExitSpeedDecayDuration => _inkExitSpeedDecayDuration;
         public float DiveDuration => _diveDuration;
         public float SurfaceDuration => _surfaceDuration;
         public float DiveDepth => _diveDepth;

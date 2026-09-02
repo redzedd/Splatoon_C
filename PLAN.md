@@ -141,6 +141,14 @@
    - 驗證:ClimbAutoTest 4/4(新增案 2.5:爬牆中可見 0/2、submerged=True、沉入牆內 1.40m、Y 偏移 0.00)、Dive 4/4、Locomotion 6/6、Squid 5/5。
    - 已知但未動(待使用者決定):爬在自家墨牆上時回墨仍走「站立」慢速率,因為 `PlayerInkTank` 判斷用的是 `OnOwnInk`。
 
+3.13 ✅ **潛水手感四項**(2026-09-02,使用者指定):
+   - **爬牆水花 + 牆上快速回墨**:兩者與上一輪「爬牆露出實體」是同一個根因(OnOwnInk 是向下射線)。統一收斂到 `SquidController.IsInOwnInk`(地面墨 or 墨牆),回墨與加速共用同一判準。水花另有獨立 bug:游動距離累加時把 `delta.y` 歸零,爬牆是純垂直位移所以永遠累加不到門檻;並改成噴在牆面上、沿牆法線朝外。
+   - **速度 ×1.5 / 潛水 ×1.3**:MoveSpeed 6→9;倍率是相對於 MoveSpeed 的,所以潛水倍率 1.8→**1.56**(9 × 1.56 = 14.04 = 10.8 × 1.3),不是 2.34。乾地 6.3。
+   - **離墨速度 0.36 秒緩降**:新增 Core `SpeedBoostDecay`(上升即時、下降定速)+ 6 測試;`InkExitSpeedDecayDuration` 可調。
+   - **潛水跳躍保留方向與速度**:solver 新增 `preserveHorizontalMomentum` 開關(整段滯空跳過輸入與倍率的斜坡)+ 3 測試;`PlayerLocomotion` 在 `step.Jumped && swimming` 當幀上鎖,落地解鎖。
+   - 連帶更新:所有斷言位移量的 AutoTest 都與速度耦合(Locomotion 前進位移、Squid 墨上加速/乾地減速),門檻一併重算。
+   - 驗證:EditMode 80 綠、SwimFeelAutoTest 4/4(平時 8.50、潛水 12.80、緩降 1.56→1.55→1.00、空中 14.22 m/s 方向吻合 1.000)、Climb 6/6(牆上水花 2、0.6 秒回墨 0.120)、Locomotion 6/6、InkTank 5/5。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 鋪路密度(0.5 秒成路)——2026-09-02 方案分析(✅ 已於步驟 3.10 實作方案 A)

@@ -107,6 +107,31 @@ namespace SplatoonC.Gameplay.Debugging
                 $"可見={visibleOnWall}/{climbRenderers.Length} submerged={squid.IsSubmerged} " +
                 $"沉入牆內={intoWallOffset:F2}m 視覺Y偏移={visual.localPosition.y:F2}(應接近 0)");
 
+            // 案 2.6:爬牆時濺出水花(位移是垂直的,把 y 歸零就永遠不會觸發)
+            int activeSplash = Combat.InkSplashFxPool.Instance != null
+                ? Combat.InkSplashFxPool.Instance.ActiveCount : -1;
+            Check("爬牆有水花", activeSplash > 0, $"場上活著的水花特效={activeSplash}(期望 >0)");
+
+            // 案 2.7:貼在自家墨牆上走「快速回墨」而不是站立慢速。
+            // 量測期間把上推輸入歸零——貼牆狀態靠 WallStickSpeed 維持,
+            // 邊爬邊量會在 1 秒內爬到頂進入翻越,後面的案 3 就沒得測了。
+            intent.MoveInput = Vector2.zero;
+            var tank = player.GetComponent<PlayerInkTank>();
+            for (int i = 0; i < 200 && tank.Normalized > 0.4f; i++)
+            {
+                if (!tank.TryConsume(0.05f))
+                {
+                    break;
+                }
+            }
+            float beforeRefill = tank.Normalized;
+            yield return new WaitForSeconds(0.6f);
+            float refillGain = tank.Normalized - beforeRefill;
+            // 0.6 秒:墨中 0.2/s → 0.12,站立 0.05/s → 0.03;門檻取 0.07
+            Check("牆上快速回墨", refillGain > 0.07f,
+                $"0.6 秒回墨={refillGain:F3}(墨中應約 0.12,站立僅約 0.03)");
+            intent.MoveInput = new Vector2(0f, 1f);
+
             // 案 3:繼續推到頂 → 翻越 → 落在平台上。
             // 只再推 1 秒:0.53s 到頂 + 0.35s 翻越 + 0.12s 前進;推太久會走過 3m 深的平台掉下去
             //(2026-09-02 首輪紅:多推 1.5s,落點 x=18.5 地面)。

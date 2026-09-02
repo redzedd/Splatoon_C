@@ -1,4 +1,5 @@
 using SplatoonC.Core.Combat;
+using SplatoonC.Core.Locomotion;
 using SplatoonC.Gameplay.Combat;
 using SplatoonC.Gameplay.Painting;
 using UnityEngine;
@@ -39,6 +40,10 @@ namespace SplatoonC.Gameplay.Player
         // 供測試/HUD 讀:目前腳下是否自家墨。
         public bool OnOwnInk { get; private set; }
 
+        // 泡在自家墨裡(腳下的地面墨,或貼在自家墨牆上爬)——回墨與加速共用同一判準。
+        public bool IsInOwnInk =>
+            OnOwnInk || (_locomotion != null && _locomotion.IsInsideInkedWall);
+
         private CharacterController _controller;
         private PlayerLocomotion _locomotion;
         private float _squashVelocity;
@@ -52,6 +57,7 @@ namespace SplatoonC.Gameplay.Player
         private bool _submergeTarget;
         private Vector3 _visualBaseLocalPosition;
         private Vector3 _diveWorldDirection = Vector3.down;
+        private SpeedBoostDecay _speedDecay;
 
         private void Awake()
         {
@@ -79,6 +85,7 @@ namespace SplatoonC.Gameplay.Player
             // 爬牆時腳下沒有墨(OnOwnInk 是向下射線),要改看牆面,否則整個人露在牆外
             bool insideWall = _locomotion != null && _locomotion.IsInsideInkedWall;
             bool wantsSubmerge = _hideWhenSubmerged && IsSquid && (OnOwnInk || insideWall);
+
 
             // 沉入方向只在「下沉中」更新:翻越離牆的瞬間爬牆狀態就沒了,
             // 若跟著切回向下,角色會變成從地底冒出來而不是從牆裡鑽出來。
@@ -119,7 +126,11 @@ namespace SplatoonC.Gameplay.Player
             if (submerged && _swimSplashSpacing > 0f)
             {
                 Vector3 delta = _controller != null ? _controller.velocity * Time.deltaTime : Vector3.zero;
-                delta.y = 0f;
+                // 爬牆時位移幾乎是垂直的,把 y 歸零會讓牆上永遠濺不出水花
+                if (!insideWall)
+                {
+                    delta.y = 0f;
+                }
                 _swimDistance += delta.magnitude;
                 if (_swimDistance >= _swimSplashSpacing)
                 {
@@ -131,10 +142,19 @@ namespace SplatoonC.Gameplay.Player
 
         private void SpawnSplash()
         {
-            if (InkSplashFxPool.Instance != null)
+            if (InkSplashFxPool.Instance == null)
             {
-                InkSplashFxPool.Instance.Spawn(transform.position + Vector3.up * 0.05f, Vector3.up);
+                return;
             }
+            if (_locomotion != null && _locomotion.IsInsideInkedWall)
+            {
+                // 貼在牆面上濺,並朝牆外噴;沿用腳下位置會噴在角色底下看不到
+                Vector3 normal = _locomotion.ClimbWallNormal;
+                InkSplashFxPool.Instance.Spawn(
+                    transform.position + Vector3.up * 1f + normal * 0.15f, normal);
+                return;
+            }
+            InkSplashFxPool.Instance.Spawn(transform.position + Vector3.up * 0.05f, Vector3.up);
         }
 
         private void Update()
@@ -158,9 +178,15 @@ namespace SplatoonC.Gameplay.Player
                 }
             }
 
-            CurrentSpeedMultiplier = IsSquid
-                ? (OnOwnInk ? _config.SquidInkSpeedMultiplier : _config.SquidDrySpeedMultiplier)
+            // 目標倍率;離開墨水時不瞬間歸位,交給 SpeedBoostDecay 在指定秒數內滑落。
+            float targetMultiplier = IsSquid
+                ? (IsInOwnInk ? _config.SquidInkSpeedMultiplier : _config.SquidDrySpeedMultiplier)
                 : 1f;
+            float decayRate = _config.InkExitSpeedDecayDuration > 0f
+                ? (_config.SquidInkSpeedMultiplier - 1f) / _config.InkExitSpeedDecayDuration
+                : 0f;
+            CurrentSpeedMultiplier = _speedDecay.Update(
+                targetMultiplier, Time.deltaTime, decayRate);
 
             UpdateSubmergedVisual();
 
