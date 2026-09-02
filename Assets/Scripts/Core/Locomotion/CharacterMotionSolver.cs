@@ -52,7 +52,8 @@ namespace SplatoonC.Core.Locomotion
             float time,
             float deltaTime,
             float speedMultiplier = 1f,
-            bool preserveHorizontalMomentum = false)
+            bool preserveHorizontalMomentum = false,
+            float momentumDecayRate = 0f)
         {
             if (isGrounded)
             {
@@ -90,8 +91,22 @@ namespace SplatoonC.Core.Locomotion
             bool hasMove = clamped.sqrMagnitude > 0.0001f;
             Vector3 worldDir = Quaternion.Euler(0f, cameraYawDeg, 0f) * new Vector3(clamped.x, 0f, clamped.y);
 
-            // 潛水跳躍:整段滯空維持起跳瞬間的水平速度與方向,輸入與倍率都不介入。
-            if (!preserveHorizontalMomentum)
+            // 潛水跳躍:整段滯空維持起跳瞬間的方向,速度則以 momentumDecayRate 緩降到平時速度
+            //(rate ≤0 = 完全不衰減,維持起跳速度到落地)。輸入與倍率都不介入。
+            if (preserveHorizontalMomentum)
+            {
+                if (momentumDecayRate > 0f)
+                {
+                    float speed = state.HorizontalVelocity.magnitude;
+                    if (speed > settings.MoveSpeed)
+                    {
+                        float next = Mathf.MoveTowards(
+                            speed, settings.MoveSpeed, momentumDecayRate * deltaTime);
+                        state.HorizontalVelocity *= next / speed;
+                    }
+                }
+            }
+            else
             {
                 float control = isGrounded ? 1f : settings.AirControl;
                 // speedMultiplier:烏賊態在自家墨加速/乾地減速(由 Gameplay 層決定值,人形恆為 1)。

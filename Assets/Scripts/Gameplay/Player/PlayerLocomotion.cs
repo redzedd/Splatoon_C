@@ -94,7 +94,8 @@ namespace SplatoonC.Gameplay.Player
                 Time.time,
                 Time.deltaTime,
                 speedMultiplier,
-                _squidJumpMomentum);
+                _squidJumpMomentum,
+                SquidJumpMomentumDecayRate());
 
             _controller.Move(step.Displacement);
 
@@ -119,6 +120,20 @@ namespace SplatoonC.Gameplay.Player
                     currentYaw, targetYaw, _config.TurnSpeedDegPerSec * Time.deltaTime);
                 _visualRoot.rotation = Quaternion.Euler(0f, nextYaw, 0f);
             }
+        }
+
+        // 潛水跳躍的水平速度衰減率:與「離墨緩降」共用同一段秒數,
+        // 從潛水速度滑落到平時速度所需的加速度。
+        private float SquidJumpMomentumDecayRate()
+        {
+            float duration = _config.InkExitSpeedDecayDuration;
+            if (duration <= 0f)
+            {
+                return 0f;
+            }
+            LocomotionSettings settings = _config.ToSettings();
+            float swimSpeed = settings.MoveSpeed * _config.SquidInkSpeedMultiplier;
+            return (swimSpeed - settings.MoveSpeed) / duration;
         }
 
         // 回傳 true = 本幀位移已由爬牆/翻越接管。

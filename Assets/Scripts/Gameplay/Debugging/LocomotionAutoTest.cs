@@ -94,7 +94,7 @@ namespace SplatoonC.Gameplay.Debugging
             Check("前進位移", moved.magnitude > 7f && moved.magnitude < 11f,
                 $"|d|={moved.magnitude:F2}(期望約 9 = MoveSpeed)");
 
-            // 案 6:跳躍峰值 ≈ 跳躍高度(1.6)
+            // 案 6:跳躍峰值 ≈ 跳躍高度(1.12 = 原 1.6 的 0.7 倍)
             yield return new WaitForSeconds(0.5f);
             float baseY = player.transform.position.y;
             intent.JumpPressedThisFrame = true;
@@ -109,8 +109,8 @@ namespace SplatoonC.Gameplay.Debugging
                 yield return null;
             }
             float jumpHeight = peak - baseY;
-            Check("跳躍峰值", jumpHeight > 1.3f && jumpHeight < 1.9f,
-                $"峰值={jumpHeight:F2}(期望約 1.6)");
+            Check("跳躍峰值", jumpHeight > 0.9f && jumpHeight < 1.35f,
+                $"峰值={jumpHeight:F2}(期望約 1.12)");
 
             router.ClearOverrideSource();
             Debug.Log($"[AUTOTEST] DONE passed={_passed} failed={_failed}");

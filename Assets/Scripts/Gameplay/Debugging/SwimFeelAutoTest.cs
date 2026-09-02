@@ -128,17 +128,37 @@ namespace SplatoonC.Gameplay.Debugging
             intent.MoveInput = Vector2.zero;
             intent.SquidHeld = false;
             yield return null;
+            // 起跳瞬間仍是潛水速度(緩降 0.15 秒才滑到平時速度),故量測窗要夠短
             Vector3 airStart = player.transform.position;
-            yield return new WaitForSeconds(0.2f);
+            float launchWindow = 0f;
+            for (int i = 0; i < 3; i++)
+            {
+                launchWindow += Time.deltaTime;
+                yield return null;
+            }
             Vector3 airEnd = player.transform.position;
-            float airSpeed = HorizontalDistance(airEnd, airStart) / 0.2f;
+            float launchSpeed = HorizontalDistance(airEnd, airStart) / launchWindow;
             Vector3 airDir = airEnd - airStart;
             airDir.y = 0f;
             // 起跳方向是世界 -Z
             float dirDot = Vector3.Dot(airDir.normalized, Vector3.back);
             Check("潛水跳躍保留速度與方向",
-                airSpeed > 12f && dirDot > 0.95f,
-                $"空中水平速度={airSpeed:F2}m/s(期望約 14) 方向吻合度={dirDot:F3}(期望 >0.95)");
+                launchSpeed > 12f && dirDot > 0.95f,
+                $"起跳瞬間水平速度={launchSpeed:F2}m/s(期望約 14) 方向吻合度={dirDot:F3}(期望 >0.95)");
+
+            // 案 5:跳躍動量同樣在 0.15 秒內滑落到平時速度,不會一路飛太遠
+            yield return new WaitForSeconds(0.25f);
+            Vector3 lateStart = player.transform.position;
+            float lateWindow = 0f;
+            for (int i = 0; i < 3; i++)
+            {
+                lateWindow += Time.deltaTime;
+                yield return null;
+            }
+            float lateSpeed = HorizontalDistance(player.transform.position, lateStart) / lateWindow;
+            Check("跳躍動量緩降",
+                lateSpeed < 10.5f && lateSpeed > 7f,
+                $"起跳 0.25 秒後水平速度={lateSpeed:F2}m/s(期望滑回約 9,而非維持 14)");
             intent.JumpPressedThisFrame = false;
             intent.MoveInput = Vector2.zero;
             yield return new WaitForSeconds(1f);

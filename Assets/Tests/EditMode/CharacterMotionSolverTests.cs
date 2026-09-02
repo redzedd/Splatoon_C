@@ -232,10 +232,10 @@ namespace SplatoonC.Tests
             for (int i = 30; i < 40; i++)
             {
                 CharacterMotionSolver.Step(
-                    ref state, Vector2.zero, 0f, false, false, s, i * dt, dt, 1f, true);
+                    ref state, Vector2.zero, 0f, false, false, s, i * dt, dt, 1f, true, 0f);
             }
 
-            Assert.AreEqual(launched.z, state.HorizontalVelocity.z, 1e-4f, "應維持原潛水速度");
+            Assert.AreEqual(launched.z, state.HorizontalVelocity.z, 1e-4f, "衰減率 0 時應維持原潛水速度");
             Assert.AreEqual(launched.x, state.HorizontalVelocity.x, 1e-4f, "應維持原行進方向");
         }
 
@@ -273,6 +273,51 @@ namespace SplatoonC.Tests
 
             Assert.Less(state.VerticalVelocity, 0f, "保留水平動量不該影響重力");
         }
+    
+        [Test]
+        public void 保留動量_衰減率讓速度在指定秒數內滑回平時速度()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            for (int i = 0; i < 30; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt, 1.56f);
+            }
+            float launched = state.HorizontalVelocity.magnitude;
+            // 6 x 1.56 = 9.36 滑到 6,0.15 秒 → 速率 (9.36-6)/0.15
+            float rate = (6f * 1.56f - 6f) / 0.15f;
+
+            // 半程(0.075 秒)應該只掉一半
+            CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, false, false, s, 1f, 0.075f, 1f, true, rate);
+            Assert.AreEqual((launched + 6f) * 0.5f, state.HorizontalVelocity.magnitude, 0.05f);
+
+            CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, false, false, s, 2f, 0.075f, 1f, true, rate);
+            Assert.AreEqual(6f, state.HorizontalVelocity.magnitude, 0.05f, "0.15 秒後應回到平時速度");
+        }
+
+        [Test]
+        public void 保留動量_衰減不會低於平時速度也不改方向()
+        {
+            var s = CreateSettingsWithRamp(0.12f, 0.08f);
+            var state = MotionState.CreateInitial();
+            const float dt = 1f / 60f;
+            for (int i = 0; i < 30; i++)
+            {
+                CharacterMotionSolver.Step(
+                    ref state, new Vector2(0f, 1f), 0f, true, false, s, i * dt, dt, 1.56f);
+            }
+            Vector3 dir = state.HorizontalVelocity.normalized;
+
+            CharacterMotionSolver.Step(
+                ref state, Vector2.zero, 0f, false, false, s, 1f, 5f, 1f, true, 100f);
+
+            Assert.AreEqual(6f, state.HorizontalVelocity.magnitude, 0.01f, "不該掉到平時速度以下");
+            Assert.AreEqual(1f, Vector3.Dot(dir, state.HorizontalVelocity.normalized), 1e-3f,
+                "衰減不該改變方向");
+        }
     }
 }
-

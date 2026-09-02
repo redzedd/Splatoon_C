@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Player.PlayerLocomotionConfig
   _moveSpeed: 9
   _gravity: -25
-  _jumpHeight: 1.6
+  _jumpHeight: 1.12
   _airControl: 0.6
   _coyoteTime: 0.12
   _jumpBuffer: 0.1
@@ -24,7 +24,7 @@ MonoBehaviour:
   _groundedStick: -2
   _squidInkSpeedMultiplier: 1.56
   _squidDrySpeedMultiplier: 0.7
-  _inkExitSpeedDecayDuration: 0.36
+  _inkExitSpeedDecayDuration: 0.15
   _squidVisualScaleY: 0.3
   _squashStiffness: 250
   _squashDamping: 16
