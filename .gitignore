@@ -27,3 +27,7 @@ sysinfo.txt
 
 # Build 產物(log 與測試結果留在 Builds/ 但不進版控)
 Builds/
+
+# Unity 崩潰復原暫存場景(編輯器異常關閉時自動產生,不是專案資產)
+/[Aa]ssets/_Recovery/
+/[Aa]ssets/_Recovery.meta
