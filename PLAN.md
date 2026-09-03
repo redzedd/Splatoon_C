@@ -156,6 +156,10 @@
    - 驗證:EditMode 82 綠(新增 2 個衰減測試)、SwimFeel 5/5(起跳 13.58 m/s 方向吻合 1.000、0.25 秒後 8.96 m/s)、Locomotion 6/6(跳躍峰值 1.13)、Climb 6/6。
    - 過程事故:Unity 編譯行程卡死近 10 分鐘(CPU 零消耗但顯示 busy),重開編輯器後恢復;期間兩個 float 直接寫進 ScriptableObject YAML(改前備份),重開後由編輯器端讀值確認正確載入。
 
+3.15 ✅ **子彈初速 ×1.35**(2026-09-03,使用者指定):48.75 → **65.81**。
+   - 連帶效果:射程由 15.9 → **18.2m**。`StraightRange` 沒動,變長的是墜落段——水平滑行距離 ≈ 初速 ÷ `DropHorizontalDrag`(6.96 → 9.40m)。
+   - 驗證:RangeByPitchProbe 仍單調遞減(18.2 / 17.6 / 15.5 / 11.5 / 6.5m,平射最遠)、AimPitchProbe 5/5(偏差 0.07~0.32m,比調速前更準)、RoadAutoTest 3/3(0.5 秒仍 100% 覆蓋、零缺口)、Shooting 3/3、Aim 5/5。
+
 4. **M3 收官**:全 AutoTest 迴歸 + standalone build FPS + 打磨前後對比截圖集。
 
 ## 鋪路密度(0.5 秒成路)——2026-09-02 方案分析(✅ 已於步驟 3.10 實作方案 A)
