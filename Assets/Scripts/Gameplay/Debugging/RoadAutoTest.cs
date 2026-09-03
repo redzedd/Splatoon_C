@@ -131,6 +131,31 @@ namespace SplatoonC.Gameplay.Debugging
             Check("墨路從腳邊起", firstInkedDistance >= 0f && firstInkedDistance <= 2f,
                 $"第一個有墨的距離={firstInkedDistance:F2}m(期望 ≤2m)");
 
+            // 案 4:路要「夠寬」,不只是「有墨」。
+            // 只驗存在性會漏掉腰身——使用者看到的斷點其實是路細到快斷(2026-09-03)。
+            float thinnestWidth = 99f;
+            float thinnestAt = -1f;
+            for (float d = startDistance; d <= endDistance; d += 0.5f)
+            {
+                int inkedLateral = 0;
+                for (float lateral = -1.5f; lateral <= 1.51f; lateral += 0.25f)
+                {
+                    var probe = new Vector3(origin.x + lateral, 0f, origin.z - d);
+                    if (ground.SampleOwnership(probe) == 1)
+                    {
+                        inkedLateral++;
+                    }
+                }
+                float width = inkedLateral * 0.25f;
+                if (width < thinnestWidth)
+                {
+                    thinnestWidth = width;
+                    thinnestAt = d;
+                }
+            }
+            Check("路寬不出現腰身", thinnestWidth >= 1.25f,
+                $"最細處在 {thinnestAt:F1}m、寬 {thinnestWidth:F2}m(期望 ≥1.25;調參前曾細到 1.50 且連續四段)");
+
             router.ClearOverrideSource();
             Debug.Log($"[AUTOTEST] DONE passed={_passed} failed={_failed}");
             Destroy(gameObject);
