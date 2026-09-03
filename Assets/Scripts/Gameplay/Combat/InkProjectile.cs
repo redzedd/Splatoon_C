@@ -97,6 +97,12 @@ namespace SplatoonC.Gameplay.Combat
                 float damp = Mathf.Exp(-_config.DropHorizontalDrag * dt);
                 _velocity.x *= damp;
                 _velocity.z *= damp;
+                // 「向上」的殘餘速度同樣要煞:只靠重力拉的話,仰射會帶著數十 m/s
+                // 直線衝上天,飛行距離數倍於射程。向下速度不煞,急墜手感才留得住。
+                if (_velocity.y > 0f)
+                {
+                    _velocity.y *= damp;
+                }
             }
 
             Vector3 next = previous + _velocity * dt;

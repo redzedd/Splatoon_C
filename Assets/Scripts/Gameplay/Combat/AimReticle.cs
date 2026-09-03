@@ -74,6 +74,10 @@ namespace SplatoonC.Gameplay.Combat
                     float damp = Mathf.Exp(-config.DropHorizontalDrag * _stepTime);
                     velocity.x *= damp;
                     velocity.z *= damp;
+                    if (velocity.y > 0f)
+                    {
+                        velocity.y *= damp;
+                    }
                 }
                 Vector3 next = point + velocity * _stepTime;
                 Vector3 delta = next - point;
