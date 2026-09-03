@@ -22,7 +22,7 @@ MonoBehaviour:
   _straightRange: 10
   _straightGravity: -1.5
   _dropGravity: -60
-  _dropHorizontalDrag: 7
+  _dropHorizontalDrag: 9.45
   _dripsPerShot: 2
   _dripPhaseCycle: 4
   _dripStartDistance: 0.8
