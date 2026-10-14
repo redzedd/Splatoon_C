@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56bf8704db41be04ca2d0e9fe12d9e3e, type: 3}
+  m_Name: CombatAssets
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.CombatAssets
+  _inkBulletPrefab: {fileID: 4015932625680751002, guid: d08cd4295fd478d48938f6fe7c342dc0, type: 3}
+  _explosionFlashPrefab: {fileID: 168416784691903124, guid: af483df0adcc2b1469ed33d18d55c81a, type: 3}
+  _inkBulletDripPrefab: {fileID: 7390142739852274178, guid: 6d438ffa50ecd034fa213fe936458a80, type: 3}

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_luna_blaster_neo
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: luna_blaster_neo
+  _displayName: "\u65B0\u661F\u7206\u7834\u69CD \u65B0\u578B"
+  _englishName: Luna Blaster Neo
+  _description: "\u8FD1\u8DDD\u7206\u7834\u69CD:\u7206\u70B8\u7BC4\u570D\u5927\u3001\u5C04\u7A0B\u77ED;\u76F4\u64CA\u4E00\u767C\u64CA\u5012\u3002"
+  _main: {fileID: 11400000, guid: 3c593f8ef3984324a99821ca4cfefe61, type: 2}
+  _sub: {fileID: 11400000, guid: 0d4f40c987dd4214eb7d83a5afe4b729, type: 2}
+  _special: {fileID: 11400000, guid: 9701f22eda90023489a75fdd5570824d, type: 2}
+  _specialPoints: 200
+  _weight: 0
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 19
+  _stat2Label: "\u7206\u7834\u529B"
+  _stat2: 70
+  _stat3Label: "\u5C04\u901F"
+  _stat3: 30

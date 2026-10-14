@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_order_shot_replica
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: order_shot_replica
+  _displayName: "\u79E9\u5E8F\u5C04\u64CA\u69CD \u8907\u88FD\u54C1"
+  _englishName: Order Shot Replica
+  _description: "\u842C\u7528\u5C04\u64CA\u69CD:\u5C04\u7A0B\u3001\u5A01\u529B\u3001\u5C04\u901F\u5747\u8861,\u4E09\u767C\u64CA\u5012\u3002\n\u5916\u89C0\u8907\u88FD\u54C1,\u6027\u80FD\u8207\u539F\u7248\u76F8\u540C\u3002"
+  _main: {fileID: 11400000, guid: 6f12c0e07ee3c9247811d95d679fee92, type: 2}
+  _sub: {fileID: 11400000, guid: 1d0b40bf38d7f28419bd47736263cfcf, type: 2}
+  _special: {fileID: 11400000, guid: 0f3afe2ecfd70db44923b1384999d946, type: 2}
+  _specialPoints: 200
+  _weight: 1
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 52
+  _stat2Label: "\u5A01\u529B"
+  _stat2: 47
+  _stat3Label: "\u5C04\u901F"
+  _stat3: 60

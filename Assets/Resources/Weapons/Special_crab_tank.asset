@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 022c5ee8f78ce344ca8adb3c4cdbab7f, type: 3}
+  m_Name: Special_crab_tank
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.CrabTankConfig
+  _throwSpeed: 14
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 60
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u8783\u87F9\u5766\u514B"
+  _fallbackCostPoints: 200
+  _bodyPrefab: {fileID: 9016697551608729389, guid: d0b9fc2076b11fc499f5a64524b84da1, type: 3}
+  _bulletPrefab: {fileID: 1223012429761525018, guid: f69a60ab97f54a14fa464bc960bd5fc0, type: 3}
+  _cannonPrefab: {fileID: 171340520233569560, guid: 005b32c2072182d48b5298fbb6d3468a, type: 3}
+  _gripPrefab: {fileID: 566516581561516899, guid: 3fdebeb4315ed314999867b9b0eca8c3, type: 3}
+  _durationFrames: 480
+  _armorDelayFrames: 45
+  _endLagFrames: 25
+  _warnSeconds: 1.5
+  _armorHp: 500
+  _walkSpeed: {x: 0.075, y: 0.015}
+  _turnDegPerSecond: 70
+  _ballSpeed: 0.1
+  _bodyRadius: 1.15
+  _turretRepeat: {x: 12, y: 4}
+  _turretRampFrames: 90
+  _turretDamage: {x: 32, y: 16}
+  _turretReduce: {x: 9, y: 25}
+  _turretSpread: 3
+  _turretMuzzle: {x: 0.78, y: 1.05, z: 1.15}
+  _cannonIntervalFrames: 75
+  _cannonNoShotFrames: 32
+  _cannonDirect: 50
+  _cannonBlast: {x: 30, y: 4.8}
+  _cannonPaint: 4.5
+  _cannonMuzzle: {x: 0, y: 1.3, z: 1.3}
+  _cannonLiftDeg: 4
+  _ballContactDamage: 40
+  _ballContactInterval: 0.33
+  _ballContactRadius: 1.45
+  _unrollNoShotFrames: 20
+  _ballPaintRadius: 1.2
+  _activateSound: crab_tank_activate
+  _turretSound: crab_tank_shot
+  _cannonSound: crab_tank_cannon
+  _cannonExplodeSound: crab_tank_cannon_explode
+  _transformSound: crab_tank_transform
+  _rollLoop: crab_tank_roll_loop
+  _breakSound: crab_tank_break
+  _endSound: crab_tank_end

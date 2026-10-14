@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_blaster
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: blaster
+  _displayName: "\u706B\u71B1\u7206\u7834\u69CD"
+  _englishName: Blaster
+  _description: "\u7206\u7834\u69CD:\u76F4\u64CA\u4E00\u767C\u64CA\u5012,\u58A8\u5F48\u98DB\u5230\u76E1\u982D\u6216\u78B0\u5230\u5730\u5F62\u5C31\u7206\u70B8,\u80FD\u9694\u8457\u63A9\u9AD4\u70B8\u4EBA\u3002"
+  _main: {fileID: 11400000, guid: 5f13780ff309c6b4393a3397808a3ac7, type: 2}
+  _sub: {fileID: 11400000, guid: 5279cecaf558a53438c2f3c7f3065708, type: 2}
+  _special: {fileID: 11400000, guid: 2673752b74df91143877f5cfea81fcb7, type: 2}
+  _specialPoints: 190
+  _weight: 1
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 27
+  _stat2Label: "\u7206\u7834\u529B"
+  _stat2: 70
+  _stat3Label: "\u5C04\u901F"
+  _stat3: 20

@@ -1,0 +1,309 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 851ef0ab2f840e74ab6e870ab41a4033, type: 3}
+  m_Name: AudioLibrary
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Audio.AudioLibrary
+  _entries:
+  - Id: shoot_shooter
+    Group: shoot_shooter
+    Clip: {fileID: 8300000, guid: 6aabfe7e6281c9e41906a86a12f7fc93, type: 3}
+    Volume: 0.785
+    Loop: 0
+    Music: 0
+  - Id: shoot_shooter_2
+    Group: shoot_shooter
+    Clip: {fileID: 8300000, guid: add5dc50abfabc94b9c4026c3770a4e9, type: 3}
+    Volume: 0.937
+    Loop: 0
+    Music: 0
+  - Id: shoot_shooter_3
+    Group: shoot_shooter
+    Clip: {fileID: 8300000, guid: a922c32ce53607e40a2a7a559f38bd97, type: 3}
+    Volume: 0.786
+    Loop: 0
+    Music: 0
+  - Id: shoot_shooter_4
+    Group: shoot_shooter
+    Clip: {fileID: 8300000, guid: 6afbfe62fa3911743a887ae52b591775, type: 3}
+    Volume: 0.873
+    Loop: 0
+    Music: 0
+  - Id: ink_hit_floor
+    Group: ink_hit_floor
+    Clip: {fileID: 8300000, guid: 789c1dd7adb043b43abc9e022fddbcbb, type: 3}
+    Volume: 0.81
+    Loop: 0
+    Music: 0
+  - Id: ink_hit_floor_2
+    Group: ink_hit_floor
+    Clip: {fileID: 8300000, guid: 22dace28553efcd4ba7b7a4c5411e135, type: 3}
+    Volume: 0.862
+    Loop: 0
+    Music: 0
+  - Id: ink_hit_wall
+    Group: ink_hit_wall
+    Clip: {fileID: 8300000, guid: 8b832568e86702446abec9159b9efd1e, type: 3}
+    Volume: 0.739
+    Loop: 0
+    Music: 0
+  - Id: ink_drip
+    Group: ink_drip
+    Clip: {fileID: 8300000, guid: 833c92c8d75b87542bd5f5690d6c9098, type: 3}
+    Volume: 0.484
+    Loop: 0
+    Music: 0
+  - Id: squid_dive
+    Group: squid_dive
+    Clip: {fileID: 8300000, guid: 3a28ae4eb8845f0468a87c317ff26fa5, type: 3}
+    Volume: 0.687
+    Loop: 0
+    Music: 0
+  - Id: squid_surface
+    Group: squid_surface
+    Clip: {fileID: 8300000, guid: 99fc840fb79933a4785b05f779350c18, type: 3}
+    Volume: 0.539
+    Loop: 0
+    Music: 0
+  - Id: swim_loop
+    Group: swim_loop
+    Clip: {fileID: 8300000, guid: 76f93a98bfbe3264aa0e5e5e9c02d41e, type: 3}
+    Volume: 0.338
+    Loop: 1
+    Music: 0
+  - Id: squid_climb_loop
+    Group: squid_climb_loop
+    Clip: {fileID: 8300000, guid: 19e3a575d33a5994991f8f20ca32de9a, type: 3}
+    Volume: 0.567
+    Loop: 1
+    Music: 0
+  - Id: jump
+    Group: jump
+    Clip: {fileID: 8300000, guid: cfd7d72bd44beb7418ff08388a094ac5, type: 3}
+    Volume: 0.528
+    Loop: 0
+    Music: 0
+  - Id: land
+    Group: land
+    Clip: {fileID: 8300000, guid: a4bfe304cd794584bab02222a0f504e8, type: 3}
+    Volume: 0.766
+    Loop: 0
+    Music: 0
+  - Id: footstep_1
+    Group: footstep
+    Clip: {fileID: 8300000, guid: 70a48aad66ee72d4391bddfa1ba3493e, type: 3}
+    Volume: 0.498
+    Loop: 0
+    Music: 0
+  - Id: footstep_2
+    Group: footstep
+    Clip: {fileID: 8300000, guid: 1e3019f55f32b824d8c13afe43de6a4e, type: 3}
+    Volume: 0.371
+    Loop: 0
+    Music: 0
+  - Id: step_enemy_ink
+    Group: step_enemy_ink
+    Clip: {fileID: 8300000, guid: b604261b71029f4448e33df58a50d349, type: 3}
+    Volume: 0.324
+    Loop: 0
+    Music: 0
+  - Id: bomb_throw
+    Group: bomb_throw
+    Clip: {fileID: 8300000, guid: 7badfce5a3c9b3b468f5fa20174bca18, type: 3}
+    Volume: 0.31
+    Loop: 0
+    Music: 0
+  - Id: bomb_bounce
+    Group: bomb_bounce
+    Clip: {fileID: 8300000, guid: 9110b0fde0ffddb4787bb8661739aa11, type: 3}
+    Volume: 0.626
+    Loop: 0
+    Music: 0
+  - Id: bomb_fuse_beep
+    Group: bomb_fuse_beep
+    Clip: {fileID: 8300000, guid: aff969c64358b3d449b0f532b3df9485, type: 3}
+    Volume: 0.241
+    Loop: 0
+    Music: 0
+  - Id: bomb_explode
+    Group: bomb_explode
+    Clip: {fileID: 8300000, guid: 1503cd8fdcc5b8141810a86e429d0d1e, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: special_ready
+    Group: special_ready
+    Clip: {fileID: 8300000, guid: b4e4a1b80ed9ba942ba100c798c6d041, type: 3}
+    Volume: 0.387
+    Loop: 0
+    Music: 0
+  - Id: special_activate
+    Group: special_activate
+    Clip: {fileID: 8300000, guid: c36d016a8db5e3b4abd0e8d94d232521, type: 3}
+    Volume: 0.819
+    Loop: 0
+    Music: 0
+  - Id: tornado_loop
+    Group: tornado_loop
+    Clip: {fileID: 8300000, guid: d44a36450def8ae4798591d40e73d72b, type: 3}
+    Volume: 0.412
+    Loop: 1
+    Music: 0
+  - Id: inkstrike_launch
+    Group: inkstrike_launch
+    Clip: {fileID: 8300000, guid: 6e3484779db2a3545aeae07ec6bb5149, type: 3}
+    Volume: 0.738
+    Loop: 0
+    Music: 0
+  - Id: hit_marker
+    Group: hit_marker
+    Clip: {fileID: 8300000, guid: e87cc68afa0c72f4095aa3c7d473b791, type: 3}
+    Volume: 0.788
+    Loop: 0
+    Music: 0
+  - Id: splat_confirm
+    Group: splat_confirm
+    Clip: {fileID: 8300000, guid: 5d7a438204a70264998a331eabab1889, type: 3}
+    Volume: 0.382
+    Loop: 0
+    Music: 0
+  - Id: player_hurt
+    Group: player_hurt
+    Clip: {fileID: 8300000, guid: 089625a3eb67ac540bed3ddb9cf0c581, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: player_splatted
+    Group: player_splatted
+    Clip: {fileID: 8300000, guid: b7f0496eb8e4aac4eb1885b239d12a75, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: low_ink
+    Group: low_ink
+    Clip: {fileID: 8300000, guid: c6d42f65afe189b41b6ef3b31129aa7a, type: 3}
+    Volume: 0.288
+    Loop: 0
+    Music: 0
+  - Id: respawn_launch
+    Group: respawn_launch
+    Clip: {fileID: 8300000, guid: 2d654924f7d36724bb9723f78db8c237, type: 3}
+    Volume: 0.517
+    Loop: 0
+    Music: 0
+  - Id: super_jump_land
+    Group: super_jump_land
+    Clip: {fileID: 8300000, guid: 46acdff3c938cfe47be002592fd1a741, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: ui_move
+    Group: ui_move
+    Clip: {fileID: 8300000, guid: ff513e2906d4fab4a8d30443d5ef549c, type: 3}
+    Volume: 0.608
+    Loop: 0
+    Music: 0
+  - Id: ui_select
+    Group: ui_select
+    Clip: {fileID: 8300000, guid: c9ea60d25db831f4d902b0a788468b13, type: 3}
+    Volume: 0.366
+    Loop: 0
+    Music: 0
+  - Id: ui_back
+    Group: ui_back
+    Clip: {fileID: 8300000, guid: 810715aef6df3f14f94a7c26228f1b59, type: 3}
+    Volume: 0.414
+    Loop: 0
+    Music: 0
+  - Id: countdown_tick
+    Group: countdown_tick
+    Clip: {fileID: 8300000, guid: 1b22a29730bcaa643af59d093dfff957, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: ready
+    Group: ready
+    Clip: {fileID: 8300000, guid: 2efddd6c07dcd5d408512a0c691dfc91, type: 3}
+    Volume: 0.662
+    Loop: 0
+    Music: 0
+  - Id: go
+    Group: go
+    Clip: {fileID: 8300000, guid: 7380f4db228750847bf2487a384dd64e, type: 3}
+    Volume: 0.741
+    Loop: 0
+    Music: 0
+  - Id: whistle_end
+    Group: whistle_end
+    Clip: {fileID: 8300000, guid: c810f1e8bd872d946b1de2e14f71d2ad, type: 3}
+    Volume: 0.245
+    Loop: 0
+    Music: 0
+  - Id: game_stinger
+    Group: game_stinger
+    Clip: {fileID: 8300000, guid: 9a68556a0648b544c918189f4c9df08e, type: 3}
+    Volume: 1
+    Loop: 0
+    Music: 0
+  - Id: judge_drumroll
+    Group: judge_drumroll
+    Clip: {fileID: 8300000, guid: 9ac8cdac9d175b647bddd2e9aeef3de5, type: 3}
+    Volume: 0.52
+    Loop: 0
+    Music: 0
+  - Id: judge_reveal
+    Group: judge_reveal
+    Clip: {fileID: 8300000, guid: d157a3dc1bbb82346bb98f551950c81d, type: 3}
+    Volume: 0.805
+    Loop: 0
+    Music: 0
+  - Id: victory_jingle
+    Group: victory_jingle
+    Clip: {fileID: 8300000, guid: a6b2ed96ea58d4546b134c3d98e27c8b, type: 3}
+    Volume: 0.553
+    Loop: 0
+    Music: 0
+  - Id: defeat_jingle
+    Group: defeat_jingle
+    Clip: {fileID: 8300000, guid: 3c5767599452c014f92f62e8427a9e4c, type: 3}
+    Volume: 0.476
+    Loop: 0
+    Music: 0
+  - Id: last_minute_alert
+    Group: last_minute_alert
+    Clip: {fileID: 8300000, guid: 735d9fb65dfa7514b8f7bc81b975de3c, type: 3}
+    Volume: 0.664
+    Loop: 0
+    Music: 0
+  - Id: battle_theme
+    Group: battle_theme
+    Clip: {fileID: 8300000, guid: f281eb3339e0ef94f9d23527235f72f1, type: 3}
+    Volume: 0.8
+    Loop: 1
+    Music: 1
+  - Id: last_minute
+    Group: last_minute
+    Clip: {fileID: 8300000, guid: 1cc85911c5425df4dae9e9dc1d63a5d6, type: 3}
+    Volume: 0.85
+    Loop: 0
+    Music: 1
+  - Id: menu_theme
+    Group: menu_theme
+    Clip: {fileID: 8300000, guid: c3f763d6f86822649b7ab6b7f61f9990, type: 3}
+    Volume: 0.7
+    Loop: 1
+    Music: 1
+  - Id: results_theme
+    Group: results_theme
+    Clip: {fileID: 8300000, guid: b10b24a527514c04a86ddcee766a30e4, type: 3}
+    Volume: 0.75
+    Loop: 1
+    Music: 1

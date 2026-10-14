@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bc7fd437e53e634c832aaddf0fad96f, type: 3}
+  m_Name: Sub_angle_shooter
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.AngleShooterConfig
+  _throwSpeed: 378
+  _liftAngleDeg: 0
+  _gravity: 0
+  _lifetime: 3
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967035
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 44.100002
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 60
+  _inkLockSeconds: 0.8333334
+  _paintHardness: 0.7
+  _displayName: "\u6A19\u7DDA\u5668"
+  _inkCost: 0.4
+  _prefab: {fileID: 139018075915059285, guid: d9e329645e9cfc0459c1c5ccdabb6e7f, type: 3}
+  _maxActive: 0
+  _throwSound: angle_shooter_fire
+  _heldModel: {fileID: 2216457335814733877, guid: a649a222c83169340b8602405769c6ad, type: 3}
+  _botUsage: 0
+  _botRange: {x: 4, y: 30}
+  _s3:
+    SpeedPerFrame: 6.3
+    FlyingFrames: 7
+    CollisionRadius: 0.25
+    GroundReflectAngleRate: 0.1
+    WallReflectAngleRate: 1
+    GroundNormalY: 0.6
+    DirectDamage: 40
+    BouncePaintRadius: 2.6
+    HitPaintRadius: 2
+    HitPaintHeight: 3
+    TailFrames: 90
+    MarkingFrames: 300
+    TouchRadius: 0.25
+  _lineWidth: 0.12
+  _fadeSeconds: 0.35
+  _bounceSound: angle_shooter_bounce
+  _hitSound: angle_shooter_hit

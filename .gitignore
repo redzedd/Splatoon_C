@@ -1,0 +1,34 @@
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+MemoryCaptures/
+Recordings/
+
+# IDE
+.vs/
+.idea/
+*.csproj
+*.sln
+*.user
+.vsconfig
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Crash dumps
+sysinfo.txt
+*.stackdump
+
+# Build 產物(log 與測試結果留在 Builds/ 但不進版控)
+# 只忽略專案根目錄的 Build/Builds——不加斜線會連 Assets/Editor/Build/ 的編輯器腳本一起忽略
+/Builds/
+
+# Unity 崩潰復原暫存場景(編輯器異常關閉時自動產生,不是專案資產)
+/[Aa]ssets/_Recovery/
+/[Aa]ssets/_Recovery.meta

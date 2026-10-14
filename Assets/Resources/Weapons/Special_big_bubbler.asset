@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 007b635fb27a60941b2068bea02e54ff, type: 3}
+  m_Name: Special_big_bubbler
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.BigBubblerConfig
+  _throwSpeed: 14
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 60
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u5DE8\u5927\u9632\u8B77\u7F69"
+  _fallbackCostPoints: 180
+  _devicePrefab: {fileID: 5416944077358353478, guid: 0dc4a664ed4ca6244befc57eb618e164, type: 3}
+  _frontLagFrames: 50
+  _ignitionFrame: 15
+  _ascendFrames: 30
+  _droneMaxHeight: 8.5
+  _paintRadius: 4.5
+  _minCeiling: 3.5
+  _edgeProbeRadius: 0.35
+  _radius: {x: 7.5, y: 2.255}
+  _centerHeight: 1
+  _maxHp: 1536
+  _decayPerSecond: 92.1
+  _barrierDamageRatio: 0.64
+  _lockFrames: 1001
+  _deploySound: big_bubbler_deploy
+  _hitSound: big_bubbler_hit
+  _popSound: big_bubbler_pop

@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e51e0162fdc7a4e45a93ed0dd25837fa, type: 3}
+  m_Name: Special_trizooka
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.TrizookaConfig
+  _throwSpeed: 14
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 60
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u7D42\u6975\u767C\u5C04"
+  _fallbackCostPoints: 200
+  _globPrefab: {fileID: 7341491743700220725, guid: fbfaac5527d6bc54b9a31882d2980da1, type: 3}
+  _launcherPrefab: {fileID: 7950371094695214496, guid: 24d141c0c32368147984fa6699a7755f, type: 3}
+  _durationFrames: 330
+  _startDelayFrames: 23
+  _shotDelayFrames: 15
+  _postShotFrames: 40
+  _shots: 3
+  _globsPerShot: 3
+  _globIntervalFrames: 4
+  _directDamage: 220
+  _playerRadius: {x: 0.01, y: 0.75}
+  _playerRadiusFrames: 10
+  _fieldRadius: {x: 0.01, y: 0.3}
+  _fieldRadiusFrames: 20
+  _orbitRadius: 1
+  _orbitGrowFrames: 10
+  _orbitDegPerFrame: 15
+  _globVisualScale: 2.6
+  _nearBlast: {x: 53, y: 2.5}
+  _farBlast: {x: 35, y: 4}
+  _paintRadius: 3.2
+  _knockback: {x: 470, y: 8}
+  _moveSpeed: 0.07
+  _moveSpeedInShot: 0.04
+  _swimSpeedRatio: 0.9479167
+  _zeroDistance: 29
+  _muzzleOffset: {x: 0.32, y: 1.5, z: 0.75}
+  _activateSound: trizooka_activate
+  _fireSound: trizooka_fire
+  _explodeSound: trizooka_explode

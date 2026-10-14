@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8800f73d945052a42886f308711a61ed, type: 3}
+  m_Name: Sub_squid_beakon
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.SquidBeakonConfig
+  _throwSpeed: 0
+  _liftAngleDeg: 0
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294966971
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 2
+  _inkLockSeconds: 0
+  _paintHardness: 0.7
+  _displayName: "\u8DF3\u8E8D\u4FE1\u6A19"
+  _inkCost: 0.75
+  _prefab: {fileID: 5322674744632989956, guid: a2d6617a8df7b26408d26c01149c745e, type: 3}
+  _maxActive: 3
+  _throwSound: 
+  _heldModel: {fileID: 3297977382730737141, guid: c4f90a2d4f8bfd04ab30203716110592, type: 3}
+  _botUsage: 1
+  _botRange: {x: 0, y: 0}
+  _maxHp: 120
+  _uses: 2
+  _radarRadius: 15
+  _radarHeight: 15
+  _placeForward: 0.8
+  _paintRadius: 1
+  _fallGravity: -20
+  _deploySound: beakon_place
+  _useSound: beakon_use
+  _botMinDistanceFromBase: 30
+  _botSpacing: 20

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_starz_dynamo_roller
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: starz_dynamo_roller
+  _displayName: "\u96FB\u52D5\u99AC\u9054\u6EFE\u7B52 \u51A5"
+  _englishName: Starz Dynamo Roller
+  _description: "\u91CD\u91CF\u7D1A\u6EFE\u7B52:\u8209\u8D77\u6162,\u4F46\u7529\u58A8\u7BC4\u570D\u5EE3\u3001\u5C04\u7A0B\u9060,\u5857\u5730\u91CF\u9A5A\u4EBA\u3002"
+  _main: {fileID: 11400000, guid: 6389e072f2d45c041ae1857e1288a179, type: 2}
+  _sub: {fileID: 11400000, guid: 25b39fe07a3d1a840b16d624dcd04745, type: 2}
+  _special: {fileID: 11400000, guid: 2ad7e4af369da5048af167b977eaeddc, type: 2}
+  _specialPoints: 180
+  _weight: 2
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 76
+  _stat2Label: "\u5857\u58A8\u901F\u5EA6"
+  _stat2: 25
+  _stat3Label: "\u64CD\u4F5C\u6027"
+  _stat3: 20

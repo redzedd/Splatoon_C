@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d01c6b59d077504b9981535eb94b0ad, type: 3}
+  m_Name: Special_ink_vac
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.InkVacConfig
+  _throwSpeed: 14
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 60
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u5438\u58A8\u5668"
+  _fallbackCostPoints: 190
+  _shotPrefab: {fileID: 7248477644184188966, guid: 1c49fe9ce008cc148af890bb5ce10394, type: 3}
+  _blastPrefab: {fileID: 6711323269159658365, guid: 42ae27e375272154380a5ec2f01f8a28, type: 3}
+  _vortexPrefab: {fileID: 5292047627730570795, guid: 23387de96f9b91d4f9bfe376ec392b2c, type: 3}
+  _suckFxPrefab: {fileID: 1884909058508385664, guid: 55a4cf1d1d478dd4495e737686d60057, type: 3}
+  _nozzlePrefab: {fileID: 8676351239016404920, guid: 0354e6bcc14eb5243b66a11869205315, type: 3}
+  _backpackPrefab: {fileID: 1679595010763294667, guid: 06e56e455b4ba334dbb263e79a903957, type: 3}
+  _suctionFrames: 360
+  _activationLagFrames: 17
+  _suctionLag: {x: 12, y: 18}
+  _transitionFrames: 20
+  _exhaleWaitFrames: 150
+  _blastWaitFrames: 50
+  _capacity: 1100
+  _playerFillPerFrame: 1.5
+  _objectDamagePerFrame: 2
+  _poisonInkDrainPerSecond: 0.132
+  _poisonMoveMultiplier: 0.5
+  _nozzleTurnDegPerSecond: 300
+  _muzzleOffset: {x: 0.25, y: 1.05, z: 0.9}
+  _shotDamage: 220
+  _shotRadius: {x: 0.4, y: 0.6}
+  _blastRadius: {x: 6, y: 11}
+  _blastDamage: 220
+  _knockback: {x: 700, y: 9}
+  _trailPaint: {x: 2.4, y: 3.2}
+  _moveSpeed: {x: 0.09, y: 0.07}
+  _fireMoveSpeed: 0.072
+  _paintSpanFrames: 20
+  _paintRadius: 1.5
+  _activateSound: ink_vac_activate
+  _suctionLoop: ink_vac_suction_loop
+  _absorbSound: ink_vac_absorb
+  _fullSound: ink_vac_full
+  _fireSound: ink_vac_fire
+  _warnSound: ink_vac_blast_warn
+  _explodeSound: ink_vac_explode

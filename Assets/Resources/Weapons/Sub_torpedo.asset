@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b68bdf1541f2d54f98ed8986986fa75, type: 3}
+  m_Name: Sub_torpedo
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.TorpedoConfig
+  _throwSpeed: 84
+  _liftAngleDeg: 12
+  _gravity: -57.600002
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294966971
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 20
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 180
+  _inkLockSeconds: 1.4666667
+  _paintHardness: 0.7
+  _displayName: "\u9B5A\u96F7"
+  _inkCost: 0.65
+  _prefab: {fileID: 9167452283707948971, guid: 1023e9097042a1146ae91cdbba5284a0, type: 3}
+  _maxActive: 1
+  _throwSound: bomb_throw
+  _heldModel: {fileID: 2616019711261968396, guid: a7e3408f5d162e94fb39341628dd3aba, type: 3}
+  _botUsage: 0
+  _botRange: {x: 6, y: 24}
+  _previewStride: 2
+  _s3:
+    Throw:
+      SpawnSpeedZ: 1.4
+      SpawnSpeedY: 0.24
+      SpawnSpeedYWorldMin: -0.4
+      FlyGravity: 0.016
+      FlyAirResist: 0.05866
+      InheritLateral: 1.6
+      InheritForward: 2
+      InheritUpRate: 4
+      InheritUpMax: 0.32
+    FindStartFrame: 6
+    SearchRadius: 9
+    SearchAbove: 2.5
+    SearchBelow: 5
+    RotateFrames: 25
+    HoldFrames: 20
+    ChaseSpeed: 0.22
+    ChaseMaxFrames: 150
+    Hp: 20
+    BurstFrame: 30
+    WarningRestFrame: 30
+    GroundResist: 0.3
+    WallRebound: 0.7
+    LandingKeep: 0.6
+    AirborneTimeoutFrames: 150
+    DropletCount: 8
+    DropletPitch: 65
+    DropletSpeedMin: 0.42
+    DropletSpeedMax: 0.48
+    DropletMaxFrames: 120
+  _radius: 0.2
+  _hullRadius: 0.35
+  _dropletRadius: 0.1
+  _stepHeight: 0.25
+  _chaseBlast:
+    NearDamage: 60
+    NearRadius: 2.6
+    FarDamage: 35
+    FarRadius: 6
+    DamageLinear: 0
+    IgnoreLineOfSight: 0
+    AttackClass: 65
+    Kind: 1
+    PaintRadius: 3.5
+    PaintRayCount: 0
+    PaintRayRadius: 0
+    PaintRayReach: 0
+    DropCount: 0
+    DropRadius: 0
+    DropReach: 0
+    PaintHardness: 0.7
+    NoSpecialCharge: 0
+    KnockbackAccel: 230
+    KnockbackRange: 12
+    FxBursts: 4
+    FlashRadius: 0
+    Sound: bomb_explode
+    SoundVolume: 0.85
+  _throwBlast:
+    NearDamage: 60
+    NearRadius: 2.6
+    FarDamage: 35
+    FarRadius: 6
+    DamageLinear: 0
+    IgnoreLineOfSight: 0
+    AttackClass: 65
+    Kind: 1
+    PaintRadius: 3.5
+    PaintRayCount: 0
+    PaintRayRadius: 0
+    PaintRayReach: 0
+    DropCount: 0
+    DropRadius: 0
+    DropReach: 0
+    PaintHardness: 0.7
+    NoSpecialCharge: 0
+    KnockbackAccel: 700
+    KnockbackRange: 12
+    FxBursts: 4
+    FlashRadius: 0
+    Sound: bomb_explode
+    SoundVolume: 0.85
+  _dropletBlast:
+    NearDamage: 12
+    NearRadius: 2.6
+    FarDamage: 0
+    FarRadius: 2.6
+    DamageLinear: 0
+    IgnoreLineOfSight: 0
+    AttackClass: 66
+    Kind: 1
+    PaintRadius: 2
+    PaintRayCount: 0
+    PaintRayRadius: 0
+    PaintRayReach: 0
+    DropCount: 0
+    DropRadius: 0
+    DropReach: 0
+    PaintHardness: 0.7
+    NoSpecialCharge: 0
+    KnockbackAccel: 0
+    KnockbackRange: 0
+    FxBursts: 1
+    FlashRadius: 0.9
+    Sound: torpedo_droplet
+    SoundVolume: 0.5
+  _throwPaintRadius: 0.8
+  _transformDropCount: 6
+  _transformDropRadius: 0.7
+  _transformDropReach: 1.2
+  _lockSound: torpedo_lock
+  _transformSound: torpedo_transform
+  _dashSound: torpedo_dash
+  _rollWarningSound: torpedo_roll
+  _destroyedSound: torpedo_destroyed

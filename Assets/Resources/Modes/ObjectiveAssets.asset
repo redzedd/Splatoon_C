@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c701ff7d9f28d841ba7c71ad58f8de5, type: 3}
+  m_Name: ObjectiveAssets
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Match.ObjectiveAssets
+  _zoneFillShader: {fileID: 4800000, guid: d864ccca8ed732943991bdb12367bbca, type: 3}
+  _zoneBorderMaterial: {fileID: 2100000, guid: c7298064565f7104ea611f8a873bdd0e, type: 2}
+  _zoneCurtainMaterial: {fileID: 2100000, guid: 8712f42e8389c46448571311cbea9604, type: 2}
+  _zoneXRayMaterial: {fileID: 2100000, guid: 4ae27cabb4a897741839fc0881f6202c, type: 2}

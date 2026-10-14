@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_twinklez_splat_dualies
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: twinklez_splat_dualies
+  _displayName: "\u65AF\u666E\u62C9\u96D9\u69CD \u8000"
+  _englishName: Twinklez Splat Dualies
+  _description: "\u96D9\u69CD:\u958B\u706B\u4E2D\u53EF\u7FFB\u6EFE\u9583\u907F,\u7FFB\u6EFE\u5F8C\u8F49\u70BA\u6E96\u5EA6\u66F4\u9AD8\u7684\u5B9A\u9EDE\u5C04\u64CA;\u56DB\u767C\u64CA\u5012\u3002"
+  _main: {fileID: 11400000, guid: 94eeb54dbae79b947b7a29b085068ef7, type: 2}
+  _sub: {fileID: 11400000, guid: 0d4f40c987dd4214eb7d83a5afe4b729, type: 2}
+  _special: {fileID: 11400000, guid: 2673752b74df91143877f5cfea81fcb7, type: 2}
+  _specialPoints: 190
+  _weight: 1
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 50
+  _stat2Label: "\u5A01\u529B"
+  _stat2: 29
+  _stat3Label: "\u6A5F\u52D5\u6027"
+  _stat3: 60

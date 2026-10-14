@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4598695da23ed2142a879eb2fddf91a9, type: 3}
+  m_Name: Special_killer_wail
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.KillerWailConfig
+  _throwSpeed: 14
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 60
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u5587\u53ED\u96F7\u5C045.1ch"
+  _fallbackCostPoints: 210
+  _speakerPrefab: {fileID: 4311276287030246032, guid: c6452d187a438a14d92b93f8b2fb0efb, type: 3}
+  _pairIntervalFrames: 36
+  _firstLockFrame: 16
+  _warningFrames: 20
+  _laserFrames: 180
+  _userLockFrames: 40
+  _damagePerTick: 3.5
+  _damageIntervalFrames: 5
+  _beamRadius: 0.4
+  _beamLength: 150
+  _lockonDeg: 80
+  _lockonRadius: 10
+  _trackDelaySeconds: 0.5
+  _trackInterp: 0.4
+  _maxTurnDegPerFrame: 30
+  _freeSweepDegPerFrame: 0.3
+  _formationCenter: {x: 0, y: 1.7, z: -0.6}
+  _formationRadius: 1.3
+  _deploySound: killer_wail_deploy
+  _lockSound: killer_wail_lock
+  _warningSound: killer_wail_warning
+  _beamLoop: killer_wail_beam

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e847630396e84df43a3754b3a2a672bf, type: 3}
+  m_Name: Main_e_liter_4k
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.ChargerConfig
+  _moveSpeedWhileFiring: 0.9
+  _fireSound: charger_fire_eliter
+  _overrideAttackClass: 0
+  _attackClass: 1
+  _s3:
+    Name: E-liter 4K
+    FullChargeFrames: 92
+    MinChargeFrames: 8
+    AirChargeRate: 0.33333334
+    LowInkChargeRate: 0.33333334
+    InkConsumeMin: 0.0225
+    InkConsumeFull: 0.25
+    InkRecoverStop: 20
+    PostShotNoSquidFrames: 15
+    MoveSpeedFullCharge: 0.015
+    MoveSpeedNoCharge: 0.072
+    JumpVelocityFullCharge: 0.07
+    JumpVelocityNormal: 0.11
+    DamageMin: 40
+    DamageMax: 80
+    DamageFull: 180
+    DistanceMin: 9.045
+    DistanceMax: 29.05
+    DistanceFull: 29.05
+    MuzzleReach: 1.71
+    SpeedMin: 2.4
+    SpeedMax: 6.4
+    SpeedFull: 9.6
+    PlayerRadius: 0.1125
+    FieldRadius: 0.02
+    EndRadiusMin: 1.068
+    EndRadiusMax: 3.204
+    EndRadiusFull: 3.845
+    TrailWidthHalfMin: 0.925
+    TrailWidthHalfMax: 1.85
+    TrailWidthHalfFull: 1.85
+    TrailDepthHalfMin: 3.2375
+    TrailDepthHalfMax: 1.85
+    TrailDepthHalfFull: 1.85
+    TrailNearestSkip: 1.2
+    LastSplashRate: 1.5
+    WallRadiusMin: 1.2
+    WallRadiusMax: 1.8
+    WallRadiusFull: 1.8
+    KeepChargeFrames: 75
+    KeepLaserDelayFrames: 25
+    KeepFireDelayFrames: 31
+  _heavyWeight: 1
+  _partialAttackClass: 32
+  _fullAttackClass: 33
+  _modelPrefab: {fileID: 5023734751262089410, guid: 8495fe8b54068a64ea2c43ddb77bc197, type: 3}
+  _bulletPrefab: {fileID: 1060397244008100463, guid: 4f96b56610a128a41af57f4e0e4567c7, type: 3}
+  _laserMaterial: {fileID: 2100000, guid: ce3819ef20166564ea0016fa9b04afbd, type: 2}
+  _laserWidth: {x: 0.03, y: 0.07}
+  _bulletTrailSeconds: 0.045
+  _paintHardness: 0.75
+  _gripOffset: {x: 0.035, y: -0.08, z: 0.2}
+  _supportOffset: {x: -0.015, y: -0.055, z: 0.38}
+  _chargeZoomFov: 47
+  _partialFireSound: charger_fire_partial
+  _chargeLoopSound: charger_charge_loop
+  _fullChargeSound: charger_full
+  _hitSound: charger_hit
+  _botCloseRange: 8
+  _botMaxHoldFullSeconds: 0.9
+  _botHighGroundBias: 0.5

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d0ccd52dd8e5249841c64780e90052, type: 3}
+  m_Name: WeaponCatalog
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponCatalog
+  _kits:
+  - {fileID: 11400000, guid: 67385926da0332e41a567269249a1eaf, type: 2}
+  - {fileID: 11400000, guid: 97fcc08ebc46bb84e80fdbf7355a5037, type: 2}
+  - {fileID: 11400000, guid: 6d4c260f409d7ea49b88ea1cdbba0b9d, type: 2}
+  - {fileID: 11400000, guid: bcca8fea44543a746991b9aa431d5938, type: 2}
+  - {fileID: 11400000, guid: 075843aef42855b4f9fcf9ef32adeb92, type: 2}
+  - {fileID: 11400000, guid: 0aaab12182596df4cb297107508f66f4, type: 2}
+  - {fileID: 11400000, guid: 24d10b39cf87ef749b87ba96be985608, type: 2}
+  - {fileID: 11400000, guid: aba517716382f13409c0c281d5906237, type: 2}
+  - {fileID: 11400000, guid: 12552366157d0e140a37ce4a1e16fca9, type: 2}
+  - {fileID: 11400000, guid: 646fc72bf0c063e4b82f2da14ea35f0b, type: 2}
+  - {fileID: 11400000, guid: 553cba99a68ecb042820ed6682f6fb19, type: 2}
+  - {fileID: 11400000, guid: 546e74d5a9fc677459a1326b46a86eff, type: 2}
+  - {fileID: 11400000, guid: c7c1f251f5951944db37c52085c41bda, type: 2}
+  - {fileID: 11400000, guid: 8ae4a9aa3aa0d364da2c9c1611753fd8, type: 2}
+  - {fileID: 11400000, guid: 913f8b799d4641843ac67576a3e7bce8, type: 2}
+  - {fileID: 11400000, guid: a5e4e14bfb86ec64c8eb04f5aa8c5fa9, type: 2}
+  - {fileID: 11400000, guid: 85951e8567fdd19459cc85392703c32c, type: 2}
+  - {fileID: 11400000, guid: 1be71d5bab40a1e43b244df083d70f98, type: 2}
+  - {fileID: 11400000, guid: 30f8c23a582a4bf4c8795dadc0c6879a, type: 2}
+  - {fileID: 11400000, guid: d8387b87d28d67348be6c24c13d6ae91, type: 2}
+  - {fileID: 11400000, guid: 3871551fb1d0e714d894bf00f6907dfb, type: 2}
+  - {fileID: 11400000, guid: 44fddd56b025f5b4eb0ed0a00204b34e, type: 2}
+  - {fileID: 11400000, guid: 4ce7c9b4b7abb3741bbf0b257de358f4, type: 2}
+  - {fileID: 11400000, guid: c35078398ad58bb499b7e7b8034d166d, type: 2}

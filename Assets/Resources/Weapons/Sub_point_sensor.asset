@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8ed6da022f49bb439d40eebc2350fd9, type: 3}
+  m_Name: Sub_point_sensor
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.PointSensorConfig
+  _throwSpeed: 82.8
+  _liftAngleDeg: 12
+  _gravity: -57.600002
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967035
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 20
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 180
+  _inkLockSeconds: 1.2500001
+  _paintHardness: 0.7
+  _displayName: "\u5075\u6E2C\u5668"
+  _inkCost: 0.45
+  _prefab: {fileID: 5260952217887536839, guid: 7c7252daed210f0499ff62fc15e5c76b, type: 3}
+  _maxActive: 0
+  _throwSound: bomb_throw
+  _heldModel: {fileID: 1655599452742574536, guid: 099710a7d73f74d46954f366fb1ee67f, type: 3}
+  _botUsage: 0
+  _botRange: {x: 6, y: 20}
+  _previewStride: 2
+  _s3:
+    Throw:
+      SpawnSpeedZ: 1.38
+      SpawnSpeedY: 0.24
+      SpawnSpeedYWorldMin: -0.4
+      FlyGravity: 0.016
+      FlyAirResist: 0.05866
+      InheritLateral: 1.6
+      InheritForward: 2
+      InheritUpRate: 4
+      InheritUpMax: 0.32
+    CollisionRadius: 0.18
+    Radius: 6
+    LingerFrames: 150
+    MarkingFrames: 480
+  _expandSeconds: 0.18
+  _domeAlpha: 0.22
+  _burstSound: point_sensor_burst

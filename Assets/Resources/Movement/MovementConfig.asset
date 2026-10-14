@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6fbd262c8e682841b7799b846a461fc, type: 3}
+  m_Name: MovementConfig
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Player.MovementConfig
+  _squidMoves:
+    RollMinSpeed: 8.7
+    RollMinAngleDeg: 60
+    RollBufferFrames: 10
+    RollChainWindowFrames: 90
+    RollChainFactor: 0.85
+    RollAirFrames: 36
+    RollAirAccel: 36
+    MoveArmorHp: 30
+    RollArmorFrames: 18
+    SurgeChargeFrames: 45
+    SurgeArmorFrames: 45
+    SurgeMaxSpeed: 22.5
+    SurgeMinHop: 0.6
+    SurgeMaxHop: 3.5
+    SurgeLipPush: 1.5
+    WallRollMaxAngleDeg: 45
+    WallRollSpeedScale: 0.65
+    WallRollUpSpeed: 5.4
+    MinStick: 0.2
+  _superJump:
+    ChargeFrames: 80
+    HumanoidExtraFrames: 18
+    FlightFrames: 138
+    FireWindowFrames: 12
+    ApexBase: 10
+    ApexPerMeter: 0.3
+    ApexMax: 28
+  _markerPrefab: {fileID: 1775702009040089214, guid: e19eba46902da114cb930e4772751b53, type: 3}
+  _landingClearance: 1.1
+  _armorShellMaterial: {fileID: 2100000, guid: a0642098cef558a4da02b9052dd43859, type: 2}
+  _armorShellMesh: {fileID: 10200, guid: 0000000000000000e000000000000000, type: 0}
+  _rollSound: squid_roll
+  _surgeChargeSound: squid_surge_charge
+  _surgeReadySound: squid_surge_ready
+  _surgeSound: squid_surge
+  _superJumpChargeSound: super_jump_charge
+  _superJumpLaunchSound: super_jump_launch
+  _superJumpMarkerSound: super_jump_marker
+  _superJumpLandSound: super_jump_land

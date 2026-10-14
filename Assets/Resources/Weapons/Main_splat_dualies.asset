@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec008b4f95f0cf408fbf6e605146274, type: 3}
+  m_Name: Main_splat_dualies
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.DualiesConfig
+  _moveSpeedWhileFiring: 4.7999997
+  _fireSound: shoot_dualies
+  _overrideAttackClass: 0
+  _attackClass: 1
+  _gunModelPrefab: {fileID: 2805464409410704533, guid: 768081447149f0346ad974f8f9997839, type: 3}
+  _bulletPrefab: {fileID: 0}
+  _bullet:
+    Motion:
+      SpawnSpeed: 2.37
+      StraightFrames: 3
+      StraightEndMaxSpeed: 2.3425
+      BrakeAirResist: 0.36
+      BrakeGravity: 0.07
+      BrakeToFreeVelocityXZ: 0.2355
+      BrakeToFreeVelocityY: -0.15
+      FreeAirResist: 0.02
+      FreeGravity: 0.016
+    MaxDistance: 0
+    LifetimeFrames: 0
+    RadiusForPlayer: 0.31
+    RadiusForPlayerEnd: 0
+    RadiusForPlayerChangeFrames: 0
+    RadiusForField: 0.2
+    RadiusForFieldEnd: 0
+    RadiusForFieldChangeFrames: 0
+    PiercePlayers: 0
+    DamageMax: 30
+    DamageMin: 15
+    ReduceStartFrame: 7
+    ReduceEndFrame: 15
+    AttackClass: 42
+    Kind: 0
+    PerAttackDamageCap: 0
+    PaintWidthHalfNear: 1.71
+    PaintWidthHalfFar: 1.66
+    PaintDistanceFar: 0
+    PaintWidthShrinkRate: 0
+    PaintWidthShrinkStartFrame: 0
+    PaintWidthShrinkEndFrame: 0
+    PaintDepthScaleMax: 2.24
+    PaintDepthScaleMin: 1.31
+    PaintDepthScaleBreakFree: 1.12
+    PaintRadiusShock: 1.3
+    PaintHardness: 0.7
+    DripSpacing: 14
+    DripStartDistance: 0
+    DripRadius: 1.6343063
+    DripMaxCount: 1
+    EndPaintRadius: 0
+    NoPaint: 0
+    NoSpecialCharge: 0
+    ExplodeOnImpact: 0
+    ExplodeAtFrame: 0
+    ExplodeAtEnd: 0
+    TerrainHitExplosionScale: 0
+    ExplosionHitsDirectTarget: 0
+    Explosion:
+      NearDamage: 0
+      NearRadius: 0
+      FarDamage: 0
+      FarRadius: 0
+      DamageLinear: 0
+      IgnoreLineOfSight: 0
+      AttackClass: 0
+      Kind: 0
+      PaintRadius: 0
+      PaintRayCount: 0
+      PaintRayRadius: 0
+      PaintRayReach: 0
+      DropCount: 0
+      DropRadius: 0
+      DropReach: 0
+      PaintHardness: 0
+      NoSpecialCharge: 0
+      KnockbackAccel: 0
+      KnockbackRange: 0
+      FxBursts: 0
+      FlashRadius: 0
+      Sound: 
+      SoundVolume: 0
+    OrbitRadius: 0
+    OrbitGrowFrames: 0
+    OrbitDegPerFrame: 0
+    VisualScale: 0.85
+    TrailTime: 0
+    HitFloorSound: 
+    HitWallSound: 
+    HitSoundVolume: 0
+    Silent: 0
+  _turretBullet:
+    Motion:
+      SpawnSpeed: 2.37
+      StraightFrames: 3
+      StraightEndMaxSpeed: 2.3425
+      BrakeAirResist: 0.36
+      BrakeGravity: 0.07
+      BrakeToFreeVelocityXZ: 0.2355
+      BrakeToFreeVelocityY: -0.15
+      FreeAirResist: 0.02
+      FreeGravity: 0.016
+    MaxDistance: 0
+    LifetimeFrames: 0
+    RadiusForPlayer: 0.335
+    RadiusForPlayerEnd: 0
+    RadiusForPlayerChangeFrames: 0
+    RadiusForField: 0.2
+    RadiusForFieldEnd: 0
+    RadiusForFieldChangeFrames: 0
+    PiercePlayers: 0
+    DamageMax: 30
+    DamageMin: 15
+    ReduceStartFrame: 7
+    ReduceEndFrame: 15
+    AttackClass: 42
+    Kind: 0
+    PerAttackDamageCap: 0
+    PaintWidthHalfNear: 1.71
+    PaintWidthHalfFar: 1.66
+    PaintDistanceFar: 0
+    PaintWidthShrinkRate: 0
+    PaintWidthShrinkStartFrame: 0
+    PaintWidthShrinkEndFrame: 0
+    PaintDepthScaleMax: 2.24
+    PaintDepthScaleMin: 1.31
+    PaintDepthScaleBreakFree: 1.12
+    PaintRadiusShock: 1.3
+    PaintHardness: 0.7
+    DripSpacing: 14
+    DripStartDistance: 0
+    DripRadius: 1.6343063
+    DripMaxCount: 1
+    EndPaintRadius: 0
+    NoPaint: 0
+    NoSpecialCharge: 0
+    ExplodeOnImpact: 0
+    ExplodeAtFrame: 0
+    ExplodeAtEnd: 0
+    TerrainHitExplosionScale: 0
+    ExplosionHitsDirectTarget: 0
+    Explosion:
+      NearDamage: 0
+      NearRadius: 0
+      FarDamage: 0
+      FarRadius: 0
+      DamageLinear: 0
+      IgnoreLineOfSight: 0
+      AttackClass: 0
+      Kind: 0
+      PaintRadius: 0
+      PaintRayCount: 0
+      PaintRayRadius: 0
+      PaintRayReach: 0
+      DropCount: 0
+      DropRadius: 0
+      DropReach: 0
+      PaintHardness: 0
+      NoSpecialCharge: 0
+      KnockbackAccel: 0
+      KnockbackRange: 0
+      FxBursts: 0
+      FlashRadius: 0
+      Sound: 
+      SoundVolume: 0
+    OrbitRadius: 0
+    OrbitGrowFrames: 0
+    OrbitDegPerFrame: 0
+    VisualScale: 0.85
+    TrailTime: 0
+    HitFloorSound: 
+    HitWallSound: 
+    HitSoundVolume: 0
+    Silent: 0
+  _shotGuideFrames: 7
+  _repeatFrames: 5
+  _turretRepeatFrames: 4
+  _firstShotFrames: 3
+  _squidFirstShotFrames: 13
+  _postDelayFrames: 4
+  _maxShotsPerFrame: 4
+  _inkConsume: 0.0072
+  _inkRecoverStopFrames: 20
+  _spread:
+    StandSwerveDeg: 2
+    JumpSwerveDeg: 7.5
+    BiasMin: 0.01
+    BiasKf: 0.01
+    BiasMax: 0.25
+    BiasDecreasePerSecond: 0.29999998
+    RepeatSeconds: 0.083333336
+    JumpBiasMax: 0.4
+    JumpShrinkStartSeconds: 0.41666666
+    JumpShrinkEndSeconds: 1.1666666
+  _turretSwerveDeg: 0
+  _dropletPatterns: 7
+  _inheritForwardRate: 2
+  _inheritSideRate: 0.4
+  _roll:
+    StartupFrames: 4
+    MoveFrames: 12
+    Distance: 4
+    SlideDistance: 1
+    SlideFrames: 6
+    NoFireFrames: 4
+    UnrelaxFrames: 32
+    MaxRolls: 2
+    InkConsume: 0.07
+    InkRecoverStopFrames: 70
+    PaintWidthHalf: 1.8
+    AirDistanceScale: 0.35
+    AirSlamSpeed: 0.5
+    MinStick: 0.35
+  _muzzleHalfSpacing: 0.26
+  _turretMuzzleHalfSpacing: 0.08
+  _turretMuzzleDrop: 0.12
+  _rollSound: dualies_roll
+  _botRollInterval: {x: 2.5, y: 5}
+  _botRollWhenHurtWindow: 0.4

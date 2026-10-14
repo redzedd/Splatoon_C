@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387967a3dfb358d479b40f01ae858006, type: 3}
+  m_Name: StageCatalog
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Match.StageCatalog
+  _stages:
+  - SceneName: TurfWar_ScorchGorge
+    DisplayName: "\u7126\u5CA9\u5CFD\u8C37"
+    EnglishName: Scorch Gorge
+    PreviewColor: {r: 0.84, g: 0.62, b: 0.42, a: 1}
+    PreviewAccent: {r: 0.72, g: 0.4, b: 0.25, a: 1}
+    Description: "\u7D05\u5CA9\u5CFD\u8C37\u88E1\u7684\u9EDE\u5C0D\u7A31\u5857\u5730\u5834(S3\u76848.0\u7248\u914D\u7F6E):\u4E2D\u592E\u9AD8\u5854\u3001\u5169\u5074\u6DF1\u6DF5\u7F3A\u53E3,\u57FA\u5730\u524D\u7684\u76C6\u5730\u662F\u4E3B\u8981\u7684\u5857\u5730\u5340\u3002"

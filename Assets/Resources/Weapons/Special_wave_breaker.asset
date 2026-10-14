@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00a0a1322a762245882d91488801cfc, type: 3}
+  m_Name: Special_wave_breaker
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WaveBreakerConfig
+  _throwSpeed: 18.483505
+  _liftAngleDeg: 13.134022
+  _gravity: -32.399998
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 12
+  _previewStepTime: 0.02
+  _previewMaxSteps: 120
+  _inkLockSeconds: 0
+  _paintHardness: 0.7
+  _specialName: "\u5F48\u8DF3\u8072\u7D0D"
+  _fallbackCostPoints: 210
+  _devicePrefab: {fileID: 2295537854983165857, guid: 04ed06e49bd444c4788a77b02f781645, type: 3}
+  _wavePrefab: {fileID: 3175229539471886022, guid: 8ff1d7fe13cacd14f8dfb1156cf0a879, type: 3}
+  _heldPrefab: {fileID: 416435517572537309, guid: 9a31b7307886ed74d818ab801c615f1c, type: 3}
+  _maxHp: 480
+  _contact: {x: 30, y: 0.5}
+  _contactShape: {x: 0.75, y: 2.75}
+  _contactKnockback: 400
+  _lockFrames: 390
+  _waveDamage: 45
+  _waveMaxRadius: 20
+  _waveExpandFrames: 160
+  _waveMarkSeconds: 8
+  _waveHalfBand: 0.35
+  _waveHitHeight: 0.5
+  _sensorMarkEndFrame: 102
+  _throwSound: wave_breaker_throw
+  _landSound: wave_breaker_land
+  _waveSound: wave_breaker_wave

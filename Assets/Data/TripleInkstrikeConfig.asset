@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da459a8af6a3c2e478f76c071f3b0378, type: 3}
+  m_Name: TripleInkstrikeConfig
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.TripleInkstrikeConfig
+  _throwSpeed: 26
+  _liftAngleDeg: 25
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.03
+  _previewMaxSteps: 100
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _specialName: "\u4E09\u91CD\u9F8D\u6372\u98A8"
+  _fallbackCostPoints: 220
+  _devicePrefab: {fileID: 1374434227015032532, guid: 4230df0a9567e13489e827988e7a22c9, type: 3}
+  _tornadoPrefab: {fileID: 8997769610366766411, guid: 267c7798d0d8c4f4e90803eaba93e70b, type: 3}
+  _activeDuration: 6
+  _maxDevices: 3
+  _armDelay: 1.1666666
+  _stickOffset: 0.05
+  _visualSize: 0.35
+  _tornadoStartRadius: 0.5
+  _tornadoMaxRadius: 7.7
+  _tornadoHeight: 20
+  _tornadoGrowDuration: 0.8333333
+  _tornadoHoldDuration: 0.85
+  _tornadoFadeDuration: 0.25
+  _tornadoDamagePerSecond: 450
+  _tornadoDamageTickInterval: 0.1
+  _tornadoPaintInterval: 0.1
+  _tornadoPaintRadius: 1.6
+  _tornadoRingRayCount: 14
+  _tornadoWallRayCount: 12

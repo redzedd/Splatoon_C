@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6239d649a6875d4196ce7397110cf4b, type: 3}
+  m_Name: Sub_suction_bomb
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.SuctionBombConfig
+  _throwSpeed: 20
+  _liftAngleDeg: 20
+  _gravity: -20
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294966971
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 15
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 180
+  _inkLockSeconds: 1
+  _paintHardness: 0.7
+  _displayName: "\u5438\u76E4\u70B8\u5F48"
+  _inkCost: 0.7
+  _prefab: {fileID: 6837171150973169762, guid: dd418b45dc09fe34ca138dc10add9335, type: 3}
+  _maxActive: 0
+  _throwSound: bomb_throw
+  _heldModel: {fileID: 7481905163905717483, guid: 66624b43c30579140aad329cfd70c240, type: 3}
+  _botUsage: 0
+  _botRange: {x: 5, y: 14}
+  _radius: 0.2
+  _fuseFrames: 120
+  _warningRestFrames: 60
+  _swellRestFrames: 30
+  _damageOffset: 0.6
+  _surfacePaintRadius: 5
+  _crossPaintRadius: 2.5
+  _discStampRadius: 1.25
+  _blast:
+    NearDamage: 180
+    NearRadius: 4.6
+    FarDamage: 30
+    FarRadius: 8
+    DamageLinear: 0
+    IgnoreLineOfSight: 0
+    AttackClass: 60
+    Kind: 1
+    PaintRadius: 0
+    PaintRayCount: 15
+    PaintRayRadius: 1.116
+    PaintRayReach: 8
+    DropCount: 0
+    DropRadius: 0
+    DropReach: 0
+    PaintHardness: 0.7
+    NoSpecialCharge: 0
+    KnockbackAccel: 700
+    KnockbackRange: 12
+    FxBursts: 6
+    FlashRadius: 0
+    Sound: bomb_explode
+    SoundVolume: 0
+  _stickSound: suction_stick
+  _warningSound: suction_warning

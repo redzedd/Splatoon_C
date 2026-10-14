@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e2eeb923e46d64f9a01122875a5051, type: 3}
+  m_Name: Main_splattershot_jr
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponConfig
+  _moveSpeedWhileFiring: 4.56
+  _fireSound: shoot_shooter_jr
+  _overrideAttackClass: 0
+  _attackClass: 1
+  _projectilePrefab: {fileID: 2724704706096080588, guid: 8572aaf82a4558a4ca16124d4e90bae9, type: 3}
+  _dripPrefab: {fileID: 4249119246433288612, guid: 1b51bc30e1373de4eba5956820ad1987, type: 3}
+  _gunModelPrefab: {fileID: 3253108166771574922, guid: 027403d461eb53d408885a9622aceb49, type: 3}
+  _bullet:
+    Motion:
+      SpawnSpeed: 2.266
+      StraightFrames: 3
+      StraightEndMaxSpeed: 1.9513
+      BrakeAirResist: 0.36
+      BrakeGravity: 0.07
+      BrakeToFreeVelocityXZ: 0.2355
+      BrakeToFreeVelocityY: -0.15
+      FreeAirResist: 0.02
+      FreeGravity: 0.016
+    MaxDistance: 0
+    LifetimeFrames: 0
+    RadiusForPlayer: 0.3
+    RadiusForPlayerEnd: 0
+    RadiusForPlayerChangeFrames: 0
+    RadiusForField: 0.2
+    RadiusForFieldEnd: 0
+    RadiusForFieldChangeFrames: 0
+    PiercePlayers: 0
+    DamageMax: 28
+    DamageMin: 14
+    ReduceStartFrame: 8
+    ReduceEndFrame: 24
+    AttackClass: 1
+    Kind: 0
+    PerAttackDamageCap: 0
+    PaintWidthHalfNear: 2.11
+    PaintWidthHalfFar: 1.77
+    PaintDistanceFar: 0
+    PaintWidthShrinkRate: 0
+    PaintWidthShrinkStartFrame: 0
+    PaintWidthShrinkEndFrame: 0
+    PaintDepthScaleMax: 2.62
+    PaintDepthScaleMin: 1.31
+    PaintDepthScaleBreakFree: 1.12
+    PaintRadiusShock: 1.56
+    PaintHardness: 0.7
+    DripSpacing: 9.5
+    DripStartDistance: 0
+    DripRadius: 1.5559078
+    DripMaxCount: 2
+    EndPaintRadius: 0
+    NoPaint: 0
+    NoSpecialCharge: 0
+    ExplodeOnImpact: 0
+    ExplodeAtFrame: 0
+    ExplodeAtEnd: 0
+    TerrainHitExplosionScale: 0
+    ExplosionHitsDirectTarget: 0
+    Explosion:
+      NearDamage: 0
+      NearRadius: 0
+      FarDamage: 0
+      FarRadius: 0
+      DamageLinear: 0
+      IgnoreLineOfSight: 0
+      AttackClass: 0
+      Kind: 0
+      PaintRadius: 0
+      PaintRayCount: 0
+      PaintRayRadius: 0
+      PaintRayReach: 0
+      DropCount: 0
+      DropRadius: 0
+      DropReach: 0
+      PaintHardness: 0
+      NoSpecialCharge: 0
+      KnockbackAccel: 0
+      KnockbackRange: 0
+      FxBursts: 0
+      FlashRadius: 0
+      Sound: 
+      SoundVolume: 0
+    OrbitRadius: 0
+    OrbitGrowFrames: 0
+    OrbitDegPerFrame: 0
+    VisualScale: 1.05
+    TrailTime: 0
+    HitFloorSound: 
+    HitWallSound: 
+    HitSoundVolume: 0
+    Silent: 0
+  _dropletSplitNum: 7
+  _inheritForwardRate: 2
+  _inheritSideRate: 0.4
+  _fireInterval: 0.083333336
+  _maxShotsPerFrame: 4
+  _muzzleSpeed: 65.8125
+  _projectileGravity: -11
+  _projectileLifetime: 3
+  _inkCostPerShot: 0.0043
+  _inkLockSeconds: 0.25
+  _inkTankScale: 1.1
+  _spread:
+    StandSwerveDeg: 11.66
+    JumpSwerveDeg: 14.58
+    BiasMin: 0.04
+    BiasKf: 0.02
+    BiasMax: 0.4
+    BiasDecreasePerSecond: 0.59999996
+    RepeatSeconds: 0.083333336
+    JumpBiasMax: 0.4
+    JumpShrinkStartSeconds: 0.41666666
+    JumpShrinkEndSeconds: 1.1666666
+  _straightRange: 8.694499
+  _straightGravity: -1.5
+  _dropGravity: -60
+  _dropHorizontalDrag: 9.45
+  _dripsPerShot: 3
+  _dripPhaseCycle: 4
+  _dripStartDistance: 0.8
+  _dripRangeMultiplier: 1.5750762
+  _dripJitterDistance: 0.25
+  _dripRadius: 1.209375
+  _dripInheritSpeed: 0.05
+  _dripGravity: -25
+  _dripSideSpeed: 0.8
+  _dripLifetime: 3
+  _muzzleSplashRadius: 1.1892186
+  _muzzleSplashDistance: 0.4
+  _muzzleSplashDistanceFar: 4
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
+  _splatRadius: 1.9399999
+  _splatHardness: 0.7
+  _splashCount: 2
+  _splashRadius: 0.89538455
+  _splashSpread: 0.6
+  _damage: 28
+  _minDamage: 14
+  _damageDecayDistance: 1.5
+  _damageFalloffStart: 9.894499

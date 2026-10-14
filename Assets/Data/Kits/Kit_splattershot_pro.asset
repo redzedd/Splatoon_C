@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_splattershot_pro
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: splattershot_pro
+  _displayName: "\u9802\u5C16\u5C04\u64CA\u69CD"
+  _englishName: Splattershot Pro
+  _description: "\u5C04\u7A0B\u9577\u3001\u4E09\u767C\u64CA\u5012\u7684\u5C04\u64CA\u69CD;\u5C04\u901F\u8F03\u6162\u3001\u8017\u58A8\u8F03\u591A\u3002"
+  _main: {fileID: 11400000, guid: 669dd39846afcd445827b2b091436bd8, type: 2}
+  _sub: {fileID: 11400000, guid: bdcd2e6e98c44ce479646006e381ab53, type: 2}
+  _special: {fileID: 11400000, guid: 2f80857c4104fd04e9cf77dd9dec0a43, type: 2}
+  _specialPoints: 190
+  _weight: 1
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 70
+  _stat2Label: "\u5A01\u529B"
+  _stat2: 64
+  _stat3Label: "\u5C04\u901F"
+  _stat3: 30

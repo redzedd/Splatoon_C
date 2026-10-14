@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36a35a5dd988a4843aef633cbd2935d4, type: 3}
+  m_Name: Sub_fizzy_bomb
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.FizzyBombConfig
+  _throwSpeed: 81.6
+  _liftAngleDeg: 12
+  _gravity: -57.600002
+  _lifetime: 8
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 4294966971
+  _targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _aimReach: 20
+  _previewStepTime: 0.016666668
+  _previewMaxSteps: 180
+  _inkLockSeconds: 1.4166667
+  _paintHardness: 0.7
+  _displayName: "\u78B3\u9178\u70B8\u5F48"
+  _inkCost: 0.6
+  _prefab: {fileID: 2162743513238237102, guid: 08bd5271d29f94142ab17a30f88eab5a, type: 3}
+  _maxActive: 0
+  _throwSound: bomb_throw
+  _heldModel: {fileID: 8406352006270458787, guid: 1bc208d799f1a7e48a68109e5145104d, type: 3}
+  _botUsage: 0
+  _botRange: {x: 5, y: 18}
+  _previewStride: 2
+  _s3:
+    Throw:
+      SpawnSpeedZ: 1.36
+      SpawnSpeedY: 0.24
+      SpawnSpeedYWorldMin: -0.4
+      FlyGravity: 0.016
+      FlyAirResist: 0.05866
+      InheritLateral: 1.6
+      InheritForward: 2
+      InheritUpRate: 4
+      InheritUpMax: 0.32
+    WindupFrames: 5
+    Level2Frames: 40
+    Level3ExtraFrames: 80
+    MashJumpFrames: 8
+    MashStickFrames: 11
+    MashMaxPerFrame: 2.5
+    FirstBurstWaitFrames: 15
+    FirstBurstWarnFrames: 15
+    NextBurstWaitFrames: 1
+    NextBurstWarnFrames: 7
+    HopSpeedMin: 0.24
+    HopSpeedMax: 0.32
+    HopPitchMin: 48
+    HopPitchMax: 58
+    HopYawJitter: 20
+    GroundResist: 0.19
+    WallRebound: 0.7
+    LandingKeep: 0.5
+    TrailSpacing: 2.2
+    TrailDropHeight: 10
+    TrailDepthScale: 1.6
+    TrailHalfWidth1: 1.2
+    TrailHalfWidth2: 1.26
+    TrailHalfWidth3: 1.32
+    NearDamage: 50
+    FarDamage: 35
+    NearRadius1: 1.6
+    NearRadius2: 1.95
+    NearRadius3: 2.6
+    FarRadius1: 3.8
+    FarRadius2: 4.5
+    FarRadius3: 5.45
+    PaintRadius1: 3
+    PaintRadius2: 3.4
+    PaintRadius3: 3.8
+  _radius: 0.18
+  _stepHeight: 0.25
+  _hopTimeoutFrames: 150
+  _blast:
+    NearDamage: 50
+    NearRadius: 1.6
+    FarDamage: 35
+    FarRadius: 3.8
+    DamageLinear: 0
+    IgnoreLineOfSight: 0
+    AttackClass: 62
+    Kind: 1
+    PaintRadius: 3
+    PaintRayCount: 4
+    PaintRayRadius: 1
+    PaintRayReach: 3.8
+    DropCount: 6
+    DropRadius: 0.7
+    DropReach: 0
+    PaintHardness: 0.7
+    NoSpecialCharge: 0
+    KnockbackAccel: 470
+    KnockbackRange: 8
+    FxBursts: 3
+    FlashRadius: 0
+    Sound: fizzy_burst
+    SoundVolume: 0.8
+  _levelSound: fizzy_charge_level
+  _chargedSound: fizzy_charge_full
+  _hissSound: fizzy_hiss

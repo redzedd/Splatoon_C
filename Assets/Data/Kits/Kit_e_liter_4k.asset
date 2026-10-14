@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea25b106f516e343929b14d8f0c23c3, type: 3}
+  m_Name: Kit_e_liter_4k
+  m_EditorClassIdentifier: SplatoonC.Gameplay::SplatoonC.Gameplay.Combat.WeaponKit
+  _id: e_liter_4k
+  _displayName: "\u516C\u53474K"
+  _englishName: E-liter 4K
+  _description: "\u5C04\u7A0B\u6700\u9577\u7684\u72D9\u64CA\u69CD,\u84C4\u6EFF\u4E00\u64CA\u64CA\u5012;\u84C4\u529B\u7D04
+    1.5 \u79D2\u3001\u91CD\u91CF\u7D1A\u3002\n(\u66AB\u4EE3:S3 \u539F\u914D\u526F\u6B66\u5668
+    Ink Mine \u5C1A\u672A\u5BE6\u4F5C,\u5148\u914D \u516C\u53474K \u6539\u88DD \u7684\u8DF3\u8E8D\u4FE1\u6A19\u3002)"
+  _main: {fileID: 11400000, guid: 9ffbd203357de004a8c98b6c0cfda96d, type: 2}
+  _sub: {fileID: 11400000, guid: 96749ec9e030d7f4da92983eb251d9d9, type: 2}
+  _special: {fileID: 11400000, guid: 1d8743c3348b6f9489332be2c43852e4, type: 2}
+  _specialPoints: 210
+  _weight: 2
+  _stat1Label: "\u5C04\u7A0B"
+  _stat1: 96
+  _stat2Label: "\u84C4\u529B\u901F\u5EA6"
+  _stat2: 20
+  _stat3Label: "\u6A5F\u52D5\u6027"
+  _stat3: 15
